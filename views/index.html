@@ -18,7 +18,7 @@
   </div>
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8">
-  document.addEventListener('DOMContentLoaded', function () {
+  dogjs.on('load', function () {
     var examples, i, interval;
     examples = [ 'cook a thanksgiving dinner', 'hike the Dish', 'build your own website' ];
     i = 0;
@@ -32,7 +32,8 @@
       }
       setTimeout(cycle, interval);
     }
-    setTimeout(cycle, 10); // defer operation
+    // no need to defer: we wait for `dogjs` to load
+    cycle();
   });
   </script>
 </body>
