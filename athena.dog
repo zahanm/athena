@@ -1,0 +1,6 @@
+
+DEFINE event block {
+  input server
+}
+
+LISTEN TO public VIA http FOR blocks
