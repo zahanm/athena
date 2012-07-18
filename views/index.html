@@ -6,11 +6,34 @@
 </head>
 <body>
   <dog>
-    <form listen="blocks" holder="#content">
+    <form listen="blocks" holder="#answer" class="form-inline">
+      <input type="text" name="learnable" id="learnable" class="span3" >
     </form>
   </dog>
-  <p>Hello world</p>
-  <div id="content"></div>
+  <div class="container">
+    <div class="offset4 span4 centered">
+      <h3>What do you want to do?</h3>
+      <div id="answer"></div>
+    </div>
+  </div>
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript" charset="utf-8">
+  document.addEventListener('DOMContentLoaded', function () {
+    var examples, i, interval;
+    examples = [ 'cook a thanksgiving dinner', 'hike the Dish', 'build your own website' ];
+    i = 0;
+    interval = 2000; // in ms
+    function cycle(argument) {
+      // cycle through placeholders for learnables
+      var learnable = document.querySelector('#learnable');
+      if (learnable && learnable.value === '') {
+        learnable.placeholder = examples[i];
+        i = (i+1) % examples.length;
+      }
+      setTimeout(cycle, interval);
+    }
+    setTimeout(cycle, 10); // defer operation
+  });
+  </script>
 </body>
 </html>
