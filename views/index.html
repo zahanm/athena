@@ -2,39 +2,38 @@
 <html>
 <head>
   <title>Athena</title>
+  <link href='http://fonts.googleapis.com/css?family=Merienda+One' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="/styles/index.css" type="text/css" charset="utf-8">
 </head>
 <body>
   <dog>
-    <form listen="blocks" holder="#answer" class="form-inline">
-      <input type="text" name="learnable" id="learnable" class="span3" >
+    <form listen="blocks" holder="#answer" class="form">
+      <input type="text" name="learnable" >
+      <input type="submit" value="find a mentor" class="btn btn-success">
     </form>
   </dog>
   <div class="container">
-    <div class="offset4 span4 centered">
-      <h3>What do you want to do?</h3>
-      <div id="answer"></div>
+    <div class="row">
+      <div id="left-information" class="span7">
+        <!-- left side - for explanations -->
+        <h1>Athena</h1>
+        <p>A radical new applcation to enable peer to peer education.</p>
+        <p></p>
+      </div>
+      <div id="right-band" class="span5 centered">
+        <!-- right side - for app -->
+        <div id="right-app">
+          <h3>
+            <p class="question">What do</p>
+            <p class="question question-you">you</p>
+            <p class="question">want to do?</p>
+          </h3>
+          <div id="answer"></div>
+        </div>
+      </div>
     </div>
   </div>
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
-  <script type="text/javascript" charset="utf-8">
-  dogjs.on('load', function () {
-    var examples, i, interval;
-    examples = [ 'cook a thanksgiving dinner', 'hike the Dish', 'build your own website' ];
-    i = 0;
-    interval = 2000; // in ms
-    function cycle(argument) {
-      // cycle through placeholders for learnables
-      var learnable = document.querySelector('#learnable');
-      if (learnable && learnable.value === '') {
-        learnable.placeholder = examples[i];
-        i = (i+1) % examples.length;
-      }
-      setTimeout(cycle, interval);
-    }
-    // no need to defer: we wait for `dogjs` to load
-    cycle();
-  });
-  </script>
+  <script src="/scripts/index.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

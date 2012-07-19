@@ -5,3 +5,67 @@
 .centered {
   text-align: center;
 }
+
+// specific for Athena
+html {
+  height: 100%;
+}
+
+body {
+  height: inherit;
+  background: #d9edf7;
+}
+
+.container {
+  height: inherit;
+}
+
+.row {
+  height: inherit;
+}
+
+#left-information {
+  padding-top: 40px;
+}
+
+#right-band {
+  height: inherit;
+  background: darken(@blueDark, 5%);
+  color: @yellow;
+  .box-shadow(0 0 5px 5px @grayLight);
+  font-family: 'Merienda One', cursive;
+}
+
+#right-app {
+  height: inherit;
+  padding-top: 40px;
+
+  form {
+
+    input {
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+      width: 210px - 10px;
+    }
+
+    input[type="submit"] {
+      width: 210px;
+      font-family: inherit;
+    }
+
+  }
+}
+
+.question {
+  font-size: 22pt;
+  line-height: 22pt;
+}
+
+.question-you {
+  color: @white;
+  font-size: 48pt;
+  line-height: 52pt;
+}
