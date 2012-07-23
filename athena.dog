@@ -1,6 +1,6 @@
 
-DEFINE event block {
-  input server
+DEFINE block {
+  server
 }
 
 LISTEN TO public VIA http FOR blocks
