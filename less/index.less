@@ -6,22 +6,51 @@
   text-align: center;
 }
 
-// specific for Athena
-html {
-  height: 100%;
+.container > .row {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
+h1, h2 {
+  font-weight: 100;
+  small {
+    font-weight: inherit;
+  }
+}
+
+// specific for Athena
 body {
   height: inherit;
   background: #d9edf7;
 }
 
-.container {
-  height: inherit;
+.facecard {
+  padding: 10px;
+  border: 1px solid @grayLight;
+  .border-radius(5px);
+  img {
+    width: 60px;
+    float: left;
+    margin-right: 5px;
+  }
+  p {
+    margin: 0;
+  }
 }
 
-.row {
-  height: inherit;
+.hero {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 200;
+  form {
+    display: inline;
+    p {
+      display: inline;
+    }
+    input {
+      font-weight: inherit;
+    }
+  }
 }
 
 #left-information {
@@ -33,7 +62,6 @@ body {
   background: darken(@blueDark, 5%);
   color: @yellow;
   .box-shadow(0 0 5px 5px @grayLight);
-  font-family: 'Merienda One', cursive;
 }
 
 #right-app {

@@ -1,6 +1,28 @@
 
-DEFINE block {
-  server
+DEFINE learner {
+  name
+  email
+  learnable
+  teachable
 }
 
-LISTEN TO public VIA http FOR blocks
+DEFINE state_teachable FOR person DO
+  PERFORM "In return, I'd be willing to help a friend to"
+  RETURN teachable
+END
+
+DEFINE identify_themself FOR person DO
+  PERFORM "My name is __ and I can be contacted at __"
+  RETURN name, email
+END
+
+LISTEN TO public VIA http FOR learners
+
+ON EACH learner DO
+  potential = PERSON FROM learner
+  learner.teachable = ASK potential TO state_teachable
+  identity = ASK potential TO identify_themself
+  learner.name = identity.name
+  learner.email = identity.email
+  INSPECT learner
+END

@@ -7,29 +7,45 @@
 </head>
 <body>
   <dog>
-    <form listen="blocks" holder="#answer" class="form">
-      <input type="text" name="learnable" >
-      <input type="submit" value="find a mentor" class="btn btn-success">
+    <form listen="learners" holder="#conversation" class="form-inline">
+      <p>I would like to</p>
+      <input type="text" name="learnable">
+      <input type="submit" value="start finding a mentor" class="btn btn-success">
+    </form>
+    <form ask="state_teachable" holder="#conversation" class="form-inline">
+      <p>{{ instructions }}</p>
+      <input type="text" name="teachable">
+      <input type="submit" value="spread the learning" class="btn btn-success">
+    </form>
+    <form ask="identify_themself" holder="#conversation" class="form-inline">
+      <p>My name is</p>
+      <input type="text" name="name" placeholder="name">,
+      <p>and I my email is</p>
+      <input type="email" name="email" placeholder="email">
+      <input type="submit" value="sign up" class="btn btn-success">
     </form>
   </dog>
   <div class="container">
     <div class="row">
-      <div id="left-information" class="span7">
-        <!-- left side - for explanations -->
-        <h1>Athena</h1>
-        <p>A radical new applcation to enable peer to peer education.</p>
-        <p></p>
-      </div>
-      <div id="right-band" class="span5 centered">
-        <!-- right side - for app -->
-        <div id="right-app">
-          <h3>
-            <p class="question">What do</p>
-            <p class="question question-you">you</p>
-            <p class="question">want to do?</p>
-          </h3>
-          <div id="answer"></div>
+      <div class="span3">
+        <h2>Behind the faces</h2>
+        <div class="facecard">
+          <img src="/images/sep.jpg">
+          <h4>Sep Kamvar</h4>
+          <p>MIT</p>
+          <p>Avid Surfer</p>
         </div>
+      </div>
+      <div class="offset3 span5">
+        <h1>Athena <small>a peer-to-peer learning exprience</small></h1>
+      </div>
+      <div class="span1">
+        <button class="btn btn-large btn-primary">Login</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="offset2 span8 hero">
+        <div id="conversation" method="replace"></div>
       </div>
     </div>
   </div>
