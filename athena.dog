@@ -1,5 +1,9 @@
 
-DEFINE learner {
+# DEFINE COMMUNITY athena {
+#   learnables
+# }
+
+DEFINE learning_request {
   name
   email
   learnable
@@ -7,22 +11,27 @@ DEFINE learner {
 }
 
 DEFINE state_teachable FOR person DO
-  PERFORM "In return, I'd be willing to help a friend to"
+  PERFORM "Tell me what you'd be interested in teaching."
   RETURN teachable
 END
 
-DEFINE identify_themself FOR person DO
-  PERFORM "My name is __ and I can be contacted at __"
+DEFINE identify_yourself FOR person DO
+  PERFORM "Tell me your name and contact info."
   RETURN name, email
 END
 
-LISTEN TO public VIA http FOR learners
+LISTEN TO public VIA http FOR learning_requests
 
-ON EACH learner DO
-  potential = PERSON FROM learner
-  learner.teachable = ASK potential TO state_teachable
-  identity = ASK potential TO identify_themself
-  learner.name = identity.name
-  learner.email = identity.email
+ON EACH learning_request DO
+  INSPECT learning_request
+  learner = PERSON FROM learning_request
+  # learner.teachable = ASK learner VIA stream TO state_teachable
+  # identity = ASK learner VIA stream TO identify_yourself
+  # learner.name = identity.name
+  # learner.email = identity.email
   INSPECT learner
+  # Task #1 - Save person
+  # learner = COMPUTE people.insert ON learner
+  # Task #2 - Add to community
+  # learner = COMPUTE community.insert ON athena, learner
 END

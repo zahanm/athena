@@ -11,13 +11,26 @@ dogjs.on('load', function () {
   interval = 2000; // in ms
   function cycle(argument) {
     // cycle through placeholders for learnables
-    var learnable = document.querySelector('#answer input[name="learnable"]');
-    if (learnable && document.activeElement !== learnable && learnable.value === '') {
-      learnable.placeholder = examples[i];
-      i = (i+1) % examples.length;
-    }
+    var learnable, teachable;
+    learnable = document.querySelector('#conversation input[name="learnable"]');
+    teachable = document.querySelector('#conversation input[name="teachable"]');
+    [ learnable, teachable ].forEach(function (elem) {
+      if (elem && document.activeElement !== elem && elem.value === '') {
+        elem.placeholder = examples[i];
+        i = (i+1) % examples.length;
+      }
+    });
     setTimeout(cycle, interval);
   }
   // no need to defer: we wait for `dogjs` to load
   cycle();
+
+  var button = document.querySelector('#start-finding > button');
+  button.addEventListener('click', function () {
+    document.querySelector('#state-teachable').style.display = 'block';
+  });
+  button = document.querySelector('#state-teachable > button');
+  button.addEventListener('click', function () {
+    document.querySelector('#identify-themself').style.display = 'block';
+  });
 });

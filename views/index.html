@@ -7,22 +7,24 @@
 </head>
 <body>
   <dog>
-    <form listen="learners" holder="#conversation" class="form-inline">
-      <p>I would like to</p>
-      <input type="text" name="learnable">
-      <input type="submit" value="start finding a mentor" class="btn btn-success">
-    </form>
-    <form ask="state_teachable" holder="#conversation" class="form-inline">
-      <p>{{ instructions }}</p>
-      <input type="text" name="teachable">
-      <input type="submit" value="spread the learning" class="btn btn-success">
-    </form>
-    <form ask="identify_themself" holder="#conversation" class="form-inline">
-      <p>My name is</p>
-      <input type="text" name="name" placeholder="name">,
-      <p>and I my email is</p>
-      <input type="email" name="email" placeholder="email">
-      <input type="submit" value="sign up" class="btn btn-success">
+    <form listen="learning_requests" holder="#conversation" class="form-inline">
+      <div id="start-finding">
+        <p>I would like to</p>
+        <input type="text" name="learnable">
+        <button class="btn btn-success" type="button">start finding a mentor</button>
+      </div>
+      <div id="state-teachable" style="display: none;">
+        <p>In return, I'd be willing to help a friend to</p>
+        <input type="text" name="teachable">
+        <button class="btn btn-success" type="button">spread the learning</button>
+      </div>
+      <div id="identify-themself" style="display: none;">
+        <p>My name is</p>
+        <input type="text" name="name" placeholder="full name">,
+        <p>and I my email is</p>
+        <input type="email" name="email" placeholder="email">
+        <input type="submit" value="sign up" class="btn btn-success">
+      </div>
     </form>
   </dog>
   <div class="container">
@@ -44,7 +46,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="offset2 span8 hero">
+      <div class="offset1 span10 hero">
         <div id="conversation" method="replace"></div>
       </div>
     </div>
