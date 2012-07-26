@@ -10,6 +10,9 @@ DEFINE learning_request {
   teachable
 }
 
+# Signup process
+# --------------
+
 DEFINE state_teachable FOR person DO
   PERFORM "Tell me what you'd be interested in teaching."
   RETURN teachable
