@@ -27,19 +27,21 @@
         <input type="submit" value="sign up" class="btn btn-success">
       </div>
     </form>
+    <!-- admin display -->
+    <section oneach="@each:learning_request" subscribe="true">
+      <section notify="learning_request" holder="#admin">
+        <div class="row">
+          <div class="span2">{{name}}</div>
+          <div class="span2">{{email}}</div>
+          <div class="span2">{{learnable}}</div>
+          <div class="span2">{{teachable}}</div>
+        </div>
+      </section>
+    </section>
   </dog>
   <div class="container">
     <div class="row">
-      <div class="span3">
-        <h2>Behind the faces</h2>
-        <div class="facecard">
-          <img src="/images/sep.jpg">
-          <h4>Sep Kamvar</h4>
-          <p>MIT</p>
-          <p>Avid Surfer</p>
-        </div>
-      </div>
-      <div class="offset3 span5">
+      <div class="offset6 span5">
         <h1>Athena <small>a peer-to-peer learning exprience</small></h1>
       </div>
       <div class="span1">
@@ -51,7 +53,19 @@
         <div id="conversation" method="fill"></div>
       </div>
     </div>
+    <div id="admin-holder" class="row">
+      <div class="span12">
+        <div class="row strong">
+          <div class="span2">Name</div>
+          <div class="span2">Email</div>
+          <div class="span2">Learnable</div>
+          <div class="span2">Teachable</div>
+        </div>
+        <div id="admin" method="append"></div>
+      </div>
+    </div>
   </div>
+  <button class="btn" id="admin-button">Admin</button>
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/index.js" type="text/javascript" charset="utf-8"></script>
 </body>

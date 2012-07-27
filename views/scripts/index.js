@@ -33,4 +33,18 @@ dogjs.on('load', function () {
   button.addEventListener('click', function () {
     document.querySelector('#identify-themself').style.display = 'block';
   });
+  button = document.querySelector('#identify-themself > input[type="submit"]');
+  button.addEventListener('click', function () {
+    document.querySelector('#state-teachable').style.display = 'none';
+    document.querySelector('#identify-themself').style.display = 'none';
+  });
+  button = document.querySelector('#admin-button');
+  button.addEventListener('click', function () {
+    var holder = document.querySelector('#admin-holder');
+    if (holder.style.display && holder.style.display === 'block') {
+      holder.style.display = 'none';
+    } else {
+      holder.style.display = 'block';
+    }
+  })
 });
