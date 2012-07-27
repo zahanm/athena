@@ -43,8 +43,10 @@ dogjs.on('load', function () {
     var holder = document.querySelector('#admin-holder');
     if (holder.style.display && holder.style.display === 'block') {
       holder.style.display = 'none';
+      document.querySelector('#signup-holder').style.display = 'block';
     } else {
       holder.style.display = 'block';
+      document.querySelector('#signup-holder').style.display = 'none';
     }
   })
 });

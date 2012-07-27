@@ -31,10 +31,10 @@
     <section oneach="@each:learning_request" subscribe="true">
       <section notify="learning_request" holder="#admin">
         <div class="row">
-          <div class="span2">{{name}}</div>
-          <div class="span2">{{email}}</div>
-          <div class="span2">{{learnable}}</div>
-          <div class="span2">{{teachable}}</div>
+          <div class="cell span2">{{name}}</div>
+          <div class="cell span3">{{email}}</div>
+          <div class="cell span3">{{learnable}}</div>
+          <div class="cell span3">{{teachable}}</div>
         </div>
       </section>
     </section>
@@ -48,18 +48,18 @@
         <button class="btn btn-large btn-primary">Login</button>
       </div>
     </div>
-    <div class="row">
+    <div id="signup-holder" class="row">
       <div class="offset1 span10 hero">
         <div id="conversation" method="fill"></div>
       </div>
     </div>
     <div id="admin-holder" class="row">
-      <div class="span12">
-        <div class="row strong">
-          <div class="span2">Name</div>
-          <div class="span2">Email</div>
-          <div class="span2">Learnable</div>
-          <div class="span2">Teachable</div>
+      <div class="offset1 span11">
+        <div class="row">
+          <div class="span2 strong">Name</div>
+          <div class="span3 strong">Email</div>
+          <div class="span3 strong">Learnable</div>
+          <div class="span3 strong">Teachable</div>
         </div>
         <div id="admin" method="append"></div>
       </div>
