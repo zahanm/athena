@@ -1,6 +1,4 @@
 
-import sys
-import json
 import dogpy
 
 @dogpy.extfunc
