@@ -10,6 +10,8 @@ DEFINE learning_request {
   teachable
 }
 
+DEFINE learning_requests OF learning_request
+
 # Signup process
 # --------------
 
@@ -26,8 +28,10 @@ END
 LISTEN TO public VIA http FOR learning_requests
 
 ON EACH learning_request DO
+  COMPUTE add ON learning_requests, learning_request
   INSPECT learning_request
-  learner = PERSON FROM learning_request
+  # learner = PERSON FROM learning_request
+  learner = learning_request
   # learner.teachable = ASK learner VIA stream TO state_teachable
   # identity = ASK learner VIA stream TO identify_yourself
   # learner.name = identity.name
@@ -37,16 +41,38 @@ ON EACH learning_request DO
   # learner = COMPUTE people.insert ON learner
   # Task #2 - Add to community
   # learner = COMPUTE community.insert ON athena, learner
+  NOTIFY public VIA stream OF learner
 END
 
+# admin panel
+# -----------
+
+DEFINE review_admin_panel FOR person ON learners DO
+  PERFORM "Take a look at these learners"
+  RETURN name
+END
+
+DEFINE admin_panel { }
+
+LISTEN TO public VIA http FOR admin_panels
+
+ON EACH admin_panel DO
+  ASK public VIA stream TO review_admin_panel ON learning_requests
+  RETURN
+END
+
+LISTEN FOR admin_pairing
+
+# best teacher request
+# --------------------
 
 DEFINE best_teacher_request {}
 
-LISTEN TO athena FOR best_teachers_requests
+LISTEN TO athena VIA http FOR best_teachers_requests
 
 ON EACH best_teachers_request DO
   me = PERSON FROM best_teachers_request
-  potential_teachers = PEOPLE FROM athena WHERE teachables CONTAINS me.learnables
+  potential_teachers = PEOPLE FROM athena WHERE teachables == me.learnables
   best_teachers = COMPUTE rank_k_teachers ON potential_teachers USING k = 5
   RETURN best_teachers
 END
