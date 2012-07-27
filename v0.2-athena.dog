@@ -1,0 +1,125 @@
+
+DEFINE COMMUNITY athena {
+  learnables
+  learner
+  teachables
+  teacher
+}
+
+DEFINE COMMUNITY admins { }
+
+# Signup process
+# --------------
+#
+# Pretty straightforward. Almost working in v0.1
+#
+
+DEFINE state_teachables FOR person DO
+  PERFORM "Tell me what you'd be interested in teaching."
+  RETURN teachables
+END
+
+DEFINE identify_yourself FOR person DO
+  PERFORM "Tell me your name and contact info."
+  RETURN name, email
+END
+
+DEFINE learn {
+  learnables
+}
+
+LISTEN TO public VIA http FOR learns
+
+ON EACH learn DO
+  # add learner to athena community
+  # TODO do we need to have the 'learner ='?
+  # TODO should the add to community be at the top
+  #   since required attributes only get added on from the community
+  learner = ADD learner TO athena
+  # add leanables to person for persistant storage
+  # TODO note we're adding a list of teachables
+  # ADD should also work for a single element
+  learner.learnables = ADD learn.learnables TO learner.learnables
+  teachables = ASK learner VIA stream TO state_teachables
+  # add teachables to person
+  learner.teachables = ADD teachables TO learner.teachables
+  identity = ASK learner VIA stream TO identify_yourself
+  # TODO think about auto-adding properties to learner in both LISTEN and ASK
+  learner.name = identity.name
+  learner.email = identity.email
+  # Save modifications made to person
+  SAVE learner TO public
+  # For eventual debugging purposes
+  INSPECT learner
+  # TODO iffy, learner will not update if admin display stems from this
+  NOTIFY admins OF learner
+END
+
+# admin panel
+# -----------
+#
+# Human moderated pairings
+#
+
+# Add the predefined admins to the community
+# TODO syntax to define a person, using known details
+ADD PERSON { "Zahan Malkani", "zahanm@mit.edu" } TO admins
+ADD PERSON { "Sep Kamvar", "sdkamvar@mit.edu" } TO admins
+ADD PERSON { "Salman Ahmad", "saahmad@mit.edu" } TO admins
+
+# Using a LISTEN, since we want up to date information about the pairs
+# when making the request, so the data needs to be fetched at request time
+
+# TODO is this really needed?
+#   problem with auto-defined events is potential for spelling slip-ups
+DEFINE unpaired_listing { }
+
+LISTEN TO admins VIA http FOR unpaired_listings
+
+ON EACH unpaired_listing DO
+  # TODO query syntax, shared with all collections?
+  unpaired = PEOPLE FROM athena WHERE learner = NULL OR teacher = NULL
+  RETURN unpaired
+END
+
+# Listen for pairings made by the admins
+DEFINE pairing { learner, teacher }
+
+LISTEN TO admins VIA http FOR pairings
+
+ON EACH pairing DO
+  # TODO PERSON shortcut for PEOPLE .. LIMIT 1 ?
+  # TODO how to map submitted person to Person type?
+  learner = PERSON FROM athena WHERE ref = pairing.learner
+  teacher = PERSON FORM athena WHERE ref = pairing.teacher
+  # TODO what does this store, refs?
+  learner.teacher = teacher
+  teacher.learner = learner
+END
+
+# external ranking
+# ----------------
+#
+# Automated pairing, driven by external Python functions
+#
+
+# This function is just to choose the best teacher
+# TODO assuming that we're optimizing for the best teachers and
+#   not learners
+DEFINE best_unpaired_teacher ON learner DO
+  # TODO intersection syntax?
+  potential_teachers = PEOPLE FROM athena WHERE learner == NULL AND (teachables & learner.learnables) > 0
+  best_teachers = COMPUTE rank_k_teachers ON learner, potential_teachers
+  # TODO slice syntax?
+  RETURN best_teachers[0]
+END
+
+DEFINE rank_k_teachers FOR shell ON me, teachers USING k = 5 DO
+  PERFORM "python ranking.py"
+  RETURN teachers_list
+END
+
+# --- App-wide notes
+
+# TODO start using Titlecase for structure names?
+# TODO should teacher-learner be many-to-many?
