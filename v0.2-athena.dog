@@ -1,5 +1,5 @@
 
-DEFINE COMMUNITY athena {
+DEFINE COMMUNITY athena { # change name to learners
   learnables
   learner
   teachables
@@ -24,31 +24,35 @@ DEFINE identify_yourself FOR person DO
   RETURN name, email
 END
 
-DEFINE learn {
-  learnables
-}
+# TODO DEFINE, LISTEN and ON EACH is verbose - shorten?
+# DECISION pending structure returned by 'LISTEN FOR <type>'
+# DECISION listen for structure - that structure can be
+# defined inline in the LISTEN
+learning_requests = LISTEN TO public VIA http FOR { topic }
 
-LISTEN TO public VIA http FOR learns
-
-ON EACH learn DO
+ON EACH learning_request DO
+  learner = PERSON FROM learning_request
   # add learner to athena community
   # TODO do we need to have the 'learner ='?
+  # DECISION macros which define syntactic sugar
+  # So: ADD salman TO box ==> box = COMPUTE add ON salman, box
   # TODO should the add to community be at the top
   #   since required attributes only get added on from the community
-  learner = ADD learner TO athena
-  # add leanables to person for persistant storage
-  # TODO note we're adding a list of teachables
-  # ADD should also work for a single element
-  learner.learnables = ADD learn.learnables TO learner.learnables
+  # DECISION add community at the beginning
+  ADD learner TO athena
+  # add learnables to person for persistant storage
+  ADD learning_request.topic TO learner.athena.learnables
   teachables = ASK learner VIA stream TO state_teachables
   # add teachables to person
   learner.teachables = ADD teachables TO learner.teachables
   identity = ASK learner VIA stream TO identify_yourself
   # TODO think about auto-adding properties to learner in both LISTEN and ASK
+  # DECISION: macros can handle this => MERGE identity INTO learner
   learner.name = identity.name
   learner.email = identity.email
+  # TODO required
   # Save modifications made to person
-  SAVE learner TO public
+  SAVE learner
   # For eventual debugging purposes
   INSPECT learner
   # TODO iffy, learner will not update if admin display stems from this
@@ -63,24 +67,35 @@ END
 
 # Add the predefined admins to the community
 # TODO syntax to define a person, using known details
-ADD PERSON { "Zahan Malkani", "zahanm@mit.edu" } TO admins
-ADD PERSON { "Sep Kamvar", "sdkamvar@mit.edu" } TO admins
-ADD PERSON { "Salman Ahmad", "saahmad@mit.edu" } TO admins
+# DECISION apart from macro for ADD, this should work as is
+ADD dog.person { first_name = "Zahan", last_name = "Malkani", email = "zahanm@mit.edu" } TO admins
+ADD dog.person { first_name = "Sep", last_name = "Kamvar", email = "sdkamvar@mit.edu" } TO admins
+ADD dog.person { first_name = "Salman", last_name = "Ahmad", email = "saahmad@mit.edu" } TO admins
 
 # Using a LISTEN, since we want up to date information about the pairs
 # when making the request, so the data needs to be fetched at request time
 
-# TODO is this really needed?
-#   problem with auto-defined events is potential for spelling slip-ups
-DEFINE unpaired_listing { }
-
-LISTEN TO admins VIA http FOR unpaired_listings
+# TODO listening for nothing?
+# DECISION `request` aliased to { }
+unpaired_listings = LISTEN TO admins VIA http FOR request
 
 ON EACH unpaired_listing DO
   # TODO query syntax, shared with all collections?
-  unpaired = PEOPLE FROM athena WHERE learner = NULL OR teacher = NULL
+  unpaired = PEOPLE FROM athena WHERE learner == NULL OR teacher == NULL
   RETURN unpaired
 END
+
+unpaired = PEOPLE FROM athena AND mit WHERE learner == NULL OR teacher == NULL
+results = videos WHERE
+results = FROM videos WHERE ...
+
+results = QUERY videos WHERE
+results = FIND videos WHERE
+results = DATA FROM videos WHERE
+
+
+
+results - videos[ ... ]
 
 # Listen for pairings made by the admins
 DEFINE pairing { learner, teacher }
