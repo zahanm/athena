@@ -1,4 +1,9 @@
 
+
+
+
+#=============
+
 DEFINE COMMUNITY athena { # change name to learners
   learnables
   learner
@@ -50,7 +55,7 @@ ON EACH learning_request DO
   # DECISION: macros can handle this => MERGE identity INTO learner
   learner.name = identity.name
   learner.email = identity.email
-  # TODO required
+  # TODO required?
   # Save modifications made to person
   SAVE learner
   # For eventual debugging purposes
@@ -84,18 +89,6 @@ ON EACH unpaired_listing DO
   unpaired = PEOPLE FROM athena WHERE learner == NULL OR teacher == NULL
   RETURN unpaired
 END
-
-unpaired = PEOPLE FROM athena AND mit WHERE learner == NULL OR teacher == NULL
-results = videos WHERE
-results = FROM videos WHERE ...
-
-results = QUERY videos WHERE
-results = FIND videos WHERE
-results = DATA FROM videos WHERE
-
-
-
-results - videos[ ... ]
 
 # Listen for pairings made by the admins
 DEFINE pairing { learner, teacher }
