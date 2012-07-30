@@ -8,24 +8,27 @@
 <body>
   <dog>
     <!-- learning request flow -->
-    <form listen="learning_requests" holder="#conversation" class="form-inline">
-      <div id="start-finding">
-        <p>I would like to</p>
-        <input type="text" name="learnable">
-        <button class="btn btn-success" type="button">start finding a mentor</button>
-      </div>
-      <div id="state-teachable" style="display: none;">
-        <p>In return, I'd be willing to help a friend to</p>
-        <input type="text" name="teachable">
-        <button class="btn btn-success" type="button">spread the learning</button>
-      </div>
-      <div id="identify-themself" style="display: none;">
-        <p>My name is</p>
-        <input type="text" name="name" placeholder="full name">,
-        <p>and I my email is</p>
-        <input type="email" name="email" placeholder="email">
-        <input type="submit" value="sign up" class="btn btn-success">
-      </div>
+    <form listen="learning_requests" holder="#conversation" class="form-inline" id="start-finding">
+      <p>My goal is to</p>
+      <input type="text" name="learnable">
+      <button class="btn btn-success" type="submit">note goal</button>
+    </form>
+    <form ask="state_skill_needed" holder="#conversation" class="form-inline" id="state-teachable">
+      <p>and the skill I'll going to need in order to accomplish it is</p>
+      <input type="text" name="skill">
+      <button class="btn btn-success" type="submit">start finding a mentor</button>
+    </form>
+    <form ask="state_teachable" holder="#conversation" class="form-inline" id="state-teachable">
+      <p>In return, I'd be willing to help a friend to</p>
+      <input type="text" name="teachable">
+      <button class="btn btn-success" type="submit">spread the learning</button>
+    </form>
+    <form ask="identify_yourself" holder="#conversation" class="form-inline" id="identify-themself">
+      <p>My name is</p>
+      <input type="text" name="name" placeholder="full name">,
+      <p>and I my email is</p>
+      <input type="email" name="email" placeholder="email">
+      <button class="btn btn-success" type="submit">sign up</button>
     </form>
     <!-- admin display -->
     <section oneach="@each:learning_request" subscribe="true">
@@ -50,7 +53,7 @@
     </div>
     <div id="signup-holder" class="row">
       <div class="offset1 span10 hero">
-        <div id="conversation" method="fill"></div>
+        <div id="conversation" method="append"></div>
       </div>
     </div>
     <div id="thanks-holder" class="row">

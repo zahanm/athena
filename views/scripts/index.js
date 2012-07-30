@@ -44,17 +44,17 @@ dogjs.on('load', function () {
   }
 
   var button = document.querySelector('#start-finding > button');
-  button.addEventListener('click', function () {
-    document.querySelector('#state-teachable').style.display = 'block';
-  });
-  button = document.querySelector('#state-teachable > button');
-  button.addEventListener('click', function () {
-    document.querySelector('#identify-themself').style.display = 'block';
-  });
+  // button.addEventListener('click', function () {
+  //   document.querySelector('#state-teachable').style.display = 'block';
+  // });
+  // button = document.querySelector('#state-teachable > button');
+  // button.addEventListener('click', function () {
+  //   document.querySelector('#identify-themself').style.display = 'block';
+  // });
   button = document.querySelector('#identify-themself > input[type="submit"]');
   button.addEventListener('click', function () {
-    document.querySelector('#state-teachable').style.display = 'none';
-    document.querySelector('#identify-themself').style.display = 'none';
+    // document.querySelector('#state-teachable').style.display = 'none';
+    // document.querySelector('#identify-themself').style.display = 'none';
     document.querySelector('#thanks-holder').style.display = 'block';
     fadeOut(document.querySelector('#thanks-holder'));
   });

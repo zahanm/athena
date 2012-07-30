@@ -16,6 +16,11 @@ DEFINE learning_request {
 # Signup process
 # --------------
 
+DEFINE state_skill_needed FOR person DO
+  PERFORM "What is the skill needed to perform that task?"
+  RETURN skill
+END
+
 DEFINE state_teachable FOR person DO
   PERFORM "Tell me what you'd be interested in teaching."
   RETURN teachable
@@ -32,6 +37,8 @@ ON EACH learning_request DO
   INSPECT learning_request
   learner = PERSON FROM learning_request
   INSPECT learner
+  skill = ASK public VIA stream TO state_skill_needed
+  INSPECT skill
   teachable = ASK public VIA stream TO state_teachable
   INSPECT teachable
   identity = ASK public VIA stream TO identify_yourself
