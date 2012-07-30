@@ -1,9 +1,4 @@
 
-
-
-
-#=============
-
 DEFINE COMMUNITY athena { # change name to learners
   learnables
   learner
@@ -29,11 +24,13 @@ DEFINE identify_yourself FOR person DO
   RETURN name, email
 END
 
+DEFINE learning_request { topic }
+
 # TODO DEFINE, LISTEN and ON EACH is verbose - shorten?
 # DECISION pending structure returned by 'LISTEN FOR <type>'
 # DECISION listen for structure - that structure can be
 # defined inline in the LISTEN
-learning_requests = LISTEN TO public VIA http FOR { topic }
+LISTEN TO public VIA http FOR learning_requests
 
 ON EACH learning_request DO
   learner = PERSON FROM learning_request
@@ -73,6 +70,7 @@ END
 # Add the predefined admins to the community
 # TODO syntax to define a person, using known details
 # DECISION apart from macro for ADD, this should work as is
+# DECISION these particular users will be added in Vet admin interface
 ADD dog.person { first_name = "Zahan", last_name = "Malkani", email = "zahanm@mit.edu" } TO admins
 ADD dog.person { first_name = "Sep", last_name = "Kamvar", email = "sdkamvar@mit.edu" } TO admins
 ADD dog.person { first_name = "Salman", last_name = "Ahmad", email = "saahmad@mit.edu" } TO admins
@@ -80,11 +78,13 @@ ADD dog.person { first_name = "Salman", last_name = "Ahmad", email = "saahmad@mi
 # Using a LISTEN, since we want up to date information about the pairs
 # when making the request, so the data needs to be fetched at request time
 
+DEFINE list_unpaired_request { }
+
 # TODO listening for nothing?
 # DECISION `request` aliased to { }
-unpaired_listings = LISTEN TO admins VIA http FOR request
+LISTEN TO admins VIA http FOR list_unpaired_requests
 
-ON EACH unpaired_listing DO
+ON EACH list_unpaired_request DO
   # TODO query syntax, shared with all collections?
   unpaired = PEOPLE FROM athena WHERE learner == NULL OR teacher == NULL
   RETURN unpaired
