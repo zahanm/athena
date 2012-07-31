@@ -1,7 +1,19 @@
 
 DEFINE COMMUNITY athena {
+  goal
   learnables
   teachables
+  student
+  teacher
+}
+
+# FIXME temporary, till people and communities are implemented
+DEFINE athena_member {
+  name
+  email
+  goal
+  learnable
+  teachable
   student
   teacher
 }
@@ -29,21 +41,25 @@ DEFINE goal { value }
 LISTEN TO public VIA http FOR goals
 
 ON EACH goal DO
-  INSPECT goal
-  learner = PERSON FROM goal
-  INSPECT learner
-  skill = ASK public VIA stream TO state_skill_needed
-  INSPECT skill
-  teachable = ASK public VIA stream TO state_teachable
-  INSPECT teachable
+  learner = athena_member { }
+  learner.goal = goal['value']
+  response = ASK public VIA stream TO state_skill_needed
+  learner.learnable = response['skill']
+  response = ASK public VIA stream TO state_teachable
+  learner.teachable = response['teachable']
   identity = ASK public VIA stream TO identify_yourself
-  INSPECT identity
+  learner.name = identity['name']
+  learner.email = identity['email']
+  INSPECT learner
+  PRINT 'Learner:'
+  PRINT 'name: ' + learner.name
+  PRINT 'email: ' + learner.email
+  PRINT 'goal: ' + learner.goal
+  PRINT 'learnable: ' + learner.learnable
+  PRINT 'teachable: ' + learner.teachable
   #
-  # learner.name = identity.name
-  # learner.email = identity.email
-  # INSPECT learner
   # COMPUTE people.save ON learner
-  NOTIFY public VIA stream OF goal
+  NOTIFY public VIA stream OF learner
 END
 
 # external functions

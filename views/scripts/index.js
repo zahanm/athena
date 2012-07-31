@@ -20,7 +20,7 @@ dogjs.on('load', function () {
         i = (i+1) % examples.length;
       }
     });
-    setTimeout(cycle, interval);
+    // setTimeout(cycle, interval);
   }
   // no need to defer: we wait for `dogjs` to load
   cycle();
