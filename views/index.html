@@ -8,10 +8,12 @@
 <body>
   <dog>
     <!-- learning request flow -->
-    <form listen="learning_requests" holder="#conversation" class="form-inline" id="start-finding">
+    <form listen="goals" holder="#conversation" class="form-inline" id="start-finding">
       <p>My goal is to</p>
-      <input type="text" name="learnable">
-      <button class="btn btn-success" type="submit">note goal</button>
+      <div class="input-append">
+        <input type="text" name="value"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
+        <!-- <button class="btn btn-success" type="submit">note goal</button> -->
+      </div>
     </form>
     <form ask="state_skill_needed" holder="#conversation" class="form-inline" id="state-teachable">
       <p>and the skill I'll going to need in order to accomplish it is</p>
@@ -31,8 +33,8 @@
       <button class="btn btn-success" type="submit">sign up</button>
     </form>
     <!-- admin display -->
-    <section oneach="@each:learning_request" subscribe="true">
-      <section notify="learning_request" holder="#admin">
+    <section oneach="@each:goal" subscribe="true">
+      <section notify="goal" holder="#admin">
         <div class="row">
           <div class="cell span2">{{name}}</div>
           <div class="cell span3">{{email}}</div>

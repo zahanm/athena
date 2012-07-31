@@ -6,13 +6,6 @@ DEFINE COMMUNITY athena {
   teacher
 }
 
-DEFINE learning_request {
-  name
-  email
-  learnable
-  teachable
-}
-
 # Signup process
 # --------------
 
@@ -31,11 +24,13 @@ DEFINE identify_yourself FOR person DO
   RETURN name, email
 END
 
-LISTEN TO public VIA http FOR learning_requests
+DEFINE goal { value }
 
-ON EACH learning_request DO
-  INSPECT learning_request
-  learner = PERSON FROM learning_request
+LISTEN TO public VIA http FOR goals
+
+ON EACH goal DO
+  INSPECT goal
+  learner = PERSON FROM goal
   INSPECT learner
   skill = ASK public VIA stream TO state_skill_needed
   INSPECT skill
@@ -43,9 +38,18 @@ ON EACH learning_request DO
   INSPECT teachable
   identity = ASK public VIA stream TO identify_yourself
   INSPECT identity
+  #
   # learner.name = identity.name
   # learner.email = identity.email
   # INSPECT learner
   # COMPUTE people.save ON learner
-  NOTIFY public VIA stream OF learning_request
+  NOTIFY public VIA stream OF goal
+END
+
+# external functions
+# ------------------
+
+DEFINE rank_k_teachers FOR shell ON me, teachers USING k = 5 DO
+  PERFORM "python ranking.py"
+  RETURN teachers_list
 END
