@@ -11,29 +11,34 @@
     <form listen="goals" holder="#conversation" class="form-inline" id="start-finding">
       <p>My goal is to</p>
       <div class="input-append">
-        <input type="text" name="value"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
-        <!-- <button class="btn btn-success" type="submit">note goal</button> -->
+        <input type="text" name="value" style="width: 400px;"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
       </div>
     </form>
-    <form ask="state_skill_needed" holder="#conversation" class="form-inline" id="state-teachable">
-      <p>and the skill I'll going to need in order to accomplish it is</p>
-      <input type="text" name="skill">
-      <button class="btn btn-success" type="submit">start finding a mentor</button>
-    </form>
-    <form ask="state_teachable" holder="#conversation" class="form-inline" id="state-teachable">
-      <p>In return, I'd be willing to help a friend to</p>
-      <input type="text" name="teachable">
-      <button class="btn btn-success" type="submit">spread the learning</button>
-    </form>
-    <form ask="identify_yourself" holder="#conversation" class="form-inline" id="identify-themself">
-      <p>My name is</p>
-      <input type="text" name="name" placeholder="full name">,
-      <p>and I my email is</p>
-      <input type="email" name="email" placeholder="email">
-      <button class="btn btn-success" type="submit">sign up</button>
-    </form>
-    <!-- admin display -->
+
     <section oneach="@each:goal" subscribe="true">
+
+      <!-- Inside the ON EACH goal -->
+      <form ask="state_skill_needed" holder="#conversation" class="form-inline" id="state-teachable">
+        <p>and the skill I'll going to need in order to accomplish it is</p>
+        <div class="input-append">
+          <input type="text" name="skill"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
+        </div>
+      </form>
+      <form ask="state_teachable" holder="#conversation" class="form-inline" id="state-teachable">
+        <p>In return, I'd be willing to help a friend to</p>
+        <div class="input-append">
+          <input type="text" name="teachable"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
+        </div>
+      </form>
+      <form ask="identify_yourself" holder="#conversation" class="form-inline" id="identify-themself">
+        <p>My name is</p>
+        <input type="text" name="name" placeholder="full name">,
+        <p>and I my email is</p>
+        <input type="email" name="email" placeholder="email">
+        <button class="btn btn-success" type="submit">sign up</button>
+      </form>
+
+      <!-- admin display -->
       <section notify="goal" holder="#admin">
         <div class="row">
           <div class="cell span2">{{name}}</div>
@@ -42,7 +47,9 @@
           <div class="cell span3">{{teachable}}</div>
         </div>
       </section>
+
     </section>
+
   </dog>
   <div class="container">
     <div class="row">
