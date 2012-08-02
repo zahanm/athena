@@ -1,21 +1,27 @@
 
-DEFINE COMMUNITY athena { # change name to learners
+# Community definitions
+# ---------------------
+
+DEFINE learners OF people USING learners_profile {
+  goal
   learnables
-  learner
   teachables
-  teacher
+  students
+  teachers
 }
 
-DEFINE COMMUNITY admins { }
+DEFINE admins OF people
 
 # Signup process
 # --------------
-#
-# Pretty straightforward. Almost working in v0.1
-#
+
+DEFINE state_skill_needed FOR person DO
+  PERFORM "What is the skill needed to perform that task?"
+  RETURN skill
+END
 
 DEFINE state_teachables FOR person DO
-  PERFORM "Tell me what you'd be interested in teaching."
+  PERFORM "Tell me some things you'd be interested in teaching."
   RETURN teachables
 END
 
@@ -24,41 +30,50 @@ DEFINE identify_yourself FOR person DO
   RETURN name, email
 END
 
-DEFINE learning_request { topic }
+LISTEN TO public VIA http FOR goals
 
-# TODO DEFINE, LISTEN and ON EACH is verbose - shorten?
-# DECISION pending structure returned by 'LISTEN FOR <type>'
-# DECISION listen for structure - that structure can be
-# defined inline in the LISTEN
-LISTEN TO public VIA http FOR learning_requests
-
-ON EACH learning_request DO
-  learner = PERSON FROM learning_request
-  # add learner to athena community
-  # TODO do we need to have the 'learner ='?
-  # DECISION macros which define syntactic sugar
-  # So: ADD salman TO box ==> box = COMPUTE add ON salman, box
-  # TODO should the add to community be at the top
-  #   since required attributes only get added on from the community
-  # DECISION add community at the beginning
-  ADD learner TO athena
-  # add learnables to person for persistant storage
-  ADD learning_request.topic TO learner.athena.learnables
+ON EACH goal DO
+  learner = PERSON FROM goal
+  skill = ASK learner VIA stream TO state_skill_needed
+  # note teachable's'
   teachables = ASK learner VIA stream TO state_teachables
-  # add teachables to person
-  learner.teachables = ADD teachables TO learner.teachables
+
+
+  # straightforward
+  # ---------------
+  learner's learners_profile.goal = goal
+  ADD skill TO learner's learners_profile.learnables
+  ADD teachables TO learner's learners_profile.teachables
+  SAVE learner to learners
+
+  # with a separate local variable
+  # ------------------------------
+  # Why like this? Well, it would be awkward to do two rounds of merging to learnables
+  # and teachables
+  # if we don't like line 1 and 5, then we should use 'straightforward' syntax
+  profile = learner's learners_profile
+  profile.goal = goal
+  ADD skill TO profile.learnables
+  ADD teachables TO profile.teachables
+  learner's learners_profile = profile
+  SAVE learner TO learners
+
+  # alternate profile lookup syntax
+  # -------------------------------
+  # how about
+  zahan's major FROM stanford_profile
+  # naturally,
+  # if there are no conflicts, can just say learner's goal
+  learner's goal FROM learners_profile = goal
+  ADD skill TO learner's learnables FROM learners_profile
+  ADD teachables TO learner's teachables FROM learners_profile
+  SAVE learner TO learners
+
+
   identity = ASK learner VIA stream TO identify_yourself
-  # TODO think about auto-adding properties to learner in both LISTEN and ASK
-  # DECISION: macros can handle this => MERGE identity INTO learner
-  learner.name = identity.name
-  learner.email = identity.email
-  # TODO required?
-  # Save modifications made to person
-  SAVE learner
-  # For eventual debugging purposes
-  INSPECT learner
-  # TODO iffy, learner will not update if admin display stems from this
-  NOTIFY admins OF learner
+  learner's name = identity.name
+  learner's email = identity.email
+  SAVE learner TO public
 END
 
 # admin panel
@@ -67,25 +82,13 @@ END
 # Human moderated pairings
 #
 
-# Add the predefined admins to the community
-# TODO syntax to define a person, using known details
-# DECISION apart from macro for ADD, this should work as is
-# DECISION these particular users will be added in Vet admin interface
-ADD dog.person { first_name = "Zahan", last_name = "Malkani", email = "zahanm@mit.edu" } TO admins
-ADD dog.person { first_name = "Sep", last_name = "Kamvar", email = "sdkamvar@mit.edu" } TO admins
-ADD dog.person { first_name = "Salman", last_name = "Ahmad", email = "saahmad@mit.edu" } TO admins
-
 # Using a LISTEN, since we want up to date information about the pairs
 # when making the request, so the data needs to be fetched at request time
 
-DEFINE list_unpaired_request { }
-
-# TODO listening for nothing?
-# DECISION `request` aliased to { }
+# list_unpaired_request is undefined earlier, will use '@value' on client
 LISTEN TO admins VIA http FOR list_unpaired_requests
 
 ON EACH list_unpaired_request DO
-  # TODO query syntax, shared with all collections?
   unpaired = PEOPLE FROM athena WHERE learner == NULL OR teacher == NULL
   RETURN unpaired
 END
@@ -96,13 +99,11 @@ DEFINE pairing { learner, teacher }
 LISTEN TO admins VIA http FOR pairings
 
 ON EACH pairing DO
-  # TODO PERSON shortcut for PEOPLE .. LIMIT 1 ?
-  # TODO how to map submitted person to Person type?
-  learner = PERSON FROM athena WHERE ref = pairing.learner
-  teacher = PERSON FORM athena WHERE ref = pairing.teacher
-  # TODO what does this store, refs?
-  learner.teacher = teacher
-  teacher.learner = learner
+  # assuming that learner and teacher are correctly populated
+  learner = pairing.learner
+  teacher = pairing.teacher
+  ADD teacher TO learner's learners_profile.teachers
+  ADD learner TO teacher's learners_profile.students
 END
 
 # external ranking
@@ -126,8 +127,3 @@ DEFINE rank_k_teachers FOR shell ON me, teachers USING k = 5 DO
   PERFORM "python ranking.py"
   RETURN teachers_list
 END
-
-# --- App-wide notes
-
-# TODO start using Titlecase for structure names?
-# TODO should teacher-learner be many-to-many?
