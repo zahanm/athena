@@ -43,6 +43,18 @@ body {
   }
 }
 
+.placeholder-opacity(@opacity) {
+  &:-moz-placeholder {
+    opacity: @opacity;
+  }
+  &:-ms-input-placeholder {
+    opacity: @opacity;
+  }
+  &::-webkit-input-placeholder {
+    opacity: @opacity;
+  }
+}
+
 .hero {
   font-size: 20px;
   font-weight: 200;

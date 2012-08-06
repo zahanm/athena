@@ -48,9 +48,9 @@ ON EACH goal DO
   response = ASK public VIA stream TO state_teachable
   learner.teachable = response['teachable']
   identity = ASK public VIA stream TO identify_yourself
+  INSPECT identity
   learner.name = identity['name']
   learner.email = identity['email']
-  INSPECT learner
   PRINT 'Learner:'
   PRINT 'name: ' + learner.name
   PRINT 'email: ' + learner.email

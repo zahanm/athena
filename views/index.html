@@ -18,7 +18,7 @@
     <section oneach="@each:goal" subscribe="true">
 
       <!-- Inside the ON EACH goal -->
-      <form ask="state_skill_needed" holder="#conversation" class="form-inline" id="state-teachable">
+      <form ask="state_skill_needed" holder="#conversation" class="form-inline">
         <p>and the skill I'll going to need in order to accomplish it is</p>
         <div class="input-append">
           <input type="text" name="skill" placeholder="flap my wings" tabindex="2"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
@@ -30,12 +30,14 @@
           <input type="text" name="teachable" placeholder="do the Tango" tabindex="3"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
         </div>
       </form>
-      <form ask="identify_yourself" holder="#conversation" class="form-inline" id="identify-themself">
+      <form ask="identify_yourself" holder="#conversation" class="form-inline">
         <p>My name is</p>
         <input type="text" name="name" placeholder="full name" tabindex="4">,
         <p>and I my email is</p>
         <input type="email" name="email" placeholder="email" tabindex="5">
-        <button class="btn btn-success" type="submit">sign up</button>
+        <div style="text-align: center;">
+          <button class="btn btn-success" type="submit">sign up</button>
+        </div>
       </form>
 
       <!-- admin display -->
