@@ -50,8 +50,8 @@ dogjs.on('load', function () {
 
   function setupHandlers(elem) {
     if (elem.attributes['ask'] && elem.attributes['ask'].value === "identify_yourself") {
-      // this is the identify_yourself form
-      elem.addEventListener('submitted:ask', function () {
+      // this is the identify_yourself form submission
+      dogjs.on('submitted:ask:identify_yourself', function (data) {
         var step = document.querySelector('form[listen="goals"]');
         step && step.reset();
         ['form[ask="state_skill_needed"]', 'form[ask="state_teachable"]', 'form[ask="identify_yourself"]'].forEach(function (selector) {
