@@ -32,7 +32,7 @@ dogjs.on('pagechange', function () {
   function changePlaceholder(elem, ptext) {
   }
 
-  function fadeOut(elem) {
+  function fadeOut(elem, callback) {
     elem.style.opacity = '1';
     timegap = 100;
     delta = -0.1;
@@ -47,6 +47,7 @@ dogjs.on('pagechange', function () {
         setTimeout(fadeDelta.bind(this, elem, delta), timegap);
       } else {
         elem.style.display = 'none';
+        callback && callback();
       }
     }
     setTimeout(fadeDelta.bind(this, elem, delta), timegap);
@@ -57,16 +58,18 @@ dogjs.on('pagechange', function () {
 
   // this is the identify_yourself form submission
   dogjs.on('submitted:ask:identify_yourself', function (data) {
-    var step = document.querySelector('form[listen="goals"]');
-    step && step.reset();
-    ['form[ask="state_skill_needed"]', 'form[ask="state_teachable"]', 'form[ask="identify_yourself"]'].forEach(function (selector) {
+    ['form[listen="goals"]', 'form[ask="state_skill_needed"]', 'form[ask="state_teachable"]', 'form[ask="identify_yourself"]'].forEach(function (selector) {
       step = document.querySelector(selector);
       if (!step) { return; }
       step.reset();
       step.style.display = 'none';
     });
     document.querySelector('#thanks-holder').style.display = 'block';
-    setTimeout(fadeOut.bind(this, document.querySelector('#thanks-holder')), 2000);
+    setTimeout(function () {
+      fadeOut(document.querySelector('#thanks-holder'), function () {
+        dogjs.changePage('browse');
+      });
+    }, 2000);
   });
 
   var changer = document.querySelector('#change-page');
