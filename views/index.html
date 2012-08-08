@@ -5,41 +5,14 @@
   <link href='http://fonts.googleapis.com/css?family=Merienda+One' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="/styles/index.css" type="text/css" charset="utf-8">
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/scripts/index.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript" charset="utf-8">
+    dogjs.setupPages({
+      'default': '/home.html',
+      'templates': '/templates.html'
+    });
+  </script>
 </head>
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="offset6 span5">
-        <h1>Athena <small>a peer-to-peer learning exprience</small></h1>
-      </div>
-      <div class="span1">
-        <button class="btn btn-large btn-primary">Login</button>
-      </div>
-    </div>
-    <div id="signup-holder" class="row">
-      <div class="offset1 span10 hero">
-        <div id="conversation" method="append"></div>
-      </div>
-    </div>
-    <div id="thanks-holder" class="row">
-      <div class="offset1 hero-unit">
-        <h1>Thank you</h1>
-        <p>We will get back to you soon with a pairing.</p>
-      </div>
-    </div>
-    <div id="admin-holder" class="row">
-      <div class="offset1 span11">
-        <div class="row">
-          <div class="span2 strong">Name</div>
-          <div class="span3 strong">Email</div>
-          <div class="span3 strong">Learnable</div>
-          <div class="span3 strong">Teachable</div>
-        </div>
-        <div id="admin" method="append"></div>
-      </div>
-    </div>
-  </div>
-  <button class="btn" id="admin-button">Admin</button>
-  <script src="/scripts/index.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

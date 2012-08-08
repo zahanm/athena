@@ -81,8 +81,3 @@ dogjs.on('load', function () {
     }
   })
 });
-
-dogjs.setupPages({
-  'default': '/home.html',
-  'templates': '/templates.html'
-});
