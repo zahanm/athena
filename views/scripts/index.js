@@ -1,5 +1,5 @@
 
-dogjs.on('load', function () {
+dogjs.on('pagechange', function () {
 
   // placeholder cycling
   // -------------------
@@ -66,18 +66,14 @@ dogjs.on('load', function () {
       step.style.display = 'none';
     });
     document.querySelector('#thanks-holder').style.display = 'block';
-    fadeOut(document.querySelector('#thanks-holder'));
+    setTimeout(fadeOut.bind(this, document.querySelector('#thanks-holder')), 2000);
   });
 
-  var button = document.querySelector('#admin-button');
-  button.addEventListener('click', function () {
-    var holder = document.querySelector('#admin-holder');
-    if (holder.style.display && holder.style.display === 'block') {
-      holder.style.display = 'none';
-      document.querySelector('#signup-holder').style.display = 'block';
-    } else {
-      holder.style.display = 'block';
-      document.querySelector('#signup-holder').style.display = 'none';
-    }
+  var changer = document.querySelector('#change-page');
+  changer && changer.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    destination = changer.querySelector('input[type="text"]');
+    dogjs.changePage(destination.value);
+    return false;
   })
 });
