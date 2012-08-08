@@ -4,55 +4,9 @@
   <title>Athena</title>
   <link href='http://fonts.googleapis.com/css?family=Merienda+One' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="/styles/index.css" type="text/css" charset="utf-8">
+  <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
-  <dog>
-    <!-- learning request flow -->
-    <form listen="goals" holder="#conversation" class="form-inline" id="start-finding">
-      <p>My goal is to</p>
-      <div class="input-append">
-        <input type="text" name="value" placeholder="fly higher than the sky" tabindex="1" style="width: 400px;"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
-      </div>
-    </form>
-
-    <section oneach="@each:goal" subscribe="true">
-
-      <!-- Inside the ON EACH goal -->
-      <form ask="state_skill_needed" holder="#conversation" class="form-inline">
-        <p>and the skill I'll going to need in order to accomplish it is</p>
-        <div class="input-append">
-          <input type="text" name="skill" placeholder="flap my wings" tabindex="2"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
-        </div>
-      </form>
-      <form ask="state_teachable" holder="#conversation" class="form-inline" id="state-teachable">
-        <p>In return, I'd be willing to help a friend to</p>
-        <div class="input-append">
-          <input type="text" name="teachable" placeholder="do the Tango" tabindex="3"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
-        </div>
-      </form>
-      <form ask="identify_yourself" holder="#conversation" class="form-inline">
-        <p>My name is</p>
-        <input type="text" name="name" placeholder="full name" tabindex="4">,
-        <p>and I my email is</p>
-        <input type="email" name="email" placeholder="email" tabindex="5">
-        <div style="text-align: center;">
-          <button class="btn btn-success" type="submit">sign up</button>
-        </div>
-      </form>
-
-      <!-- admin display -->
-      <section notify="goal" holder="#admin">
-        <div class="row">
-          <div class="cell span2">{{name}}</div>
-          <div class="cell span3">{{email}}</div>
-          <div class="cell span3">{{learnable}}</div>
-          <div class="cell span3">{{teachable}}</div>
-        </div>
-      </section>
-
-    </section>
-
-  </dog>
   <div class="container">
     <div class="row">
       <div class="offset6 span5">
@@ -86,7 +40,6 @@
     </div>
   </div>
   <button class="btn" id="admin-button">Admin</button>
-  <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/index.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
