@@ -85,10 +85,7 @@ dogjs.on('pageload', function () {
   //
   // Finding it difficult to include cutom Javascript on a loaded page
 
-  var stopwords = {};
-  ['a', 'the', 'and', 'of', 'on', 'over', 'do', 'let', 'my', 'go'].forEach(function (v) {
-    stopwords[v] = true;
-  });
+  var stopwords = /^(a|the|and|of|on|over|do|let|in|\d+)$/;
 
   function buildTagCloud(sourceQ, targetQ) {
     var sources, target, tagCounts;
@@ -104,7 +101,7 @@ dogjs.on('pageload', function () {
     Array.prototype.forEach.call(sources, function (s) {
       var content = s.innerText || s.textContent;
       content.split(/\s+/).forEach(function (tag) {
-        if (!(tag in stopwords)) {
+        if (!(stopwords.exec(tag))) {
           tagCounts[tag] = tagCounts[tag] || 0;
           tagCounts[tag] += 1;
         }
