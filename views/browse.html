@@ -19,19 +19,28 @@
     <div class="row span12">
       <div class="tabbable">
         <ul class="nav nav-tabs">
-          <li class="active"><a href="#browse-goals" data-toggle="tab">Goals</a></li>
-          <li><a href="#browse-skills" data-toggle="tab">Skills</a></li>
+          <li class="active"><a href="#browse-skills" data-toggle="tab">Skills</a></li>
+          <li><a href="#browse-goals" data-toggle="tab">Goals</a></li>
         </ul>
         <div class="tab-content">
-          <div class="tab-pane active" id="browse-goals">
-            <p>Goals mashup.</p>
-          </div>
-          <div class="tab-pane" id="browse-skills">
+          <div class="tab-pane active" id="browse-skills">
             <p>Skills word-cloud.</p>
+            <div class="tag-cloud">
+              <i class="icon-refresh loading"></i>
+              Loading
+            </div>
+          </div>
+          <div class="tab-pane" id="browse-goals">
+            <p>Goals mashup.</p>
+            <div class="tag-cloud">
+              <i class="icon-refresh loading"></i>
+              Loading
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <div id="admin" method="append" style="display: none;"></div>
   </div>
   <!-- page changer -->
   <form class="form-inline" id="change-page">

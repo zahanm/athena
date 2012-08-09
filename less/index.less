@@ -115,3 +115,35 @@ body {
   bottom: 20px;
   right: 10px;
 }
+
+// Animations
+// ----------
+
+@-webkit-keyframes rotate {
+  from { .rotate(0deg); }
+  to { .rotate(360deg); }
+}
+
+@-moz-keyframes rotate {
+  from { .rotate(0deg); }
+  to { .rotate(360deg); }
+}
+
+@-ms-keyframes rotate {
+  from { .rotate(0deg); }
+  to { .rotate(360deg); }
+}
+
+@-o-keyframes rotate {
+  from { .rotate(0deg); }
+  to { .rotate(360deg); }
+}
+
+@keyframes rotate {
+  from { .rotate(0deg); }
+  to { .rotate(360deg); }
+}
+
+.tag-cloud .loading {
+  .animation(rotate 1.5s linear infinite);
+}

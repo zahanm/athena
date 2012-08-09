@@ -78,5 +78,57 @@ dogjs.on('pageload', function () {
     destination = changer.querySelector('input[type="text"]');
     dogjs.changePage(destination.value);
     return false;
-  })
+  });
+
+  // JS for word cloud on browse page
+  // --------------------------------
+  //
+  // Finding it difficult to include cutom Javascript on a loaded page
+
+  function buildTagCloud(sourceQ, targetQ) {
+    var sources, target, tagCounts;
+    sources = document.querySelectorAll(sourceQ);
+    target = document.querySelector(targetQ);
+    tagCounts = {};
+
+    if (!sources.length) {
+      console.warn("Data for tag cloud hasn't loaded yet");
+      return;
+    }
+
+    Array.prototype.forEach.call(sources, function (s) {
+      var content = s.innerText || s.textContent;
+      content.split(/\s+/).forEach(function (tag) {
+        tagCounts[tag] = tagCounts[tag] || 0;
+        tagCounts[tag] += 1;
+      });
+    });
+
+    target.innerHTML = '<ul>';
+    Utilities.forEach(tagCounts, function (count, tag) {
+      target.innerHTML += '<li>' + tag + ' => ' + count + '</li>';
+    });
+    target.innerHTML += '</ul>';
+  }
+
+  function rebuildTagState() {
+    var activetab = document.querySelector('.tab-pane.active');
+    switch(activetab.id) {
+      case 'browse-skills':
+      buildTagCloud('#admin .cell.skill', '#browse-skills .tag-cloud');
+      break;
+      case 'browse-goals':
+      buildTagCloud('#admin .cell.goal', '#browse-goals .tag-cloud');
+      break;
+      default:
+      console.warn('Unrecognized active tab: ' + activetab.id);
+    }
+  }
+
+  if (document.querySelector('#browse-skills')) {
+    // FIXME using jQuery here for tabbing
+    $('a[data-toggle="tab"]').on('shown', rebuildTagState);
+    rebuildTagState();
+  }
+
 });
