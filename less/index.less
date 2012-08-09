@@ -116,6 +116,24 @@ body {
   right: 10px;
 }
 
+.tag-cloud {
+
+  height: 150px;
+
+  .tag-token {
+    display: inline-block;
+    padding: 2px;
+
+    &.rotated {
+      .rotate(270deg);
+    }
+  }
+
+  .loading {
+    .animation(rotate 1.5s linear infinite);
+  }
+}
+
 // Animations
 // ----------
 
@@ -142,8 +160,4 @@ body {
 @keyframes rotate {
   from { .rotate(0deg); }
   to { .rotate(360deg); }
-}
-
-.tag-cloud .loading {
-  .animation(rotate 1.5s linear infinite);
 }

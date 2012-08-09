@@ -85,6 +85,8 @@ dogjs.on('pageload', function () {
   //
   // Finding it difficult to include cutom Javascript on a loaded page
 
+  var stopwords = [];
+
   function buildTagCloud(sourceQ, targetQ) {
     var sources, target, tagCounts;
     sources = document.querySelectorAll(sourceQ);
@@ -104,11 +106,30 @@ dogjs.on('pageload', function () {
       });
     });
 
-    target.innerHTML = '<ul>';
+    // clear out `target`
+    while(target.firstChild) {
+      target.removeChild(target.firstChild);
+    }
+    // calculate sizes
+    var maxcount, lmaxcountp1, maxsize;
+    maxcount = Math.max.apply(Math, Utilities.map(tagCounts, function (v) { return v }));
+    lmaxcountp1 = Math.log(maxcount + 1);
+    maxsize = 32;
+
+    // append the list
+    var ul = document.createElement('div');
     Utilities.forEach(tagCounts, function (count, tag) {
-      target.innerHTML += '<li>' + tag + ' => ' + count + '</li>';
+      var li = document.createElement('span');
+      li.innerHTML = tag;
+      li.classList.add('tag-token');
+      li.style.fontSize = String( Math.log(count+1) / lmaxcountp1 * maxsize ) + 'px';
+      // nice try
+      // if (Math.random() < 0.5) {
+      //   li.classList.add('rotated');
+      // }
+      ul.appendChild(li);
     });
-    target.innerHTML += '</ul>';
+    target.appendChild(ul);
   }
 
   function rebuildTagState() {
