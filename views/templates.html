@@ -21,7 +21,7 @@
       </div>
     </form>
     <form ask="state_teachable" holder="#conversation" class="form-inline" id="state-teachable">
-      <p>In return, I'd be willing to help a friend to</p>
+      <p>In return, I'd be willing to help a friend learn</p>
       <div class="input-append">
         <input type="text" name="teachable" placeholder="do the Tango" tabindex="3"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
       </div>
@@ -39,11 +39,10 @@
     <!-- admin display -->
     <section notify="athena_member" holder="#admin">
       <div class="row">
-        <div class="cell span2">{{name}}</div>
-        <div class="cell span3">{{email}}</div>
-        <div class="cell span3">{{goal}}</div>
-        <div class="cell span2">{{learnable}}</div>
-        <div class="cell span2">{{teachable}}</div>
+        <div class="cell span2"><a href="mailto:{{email}}">{{name}}</a></div>
+        <div class="cell span4 goal">{{goal}}</div>
+        <div class="cell span3 skill">{{learnable}}</div>
+        <div class="cell span3 skill">{{teachable}}</div>
       </div>
     </section>
 

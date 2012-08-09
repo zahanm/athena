@@ -1,5 +1,5 @@
 
-dogjs.on('pagechange', function () {
+dogjs.on('pageload', function () {
 
   // placeholder cycling
   // -------------------
