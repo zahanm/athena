@@ -51,13 +51,7 @@ ON EACH goal DO
   INSPECT identity
   learner.name = identity['name']
   learner.email = identity['email']
-  PRINT 'Learner:'
-  PRINT 'name: ' + learner.name
-  PRINT 'email: ' + learner.email
-  PRINT 'goal: ' + learner.goal
-  PRINT 'learnable: ' + learner.learnable
-  PRINT 'teachable: ' + learner.teachable
-  #
+  COMPUTE print_details ON learner
   # COMPUTE people.save ON learner
   NOTIFY public VIA stream OF learner
 END
@@ -68,4 +62,16 @@ END
 DEFINE rank_k_teachers FOR shell ON me, teachers USING k = 5 DO
   PERFORM "python ranking.py"
   RETURN teachers_list
+END
+
+# helper functions
+# ----------------
+
+DEFINE print_details ON member DO
+  PRINT 'Member:'
+  PRINT 'name: ' + member.name
+  PRINT 'email: ' + member.email
+  PRINT 'goal: ' + member.goal
+  PRINT 'learnable: ' + member.learnable
+  PRINT 'teachable: ' + member.teachable
 END

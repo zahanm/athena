@@ -76,12 +76,7 @@ dogjs.on('pagechange', function () {
   changer && changer.addEventListener('submit', function (ev) {
     ev.preventDefault();
     destination = changer.querySelector('input[type="text"]');
-
-    // FIXME hack to address the running root problem
-    // dogjs.changePage(destination.value);
-    window.location.hash = '#' + destination.value;
-    window.location.reload();
-
+    dogjs.changePage(destination.value);
     return false;
   })
 });
