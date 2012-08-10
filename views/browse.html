@@ -19,11 +19,12 @@
     <div class="row span12">
       <div class="tabbable">
         <ul class="nav nav-tabs">
-          <li class="active"><a href="#browse-skills" data-toggle="tab">Skills</a></li>
+          <li><a href="#browse-skills" data-toggle="tab">Skills</a></li>
           <li><a href="#browse-goals" data-toggle="tab">Goals</a></li>
+          <li class="active"><a href="#people-list" data-toggle="tab">People</a></li>
         </ul>
         <div class="tab-content">
-          <div class="tab-pane active" id="browse-skills">
+          <div class="tab-pane" id="browse-skills">
             <p>These are skills that people are willing to teach, or are interested in learning.</p>
             <div class="tag-cloud offset3 span6">
               <i class="icon-refresh loading"></i>
@@ -37,10 +38,23 @@
               Loading
             </div>
           </div>
+          <div class="tab-pane active" id="people-list">
+            <p>Some people in your network:</p>
+            <div id="admin-holder" class="row">
+              <div class="span12">
+                <div class="row">
+                  <div class="span2 strong">Name</div>
+                  <div class="span4 strong">Goal</div>
+                  <div class="span3 strong">Learnable</div>
+                  <div class="span3 strong">Teachable</div>
+                </div>
+                <div id="admin" method="append"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div id="admin" method="append" style="display: none;"></div>
   </div>
   <!-- page changer -->
   <form class="form-inline" id="change-page">
