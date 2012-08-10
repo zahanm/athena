@@ -2,7 +2,7 @@
 # Community definitions
 # ---------------------
 
-DEFINE learners OF people USING learners_profile {
+DEFINE athena OF people USING athena_profile {
   goal
   learnables
   teachables
@@ -11,6 +11,14 @@ DEFINE learners OF people USING learners_profile {
 }
 
 DEFINE admins OF people
+
+# Helper functions
+# ----------------
+
+DEFINE print_person person DO
+  PRINT person.name
+  PRINT person.email
+END
 
 # Signup process
 # --------------
@@ -38,42 +46,19 @@ ON EACH goal DO
   # note teachable's'
   teachables = ASK learner VIA stream TO state_teachables
 
-
-  # straightforward
-  # ---------------
-  learner's learners_profile.goal = goal
-  ADD skill TO learner's learners_profile.learnables
-  ADD teachables TO learner's learners_profile.teachables
-  SAVE learner to learners
-
-  # with a separate local variable
-  # ------------------------------
-  # Why like this? Well, it would be awkward to do two rounds of merging to learnables
-  # and teachables
-  # if we don't like line 1 and 5, then we should use 'straightforward' syntax
-  profile = learner's learners_profile
-  profile.goal = goal
-  ADD skill TO profile.learnables
-  ADD teachables TO profile.teachables
-  learner's learners_profile = profile
-  SAVE learner TO learners
-
-  # alternate profile lookup syntax
-  # -------------------------------
-  # how about
-  zahan's major FROM stanford_profile
-  # naturally,
-  # if there are no conflicts, can just say learner's goal
-  learner's goal FROM learners_profile = goal
-  ADD skill TO learner's learnables FROM learners_profile
-  ADD teachables TO learner's teachables FROM learners_profile
-  SAVE learner TO learners
-
+  USING athena_profile DO
+    learner's goal = goal
+    ADD skill TO learner's learnables
+    ADD teachables TO learner's teachables
+  END
+  SAVE learner to athena
 
   identity = ASK learner VIA stream TO identify_yourself
   learner's name = identity.name
   learner's email = identity.email
-  SAVE learner TO public
+
+  PRINT_PERSON learner # function invocation
+  SAVE learner TO public # or should it be people?
 END
 
 # admin panel
@@ -102,8 +87,11 @@ ON EACH pairing DO
   # assuming that learner and teacher are correctly populated
   learner = pairing.learner
   teacher = pairing.teacher
-  ADD teacher TO learner's learners_profile.teachers
-  ADD learner TO teacher's learners_profile.students
+  # check out the multiple uses of the profile
+  USING athena_profile DO
+    ADD teacher TO learner's teachers
+    ADD learner TO teacher's students
+  END
 END
 
 # external ranking
