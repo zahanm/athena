@@ -56,22 +56,6 @@ dogjs.on('pageload', function () {
   // setting up event handlers
   // -------------------------
 
-  // this is the identify_yourself form submission
-  dogjs.on('submitted:ask:identify_yourself', function (data) {
-    ['form[listen="goals"]', 'form[ask="state_skill_needed"]', 'form[ask="state_teachable"]', 'form[ask="identify_yourself"]'].forEach(function (selector) {
-      step = document.querySelector(selector);
-      if (!step) { return; }
-      step.reset();
-      step.style.display = 'none';
-    });
-    document.querySelector('#thanks-holder').style.display = 'block';
-    setTimeout(function () {
-      fadeOut(document.querySelector('#thanks-holder'), function () {
-        dogjs.changePage('browse');
-      });
-    }, 2000);
-  });
-
   var changer = document.querySelector('#change-page');
   changer && changer.addEventListener('submit', function (ev) {
     ev.preventDefault();
@@ -79,79 +63,5 @@ dogjs.on('pageload', function () {
     dogjs.changePage(destination.value);
     return false;
   });
-
-  // JS for word cloud on browse page
-  // --------------------------------
-  //
-  // Finding it difficult to include cutom Javascript on a loaded page
-
-  var stopwords = /^(a|the|and|of|on|over|do|let|in|\d+)$/;
-
-  function buildTagCloud(sourceQ, targetQ) {
-    var sources, target, tagCounts;
-    sources = document.querySelectorAll(sourceQ);
-    target = document.querySelector(targetQ);
-    tagCounts = {};
-
-    if (!sources.length) {
-      console.warn("Data for tag cloud hasn't loaded yet");
-      return;
-    }
-
-    Array.prototype.forEach.call(sources, function (s) {
-      var content = s.innerText || s.textContent;
-      content.split(/\s+/).forEach(function (tag) {
-        if (!(stopwords.exec(tag))) {
-          tagCounts[tag] = tagCounts[tag] || 0;
-          tagCounts[tag] += 1;
-        }
-      });
-    });
-
-    // clear out `target`
-    while(target.firstChild) {
-      target.removeChild(target.firstChild);
-    }
-    // calculate sizes
-    var maxcount, lmaxcountp1, maxsize;
-    maxcount = Math.max.apply(Math, Utilities.map(tagCounts, function (v) { return v }));
-    lmaxcountp1 = Math.log(maxcount + 1);
-    maxsize = 32;
-
-    // append the list
-    var ul = document.createElement('div');
-    Utilities.forEach(tagCounts, function (count, tag) {
-      var li = document.createElement('span');
-      li.innerHTML = tag;
-      li.classList.add('tag-token');
-      li.style.fontSize = String( Math.log(count+1) / lmaxcountp1 * maxsize ) + 'px';
-      // nice try
-      // if (Math.random() < 0.5) {
-      //   li.classList.add('rotated');
-      // }
-      ul.appendChild(li);
-    });
-    target.appendChild(ul);
-  }
-
-  function rebuildTagState() {
-    var activetab = document.querySelector('.tab-pane.active');
-    switch(activetab.id) {
-      case 'browse-skills':
-      buildTagCloud('#admin .cell.skill', '#browse-skills .tag-cloud');
-      break;
-      case 'browse-goals':
-      buildTagCloud('#admin .cell.goal', '#browse-goals .tag-cloud');
-      break;
-      default:
-      console.warn('Unrecognized active tab: ' + activetab.id);
-    }
-  }
-
-  if (document.querySelector('#browse-skills')) {
-    // FIXME using jQuery here for tabbing
-    $('a[data-toggle="tab"]').on('shown', rebuildTagState);
-    rebuildTagState();
-  }
 
 });
