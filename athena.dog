@@ -32,8 +32,8 @@ DEFINE state_teachable FOR person DO
 END
 
 DEFINE identify_yourself FOR person DO
-  PERFORM "Tell me your name and contact info."
-  RETURN name, email
+  PERFORM "Tell me your email address."
+  RETURN email
 END
 
 DEFINE goal { value }
@@ -43,13 +43,13 @@ LISTEN TO public VIA http FOR goals
 ON EACH goal DO
   learner = athena_member { }
   learner.goal = goal['value']
+  p = PERSON FROM goal
+  INSPECT p
   response = ASK public VIA stream TO state_skill_needed
   learner.learnable = response['skill']
   response = ASK public VIA stream TO state_teachable
   learner.teachable = response['teachable']
   identity = ASK public VIA stream TO identify_yourself
-  INSPECT identity
-  learner.name = identity['name']
   learner.email = identity['email']
   COMPUTE print_details ON learner
   # COMPUTE people.save ON learner
