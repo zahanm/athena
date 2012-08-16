@@ -4,7 +4,7 @@
 <body>
 
   <!-- learning request flow -->
-  <form listen="goals" holder="#conversation" class="form-inline" id="start-finding">
+  <form listen="goals" holder="#conversation" class="form-inline" id="start-finding" authenticated="true">
     <p>My goal is to</p>
     <div class="input-append">
       <input type="text" name="value" placeholder="fly higher than the sky" tabindex="1" style="width: 400px;"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
@@ -14,19 +14,21 @@
   <section oneach="@each:goal" subscribe="true">
 
     <!-- Inside the ON EACH goal -->
-    <form ask="state_skill_needed" holder="#conversation" class="form-inline">
+    <form ask="state_skill_needed" holder="#conversation" class="form-inline" authenticated="true">
       <p>and the skill I'll going to need in order to accomplish it is</p>
       <div class="input-append">
         <input type="text" name="skill" placeholder="flap my wings" tabindex="2"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
       </div>
     </form>
-    <form ask="state_teachable" holder="#conversation" class="form-inline" id="state-teachable">
+
+    <form ask="state_teachable" holder="#conversation" class="form-inline" id="state-teachable" authenticated="true">
       <p>In return, I'd be willing to help a friend learn</p>
       <div class="input-append">
         <input type="text" name="teachable" placeholder="do the Tango" tabindex="3"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
       </div>
     </form>
-    <form ask="identify_yourself" holder="#conversation" class="form-inline">
+
+    <form ask="identify_yourself" holder="#conversation" class="form-inline" authenticated="true">
       <p>My name is</p>
       <input type="text" name="name" placeholder="full name" tabindex="4">,
       <p>and I my email is</p>
@@ -47,6 +49,15 @@
     </section>
 
   </section>
+
+  <!-- authentication -->
+  <button class="btn btn-primary btn-large unauthed" provider="facebook" holder="#big-login-button">
+    Login with Facebook
+  </button>
+
+  <button class="btn btn-large authenticated" holder="#authentication">
+    Logout
+  </button>
 
 </body>
 </html>
