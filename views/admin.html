@@ -9,7 +9,30 @@
       </div>
       <div class="span1" id="authentication"></div>
     </div>
-    <div id="admin-holder" class="row">
+    <div id="pairing" class="row">
+      <h2>Pairing</h2>
+      <div class="offset1 span3">
+        <button class="picker btn btn-large" data-picker="t">
+          Teacher
+        </button>
+      </div>
+      <div class="offset1 span3">
+        <button class="picker btn btn-large" data-picker="l">
+          Learner
+        </button>
+      </div>
+      <div class="offset2 span2">
+        <form action="/jsonecho" id="pairing-form">
+          <input type="hidden" name="teacher" value="">
+          <input type="hidden" name="learner" value="">
+          <button type="submit" class="btn btn-large btn-primary">
+            Pair
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="row people-table-holder">
+      <h2>People</h2>
       <div class="span12">
         <div class="row">
           <div class="span2 strong">Name</div>
@@ -17,7 +40,7 @@
           <div class="span3 strong">Learnable</div>
           <div class="span3 strong">Teachable</div>
         </div>
-        <div id="admin" method="append"></div>
+        <div class="people-table" method="append"></div>
       </div>
     </div>
   </div>
@@ -27,5 +50,6 @@
       <span class="add-on">Page</span><input type="text" name="destination" placeholder="Destination" style="width: 100px">
     </div>
   </form>
+  <script src="/scripts/admin.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

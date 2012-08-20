@@ -91,22 +91,34 @@ body {
   display: none;
 }
 
-#admin-holder {
+.people-table-holder {
 
   .row {
     font-size: 18px;
     line-height: 26px;
     font-weight: 200;
 
-    &:hover {
-      background: darken(@pagebackground, 10%);
-      .box-shadow(inset 0 1px 1px rgba(0,0,0,.25));
-    }
-
     .cell {
       white-space: nowrap;
       overflow: auto;
     }
+  }
+}
+
+.people-table .row {
+
+  &:hover {
+    background: darken(@pagebackground, 10%);
+    .box-shadow(inset 0 1px 1px rgba(0,0,0,.25));
+  }
+
+}
+
+#pairing {
+  margin-bottom: 40px;
+
+  .picker {
+    width: 260px;
   }
 }
 
