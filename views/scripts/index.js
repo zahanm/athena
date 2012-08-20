@@ -32,27 +32,6 @@ dogjs.on('pageload', function () {
   function changePlaceholder(elem, ptext) {
   }
 
-  function fadeOut(elem, callback) {
-    elem.style.opacity = '1';
-    timegap = 100;
-    delta = -0.1;
-    function fadeDelta(elem, amount) {
-      var opacity = Number(elem.style.opacity);
-      opacity += amount;
-      if (opacity <= 0.1) {
-        opacity = 0;
-      }
-      elem.style.opacity = String(opacity);
-      if (opacity > 0) {
-        setTimeout(fadeDelta.bind(this, elem, delta), timegap);
-      } else {
-        elem.style.display = 'none';
-        callback && callback();
-      }
-    }
-    setTimeout(fadeDelta.bind(this, elem, delta), timegap);
-  }
-
   // setting up event handlers
   // -------------------------
 
