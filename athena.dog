@@ -50,6 +50,7 @@ ON EACH goal DO
   response = ASK public VIA stream TO state_teachable
   learner.teachable = response['teachable']
   identity = ASK public VIA stream TO identify_yourself
+  learner.name = 'John Doe'
   learner.email = identity['email']
   COMPUTE print_details ON learner
   # COMPUTE people.save ON learner
