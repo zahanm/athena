@@ -4,13 +4,19 @@
 <body>
   <div class="container">
     <div class="row">
-      <div class="offset6 span5">
+      <div class="span3">
+        <div class="btn-group">
+          <button class="btn btn-large" onclick="dogjs.changePage('browse');">Browse</button>
+          <button class="btn btn-large" onclick="dogjs.changePage('admin');">Admin</button>
+        </div>
+      </div>
+      <div class="offset3 span5">
         <h1>Athena <small>a peer-to-peer learning exprience</small></h1>
       </div>
       <div class="span1" id="authentication"></div>
     </div>
     <div class="row">
-      <div id="big-login-button" class="offset4 span4" style="text-align: center;"></div>
+      <div id="big-login-button"></div>
     </div>
     <div id="signup-holder" class="row">
       <div class="offset1 span10 hero">
