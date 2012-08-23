@@ -57,14 +57,16 @@ dogjs.on('pageload', function () {
 
   function rebuildTagState() {
     var activetab = document.querySelector('.tab-pane.active');
-    switch(activetab.id) {
-      case 'browse-skills':
-      buildTagCloud('#admin .cell.skill', '#browse-skills .tag-cloud');
-      break;
-      case 'browse-goals':
-      buildTagCloud('#admin .cell.goal', '#browse-goals .tag-cloud');
-      break;
-      default:
+    if (activetab) {
+      switch(activetab.id) {
+        case 'browse-skills':
+        buildTagCloud('#admin .cell.skill', '#browse-skills .tag-cloud');
+        break;
+        case 'browse-goals':
+        buildTagCloud('#admin .cell.goal', '#browse-goals .tag-cloud');
+        break;
+        default:
+      }
     }
   }
 
