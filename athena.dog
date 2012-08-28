@@ -1,5 +1,5 @@
 
-DEFINE COMMUNITY athena {
+DEFINE COMMUNITY athena USING athena_profile {
   goal
   learnables
   teachables
@@ -41,14 +41,14 @@ DEFINE goal { value }
 LISTEN TO public VIA http FOR goals
 
 ON EACH goal DO
-  learner = athena_member { }
-  learner.goal = goal['value']
-  p = PERSON FROM goal
-  INSPECT p
+  learner = PERSON FROM goal
+  INSPECT learner
+  learner.athena_profile = {}
+  learner.athena_profile.goal = goal['value']
   response = ASK public VIA stream TO state_skill_needed
-  learner.learnable = response['skill']
+  learner.athena_profile.learnable = response['skill']
   response = ASK public VIA stream TO state_teachable
-  learner.teachable = response['teachable']
+  learner.athena_profile.teachable = response['teachable']
   identity = ASK public VIA stream TO identify_yourself
   learner.name = 'John Doe'
   learner.email = identity['email']
@@ -60,7 +60,7 @@ END
 # external functions
 # ------------------
 
-DEFINE rank_k_teachers FOR shell ON me, teachers USING k = 5 DO
+DEFINE rank_k_teachers FOR shell ON me, teachers, k DO
   PERFORM "python ranking.py"
   RETURN teachers_list
 END
@@ -72,7 +72,7 @@ DEFINE print_details ON member DO
   PRINT 'Member:'
   PRINT 'name: ' + member.name
   PRINT 'email: ' + member.email
-  PRINT 'goal: ' + member.goal
-  PRINT 'learnable: ' + member.learnable
-  PRINT 'teachable: ' + member.teachable
+  PRINT 'goal: ' + member.athena_profile.goal
+  PRINT 'learnable: ' + member.athena_profile.learnable
+  PRINT 'teachable: ' + member.athena_profile.teachable
 END
