@@ -45,13 +45,13 @@ ON EACH goal DO
   INSPECT learner
   learner.athena_profile = {}
   learner.athena_profile.goal = goal['value']
-  response = ASK public VIA stream TO state_skill_needed
-  learner.athena_profile.learnable = response['skill']
-  response = ASK public VIA stream TO state_teachable
-  learner.athena_profile.teachable = response['teachable']
-  identity = ASK public VIA stream TO identify_yourself
-  learner.name = 'John Doe'
-  learner.email = identity['email']
+  response = ASK learner VIA stream TO state_skill_needed
+  learner.athena_profile.learnable = response[0]['skill']
+  response = ASK learner VIA stream TO state_teachable
+  learner.athena_profile.teachable = response[0]['teachable']
+  identity = ASK learner VIA stream TO identify_yourself
+  learner.email = identity[0]['email']
+  PRINT identity[0]['email']
   COMPUTE print_details ON learner
   # COMPUTE people.save ON learner
   NOTIFY public VIA stream OF learner
@@ -70,7 +70,7 @@ END
 
 DEFINE print_details ON member DO
   PRINT 'Member:'
-  PRINT 'name: ' + member.name
+  PRINT 'name: ' + member.first_name + " " + member.last_name
   PRINT 'email: ' + member.email
   PRINT 'goal: ' + member.athena_profile.goal
   PRINT 'learnable: ' + member.athena_profile.learnable

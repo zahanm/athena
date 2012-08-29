@@ -81,7 +81,7 @@ dogjs.on('pageload', function () {
     document.querySelector('#thanks-holder').style.display = 'block';
     setTimeout(function () {
       fadeOut(document.querySelector('#thanks-holder'), function () {
-        dogjs.changePage('browse');
+        window.location = '/browse.html';
       });
     }, 2000);
   });
