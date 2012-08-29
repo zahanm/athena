@@ -3,8 +3,6 @@
 <head>
   <title>Athena</title>
   <link rel="stylesheet" href="/styles/index.css" type="text/css" charset="utf-8">
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/scripts/bootstrap-tab.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
@@ -26,41 +24,16 @@
     </div>
     <div class="row span12">
       <h1>Browse</h1>
-      <div class="tabbable">
-        <ul class="nav nav-tabs">
-          <li><a href="#browse-skills" data-toggle="tab">Skills</a></li>
-          <li><a href="#browse-goals" data-toggle="tab">Goals</a></li>
-          <li class="active"><a href="#people-list" data-toggle="tab">People</a></li>
-        </ul>
-        <div class="tab-content">
-          <div class="tab-pane" id="browse-skills">
-            <p>These are skills that people are willing to teach, or are interested in learning.</p>
-            <div class="tag-cloud offset3 span6">
-              <i class="icon-refresh loading"></i>
-              Loading
-            </div>
+      <p>Some people in your network:</p>
+      <div class="row people-table-holder">
+        <div class="span12">
+          <div class="row">
+            <div class="span2 strong">Name</div>
+            <div class="span4 strong">Goal</div>
+            <div class="span3 strong">Learnable</div>
+            <div class="span3 strong">Teachable</div>
           </div>
-          <div class="tab-pane" id="browse-goals">
-            <p>The goals that people in Athena are aspiring to.</p>
-            <div class="tag-cloud offset3 span6">
-              <i class="icon-refresh loading"></i>
-              Loading
-            </div>
-          </div>
-          <div class="tab-pane active" id="people-list">
-            <p>Some people in your network:</p>
-            <div class="row people-table-holder">
-              <div class="span12">
-                <div class="row">
-                  <div class="span2 strong">Name</div>
-                  <div class="span4 strong">Goal</div>
-                  <div class="span3 strong">Learnable</div>
-                  <div class="span3 strong">Teachable</div>
-                </div>
-                <div class="people-table" method="append"></div>
-              </div>
-            </div>
-          </div>
+          <div class="people-table" method="append"></div>
         </div>
       </div>
     </div>
