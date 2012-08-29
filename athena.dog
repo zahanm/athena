@@ -7,6 +7,8 @@ DEFINE COMMUNITY athena USING athena_profile {
   teacher
 }
 
+DEFINE COMMUNITY admins USING admins_profile {}
+
 # Signup process
 # --------------
 
@@ -39,10 +41,26 @@ ON EACH goal DO
   learner.athena_profile.teachable = response[0]['teachable']
   identity = ASK learner VIA stream TO identify_yourself
   learner.email = identity[0]['email']
-  PRINT identity[0]['email']
   COMPUTE print_details ON learner
   # SAVE learner TO athena
   NOTIFY public VIA stream OF learner
+END
+
+# Pairing people
+# --------------
+
+# Listen for pairings made by the admins
+DEFINE pairing { learner, teacher }
+
+LISTEN TO public VIA http FOR pairings # should be 'admins'
+
+ON EACH pairing DO
+  # assuming that learner and teacher are correctly populated
+  learner = pairing.learner
+  teacher = pairing.teacher
+  # check out the multiple uses of the profile
+  learner.athena_profile.teachers = teacher
+  teacher.athena_profile.students = learner
 END
 
 # external functions
