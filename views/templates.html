@@ -37,11 +37,11 @@
     </form>
 
     <!-- admin display -->
-    <section notify="athena_member" holder=".people-table" class="row people-row">
-      <div class="cell span2 name"><a href="mailto:{{email}}" class="email">{{name}}</a></div>
-      <div class="cell span4 goal">{{goal}}</div>
-      <div class="cell span3 skill">{{learnable}}</div>
-      <div class="cell span3 skill">{{teachable}}</div>
+    <section notify="person" holder=".people-table" class="row people-row">
+      <div class="cell span2 name"><a href="mailto:{{email}}" class="email">{{first_name}} {{last_name}}</a></div>
+      <div class="cell span4 goal">{{athena_profile.goal}}</div>
+      <div class="cell span3 skill">{{athena_profile.learnable}}</div>
+      <div class="cell span3 skill">{{athena_profile.teachable}}</div>
     </section>
 
     <!-- browse display -->
