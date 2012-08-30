@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+
+  <section oneach="@each:goal" subscribe="true">
+
+    <!-- browse display -->
+    <section notify="person" holder=".people-grid" class="row">
+      <div class="name"><a href="mailto:{{email}}" class="email">{{first_name}} {{last_name}}</a></div> wants to learn
+      <div class="goal">{{athena_profile.goal}}</div> through
+      <div class="skill">{{athena_profile.learnable}}</div> and teaching
+      <div class="skill">{{athena_profile.teachable}}</div>
+    </section>
+
+  </section>
+
+</body>
+</html>
