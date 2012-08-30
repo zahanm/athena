@@ -6,30 +6,48 @@
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="offset6 span5">
-        <h1>Karma <small>a peer-to-peer learning exprience</small></h1>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand" href="#">
+          Karma
+        </a>
+        <ul class="nav">
+          <li class="active"><a href="/">Signup</a></li>
+          <li><a href="/browse.html">Browse</a></li>
+          <li><a href="/admin.html">Admin</a></li>
+        </ul>
+        <ul class="nav pull-right" dogjs-auth="true">
+          <li><a href="/dog/account/logout">Logout</a></li>
+        </ul>
       </div>
-      <div class="span1">
-        <a class="btn btn-large" href="/dog/account/logout" dogjs-auth="true">
-          Logout
+    </div>
+  </div>
+  <div class="container">
+    <div dogjs-auth="false">
+      <div class="page-header">
+        <h1>
+          Karma
+          <small>a peer-to-peer learning exprience</small>
+        </h1>
+      </div>
+      <div class="row span12">
+        <p class="lead">
+          This is an amazing experience, and you should
+          <em>definitely</em> sign up right away.
+        </p>
+        <p class="lead">
+          And this is the splash page you've all heard so much about.
+        </p>
+        <p class="lead">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas convallis tempus nibh. Maecenas dui orci, tincidunt in tincidunt ut, tincidunt ut nulla. Donec egestas felis et nibh interdum sit amet bibendum dui pellentesque. Suspendisse nulla lorem, suscipit quis imperdiet sit amet, tincidunt id nisl. Sed nulla augue, ornare at ullamcorper ut, gravida ut odio.
+        </p>
+      </div>
+      <div class="row" style="text-align: center;">
+        <a id="big-login-button" class="btn btn-warning btn-large" href="/dog/account/facebook/login">
+          Login with Facebook
         </a>
       </div>
-    </div>
-    <div class="row authenticated">
-      <div class="span3">
-        <div class="btn-group" dogjs-auth="true">
-          <a class="btn active" href="/">Signup</a>
-          <a class="btn" href="/browse.html">Browse</a>
-          <a class="btn" href="/admin.html">Admin</a>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <a id="big-login-button" class="btn btn-primary btn-large" href="/dog/account/facebook/login" dogjs-auth="false">
-        Login with Facebook
-      </a>
     </div>
     <div id="signup-holder" class="row">
       <div class="offset1 span10 hero">
