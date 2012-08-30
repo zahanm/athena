@@ -6,12 +6,20 @@
   <section oneach="@each:goal" subscribe="true">
 
     <!-- browse display -->
-    <section notify="person" holder=".people-grid" class="row">
-      <div class="name"><a href="mailto:{{email}}" class="email">{{first_name}} {{last_name}}</a></div> wants to learn
-      <div class="goal">{{athena_profile.goal}}</div> through
-      <div class="skill">{{athena_profile.learnable}}</div> and teaching
-      <div class="skill">{{athena_profile.teachable}}</div>
-    </section>
+    <li class="span3" notify="person" holder=".people-grid">
+      <div class="thumbnail">
+        <img src="http://graph.facebook.com/{{facebook_profile.id}}/picture?type=large">
+        <div class="caption">
+          <h3>
+            {{first_name}} {{last_name}}
+            <a href="mailto:{{email}}"><i class="icon-envelope"></i></a>
+          </h3>
+          <p><em>{{athena_profile.goal}}</em></p>
+          <p>{{athena_profile.learnable}}</p>
+          <p>{{athena_profile.teachable}}</p>
+        </div>
+      </div>
+    </li>
 
   </section>
 
