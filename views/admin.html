@@ -11,11 +11,15 @@
       <div class="offset6 span5">
         <h1>Athena <small>a peer-to-peer learning exprience</small></h1>
       </div>
-      <div class="span1" id="authentication"></div>
+      <div class="span1">
+        <a class="btn btn-large" href="/dog/account/logout" dogjs-auth="true">
+          Logout
+        </a>
+      </div>
     </div>
     <div class="row">
       <div class="span3">
-        <div class="btn-group">
+        <div class="btn-group" dogjs-auth="true">
           <a class="btn" href="/">Signup</a>
           <a class="btn" href="/browse.html">Browse</a>
           <a class="btn active" href="/admin.html">Admin</a>

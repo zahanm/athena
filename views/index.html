@@ -11,11 +11,15 @@
       <div class="offset6 span5">
         <h1>Athena <small>a peer-to-peer learning exprience</small></h1>
       </div>
-      <div class="span1" id="auth-holder"></div>
+      <div class="span1">
+        <a class="btn btn-large" href="/dog/account/logout" dogjs-auth="true">
+          Logout
+        </a>
+      </div>
     </div>
     <div class="row authenticated">
       <div class="span3">
-        <div class="btn-group">
+        <div class="btn-group" dogjs-auth="true">
           <a class="btn active" href="/">Signup</a>
           <a class="btn" href="/browse.html">Browse</a>
           <a class="btn" href="/admin.html">Admin</a>
@@ -23,7 +27,9 @@
       </div>
     </div>
     <div class="row">
-      <div id="big-login-button"></div>
+      <a id="big-login-button" class="btn btn-primary btn-large" href="/dog/account/facebook/login" dogjs-auth="false">
+        Login with Facebook
+      </a>
     </div>
     <div id="signup-holder" class="row">
       <div class="offset1 span10 hero">
