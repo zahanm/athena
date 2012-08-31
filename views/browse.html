@@ -6,26 +6,24 @@
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="offset6 span5">
-        <h1>Karma <small>a peer-to-peer learning exprience</small></h1>
-      </div>
-      <div class="span1">
-        <a class="btn btn-large" href="/dog/account/logout" dogjs-auth="true">
-          Logout
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand" href="#">
+          Karma
         </a>
+        <ul class="nav">
+          <li><a href="/">Signup</a></li>
+          <li class="active"><a href="/browse.html">Browse</a></li>
+          <li><a href="/admin.html">Admin</a></li>
+        </ul>
+        <ul class="nav pull-right" dogjs-auth="true">
+          <li><a href="/dog/account/logout">Logout</a></li>
+        </ul>
       </div>
     </div>
-    <div class="row">
-      <div class="span3">
-        <div class="btn-group" dogjs-auth="true">
-          <a class="btn" href="/">Signup</a>
-          <a class="btn active" href="/browse.html">Browse</a>
-          <a class="btn" href="/admin.html">Admin</a>
-        </div>
-      </div>
-    </div>
+  </div>
+  <div class="container">
     <div class="span12">
       <div class="page-header">
         <h1>
