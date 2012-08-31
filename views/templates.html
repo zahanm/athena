@@ -5,34 +5,44 @@
 
   <!-- learning request flow -->
   <form listen="goals" holder="#conversation" class="form-inline" id="start-finding" authenticated="true">
-    <p>My goal is to</p>
-    <div class="input-append">
-      <input type="text" name="value" placeholder="make a social web app" tabindex="1" style="width: 400px;"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
-    </div>
+    <p>
+      My goal is to
+      <span class="input-append">
+        <input type="text" name="value" placeholder="make a social web app" tabindex="1" style="width: 400px;">
+        <button class="btn" type="submit">&rarr;</button>
+      </span>
+    </p>
   </form>
 
   <section oneach="@each:goal" subscribe="true">
 
     <!-- Inside the ON EACH goal -->
     <form ask="state_skill_needed" holder="#conversation" class="form-inline" authenticated="true">
-      <p>and the skill I'll going to need in order to accomplish it is</p>
-      <div class="input-append">
-        <input type="text" name="skill" placeholder="programming in Dog" tabindex="2"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
-      </div>
+      <p>
+        and the skill I'll going to need in order to accomplish it is
+        <span class="input-append">
+          <input type="text" name="skill" placeholder="programming in Dog" tabindex="2">
+          <button class="btn" type="submit">&rarr;</button>
+        </span>
+      </p>
     </form>
 
     <form ask="state_teachable" holder="#conversation" class="form-inline" id="state-teachable" authenticated="true">
-      <p>In return, I'd be willing to help a friend learn to</p>
-      <div class="input-append">
-        <input type="text" name="teachable" placeholder="dance" tabindex="3"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
-      </div>
+      <p>
+        In return, I'd be willing to help a friend learn to
+        <span class="input-append">
+          <input type="text" name="teachable" placeholder="dance" tabindex="3"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
+        </span>
+      </p>
     </form>
 
     <form ask="identify_yourself" holder="#conversation" class="form-inline" authenticated="true">
-      <p>I can be contacted the address</p>
-      <input type="email" name="email" placeholder="email" tabindex="4">
+      <p>
+        I can be contacted at the address
+        <input type="email" name="email" placeholder="email" tabindex="4">
+      </p>
       <div style="text-align: center;">
-        <button class="btn btn-success" type="submit">sign up</button>
+        <button class="btn btn-warning" type="submit">sign up</button>
       </div>
     </form>
 

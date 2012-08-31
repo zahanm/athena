@@ -23,7 +23,8 @@ h1, h2 {
   }
 }
 
-// specific for Karma
+// Karma - wide
+// ------------
 
 body {
   padding-top: 40px;
@@ -43,29 +44,24 @@ body {
   }
 }
 
-.hero {
-  font-size: 20px;
-  font-weight: 200;
-  form {
-    display: block;
-    margin-bottom: 10px;
-    p {
-      display: inline;
-      vertical-align: middle;
-    }
-    input, button {
-      font-weight: inherit;
-      font-size: inherit;
-      line-height: 28px;
-      height: initial;
-      i {
-        vertical-align: middle;
-      }
-    }
-    div {
-      margin-top: 5px;
-      margin-bottom: 5px;
-    }
+// Signup
+// ------
+
+.primary {
+  @primaryFontSize: 20px;
+  @primaryFontWeight: 200;
+  @primaryLineHeight: 30px;
+  p {
+      font-size: @primaryFontSize;
+      font-weight: @primaryFontWeight;
+      line-height: @primaryLineHeight;
+  }
+  input, button {
+    font-size: @primaryFontSize;
+    font-weight: @primaryFontWeight;
+    line-height: @primaryLineHeight;
+    height: initial;
+    margin-bottom: 4px;
   }
 }
 
@@ -75,13 +71,12 @@ body {
     left: 44%;*/
 }
 
-#conversation {
-  margin-top: 20px;
-}
-
 #thanks-holder {
   display: none;
 }
+
+// Admin
+// -----
 
 .people-table-holder {
 
@@ -114,11 +109,8 @@ body {
   }
 }
 
-#change-page {
-  position: absolute;
-  bottom: 20px;
-  right: 10px;
-}
+// Clouds
+// ------
 
 .tag-cloud {
 
