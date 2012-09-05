@@ -1,5 +1,5 @@
 
-DEFINE COMMUNITY athena USING athena_profile {
+DEFINE COMMUNITY karma USING karma_profile {
   goal
   learnables
   teachables
@@ -33,16 +33,16 @@ LISTEN TO public VIA http FOR goals
 
 ON EACH goal DO
   learner = PERSON FROM goal
-  learner.athena_profile = {}
-  learner.athena_profile.goal = goal['value']
+  learner.karma_profile = {}
+  learner.karma_profile.goal = goal['value']
   response = ASK learner VIA stream TO state_skill_needed
-  learner.athena_profile.learnable = response[0]['skill']
+  learner.karma_profile.learnable = response[0]['skill']
   response = ASK learner VIA stream TO state_teachable
-  learner.athena_profile.teachable = response[0]['teachable']
+  learner.karma_profile.teachable = response[0]['teachable']
   identity = ASK learner VIA stream TO identify_yourself
   learner.email = identity[0]['email']
   COMPUTE print_details ON learner
-  # SAVE learner TO athena
+  # SAVE learner TO karma
   NOTIFY public VIA stream OF learner
 END
 
@@ -59,8 +59,8 @@ ON EACH pairing DO
   learner = pairing.learner
   teacher = pairing.teacher
   # check out the multiple uses of the profile
-  learner.athena_profile.teachers = teacher
-  teacher.athena_profile.students = learner
+  learner.karma_profile.teachers = teacher
+  teacher.karma_profile.students = learner
 END
 
 # external functions
@@ -78,7 +78,7 @@ DEFINE print_details ON member DO
   PRINT 'Member:'
   PRINT 'name: ' + member.first_name + " " + member.last_name
   PRINT 'email: ' + member.email
-  PRINT 'goal: ' + member.athena_profile.goal
-  PRINT 'learnable: ' + member.athena_profile.learnable
-  PRINT 'teachable: ' + member.athena_profile.teachable
+  PRINT 'goal: ' + member.karma_profile.goal
+  PRINT 'learnable: ' + member.karma_profile.learnable
+  PRINT 'teachable: ' + member.karma_profile.teachable
 END
