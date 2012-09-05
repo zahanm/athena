@@ -7,16 +7,15 @@
 
     <!-- browse display -->
     <li class="span3" notify="person" holder=".people-grid">
-      <div class="thumbnail">
+      <div class="thumbnail" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{karma_profile.learnable}} {{karma_profile.teachable}}">
         <img src="http://graph.facebook.com/{{facebook_profile.id}}/picture?type=large">
         <div class="caption">
-          <h3>
-            {{first_name}} {{last_name}}
-            <a href="mailto:{{email}}"><i class="icon-envelope"></i></a>
-          </h3>
-          <p><em>{{karma_profile.goal}}</em></p>
-          <p>{{karma_profile.learnable}}</p>
-          <p>{{karma_profile.teachable}}</p>
+          <p>
+            <a href="mailto:{{email}}">{{first_name}}</a> wants
+          </p>
+          <p>to <span class="well">{{karma_profile.goal}}</span></p>
+          <p>while learning <span class="well">{{karma_profile.learnable}}</span></p>
+          <p>and teaching <span class="well">{{karma_profile.teachable}}</span></p>
         </div>
       </div>
     </li>
