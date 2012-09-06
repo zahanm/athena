@@ -36,9 +36,9 @@ ON EACH goal DO
   learner.karma_profile = {}
   learner.karma_profile.goal = goal['value']
   response = ASK learner VIA stream TO state_skill_needed
-  learner.karma_profile.learnable = response[0]['skill']
+  ADD response[0]['skill'] TO learner.karma_profile.learnables
   response = ASK learner VIA stream TO state_teachable
-  learner.karma_profile.teachable = response[0]['teachable']
+  ADD response[0]['teachable'] TO learner.karma_profile.teachables
   identity = ASK learner VIA stream TO identify_yourself
   learner.email = identity[0]['email']
   COMPUTE print_details ON learner
