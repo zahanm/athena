@@ -1,8 +1,8 @@
 
 DEFINE COMMUNITY karma USING karma_profile {
   goal
-  learnables
-  teachables
+  learnable
+  teachable
   student
   teacher
 }
@@ -36,13 +36,13 @@ ON EACH goal DO
   learner.karma_profile = {}
   learner.karma_profile.goal = goal['value']
   response = ASK learner VIA stream TO state_skill_needed
-  learner.karma_profile.learnables = {}
+  learner.karma_profile.learnable = {}
   skill = response[0]['skill']
-  ADD skill TO learner.karma_profile.learnables
+  learner.karma_profile.learnable = skill
   response = ASK learner VIA stream TO state_teachable
-  learner.karma_profile.teachables = {}
+  learner.karma_profile.teachable = {}
   teachable = response[0]['teachable']
-  ADD teachable TO learner.karma_profile.teachables
+  learner.karma_profile.teachable = teachable
   identity = ASK learner VIA stream TO identify_yourself
   learner.email = identity[0]['email']
   COMPUTE print_details ON learner
@@ -96,6 +96,6 @@ DEFINE print_details ON member DO
   PRINT 'name: ' + member.first_name + " " + member.last_name
   PRINT 'email: ' + member.email
   PRINT 'goal: ' + member.karma_profile.goal
-  PRINT 'learnable: ' + member.karma_profile.learnables[0]
-  PRINT 'teachable: ' + member.karma_profile.teachables[0]
+  PRINT 'learnable: ' + member.karma_profile.learnable
+  PRINT 'teachable: ' + member.karma_profile.teachable
 END
