@@ -76,14 +76,16 @@ END
 # Browse
 # ------
 
+DEFINE browse_request { value }
+
 LISTEN TO public FOR browse_requests
 
 ON EACH browse_request DO
   browser = PERSON FROM browse_request
-  # peeps = FIND people IN karma
-  # FOR p IN people DO
-  #   NOTIFY browser OF p
-  # END
+  karma_users = FIND people.person IN karma
+  FOR EACH karma_user IN karma_users DO
+   NOTIFY browser VIA stream OF karma_user
+  END
 END
 
 LISTEN TO public FOR pair_requests

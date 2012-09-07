@@ -3,7 +3,7 @@
 <head></head>
 <body>
 
-  <section oneach="@each:signup_request" subscribe="poll">
+  <section oneach="@each:browse_request" subscribe="once" load="browse_requests">
 
     <!-- browse display -->
     <li class="span3 people-container" notify="person" holder=".people-grid" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{#karma_profile.learnables}}{{.}} {{/karma_profile.learnables}} {{#karma_profile.teachables}}{{.}} {{/karma_profile.teachables}}">
