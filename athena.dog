@@ -82,7 +82,7 @@ LISTEN TO public FOR browse_requests
 
 ON EACH browse_request DO
   browser = PERSON FROM browse_request
-  karma_users = FIND people.person IN karma
+  karma_users = FIND people.people FROM karma
   FOR EACH karma_user IN karma_users DO
    NOTIFY browser VIA stream OF karma_user
   END
