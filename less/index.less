@@ -140,7 +140,10 @@ body {
 }
 
 .thumbnail {
+  width: 210px;
   height: 350px;
+  position: absolute;
+  -webkit-backface-visibility: hidden;
 
   img {
     max-height: 180px;
@@ -156,6 +159,31 @@ body {
       padding: 4px;
     }
   }
+}
+
+.front {
+  z-index: 10;
+}
+
+.back {
+  -webkit-transform: rotateY(-180deg);
+}
+
+.people-container {
+  width: 220px;
+  height: 350px;
+  -webkit-perspective: 1000;
+}
+
+.people-card {
+  width: 220px;
+  height: 350px;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transition: 0.5s;
+}
+
+.people-container:hover .people-card {
+    -webkit-transform: rotateY(-180deg);
 }
 
 // Functions

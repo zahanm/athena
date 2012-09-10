@@ -12,10 +12,10 @@ dogjs.on('pageload', function () {
     'build my own website'
   ];
   exampleSkills = [
-    'cook',
-    'hike',
-    'rap',
-    'programming'
+    'cooking',
+    'hiking',
+    'raping',
+    'programing'
   ];
   interval = 2000; // in ms
   carousels = {};
