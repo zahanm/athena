@@ -72,7 +72,7 @@ dogjs.on('pageload', function () {
 
   // this is the identify_yourself form submission
   dogjs.on('submitted:ask:identify_yourself', function (data) {
-    ['form[listen="goals"]', 'form[ask="state_skill_needed"]', 'form[ask="state_teachable"]', 'form[ask="identify_yourself"]'].forEach(function (selector) {
+    ['form[ask="state_goal"]', 'form[ask="state_skill_needed"]', 'form[ask="state_teachable"]', 'form[ask="identify_yourself"]'].forEach(function (selector) {
       step = document.querySelector(selector);
       if (!step) { return; }
       step.reset();

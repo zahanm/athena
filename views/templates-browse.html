@@ -3,30 +3,29 @@
 <head></head>
 <body>
 
-  <section oneach="@each:goal" subscribe="true">
+  <section oneach="@each:signup_request" subscribe="poll">
 
     <!-- browse display -->
-    <li class="people-container" notify="person" holder=".people-grid">
-	  <div class="people-card">
-	      <div class="thumbnail front" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{karma_profile.learnable}} {{karma_profile.teachable}}">
-	        <img src="http://graph.facebook.com/{{facebook_profile.id}}/picture?type=large">
-	        <div class="caption">
-	          <p>
-	            <a href="mailto:{{email}}">{{first_name}}</a> wants to
-	          </p>
-	          <p>learn <span class="well">{{karma_profile.learnable}}</span></p>
-	          <p>in order to <span class="well">{{karma_profile.goal}}</span>,</p>
-	          <p>and is willing to teach <span class="well">{{karma_profile.teachable}}</span></p>
-	        </div>
-	      </div>
-		  <div class="thumbnail back" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{karma_profile.learnable}} {{karma_profile.teachable}}">
-	        <div class="caption">
-	          <p>
-	            <a href="mailto:{{email}}">{{first_name}}</a> wants to
-	          </p>
-          	<p>This is a test</p>
+    <li class="span3 people-container" notify="person" holder=".people-grid">
+      <div class="people-card">
+        <div class="thumbnail front" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{karma_profile.learnable}} {{karma_profile.teachable}}">
+          <img src="http://graph.facebook.com/{{facebook_profile.id}}/picture?type=large">
+          <div class="caption">
+            <p>
+              <a href="mailto:{{email}}">{{first_name}}</a> wants to
+            </p>
+            <p>learn <span class="well">{{karma_profile.learnable}}</span></p>
+            <p>in order to <span class="well">{{karma_profile.goal}}</span>,</p>
+            <p>and is willing to teach <span class="well">{{karma_profile.teachable}}</span></p>
           </div>
-		</div>
+        </div>
+        <div class="thumbnail back" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{karma_profile.learnable}} {{karma_profile.teachable}}">
+        <div class="caption">
+          <p>
+            <a href="mailto:{{email}}">{{first_name}}</a> wants to
+          </p>
+          <p>This is a test</p>
+        </div>
       </div>
     </li>
 
