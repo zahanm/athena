@@ -3,7 +3,7 @@
 <head></head>
 <body>
 
-  <section oneach="@each:goal" subscribe="true">
+  <section oneach="@each:signup_request" subscribe="poll">
 
     <!-- browse display -->
     <li class="span3" notify="person" holder=".people-grid">
@@ -13,9 +13,9 @@
           <p>
             <a href="mailto:{{email}}">{{first_name}}</a> wants to
           </p>
-          <p>learn <span class="well">{{karma_profile.learnable}}</span></p>
+          <p>learn <span class="well">{{karma_profile.learnables}}</span></p>
           <p>in order to <span class="well">{{karma_profile.goal}}</span>,</p>
-          <p>and is willing to teach <span class="well">{{karma_profile.teachable}}</span></p>
+          <p>and is willing to teach <span class="well">{{karma_profile.teachables}}</span></p>
         </div>
       </div>
     </li>
