@@ -6,8 +6,8 @@
   <section oneach="@each:signup_request" subscribe="poll">
 
     <!-- browse display -->
-    <li class="span3 people-container" notify="person" holder=".people-grid">
-      <div class="people-card" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{karma_profile.learnable}} {{karma_profile.teachable}}">
+    <li class="span3 people-container" notify="person" holder=".people-grid" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{karma_profile.learnable}} {{karma_profile.teachable}}">
+      <div class="people-card">
         <div class="thumbnail front">
           <img src="http://graph.facebook.com/{{facebook_profile.id}}/picture?type=large">
           <div class="caption">
