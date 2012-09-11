@@ -63,6 +63,16 @@ ON EACH browse_request DO
   # END
 END
 
+LISTEN TO public FOR pair_requests
+
+ON EACH pair_request DO
+  browser = PERSON FROM pair_request
+  # peeps = FIND people IN karma
+  # FOR p IN people DO
+  #   NOTIFY browser OF p
+  # END
+END
+
 # Pairing people
 # --------------
 

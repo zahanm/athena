@@ -20,17 +20,27 @@
 	        </div>
 	      </div>
 		  <div class="thumbnail back" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{karma_profile.learnable}} {{karma_profile.teachable}}">
-	        <div class="caption">
+	        <div class="caption" align="center">
 	          <p>
-	            <a href="mailto:{{email}}">{{first_name}}</a> wants to
+	            {{first_name}} Can Teach You
 	          </p>
-          	<p>This is a test</p>
+			
+			<form listen="pair_requests" authenticated="true">
+				<a class="btn" href="mailto:{{email}}">Contact</a>
+		        <button id="pair-us-button" class="btn btn-warning" type="submit">
+				          Pair Us!
+				        </button>
+		    </form>
           </div>
 		</div>
       </div>
     </li>
-
+  <div id="thanks-pairing" class="row">
+    <div class="hero-unit">
+      <h1>Thank you</h1>
+      <p>We will get back to you soon with a pairing.</p>
+    </div>
+  </div>
   </section>
-
 </body>
 </html>
