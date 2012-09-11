@@ -4,20 +4,20 @@
 <body>
 
   <!-- learning request flow -->
-  <form listen="goals" holder="#conversation" class="form-inline" id="start-finding" authenticated="true">
-    <p>
-      My goal is to
-      <span class="input-append">
-        <input type="text" name="value" placeholder="make a social web app" tabindex="1" style="width: 400px;" required>
-        <button class="btn" type="submit">&rarr;</button>
-      </span>
-    </p>
-  </form>
+  <section oneach="@each:signup_request" subscribe="once" dogjs-auth="true" load="signup_requests">
 
-  <section oneach="@each:goal" subscribe="true">
+    <form ask="state_goal" holder="#conversation" class="form-inline" id="start-finding">
+      <p>
+        My goal is to
+        <span class="input-append">
+          <input type="text" name="goal" placeholder="make a social web app" tabindex="1" style="width: 400px;" required>
+          <button class="btn" type="submit">&rarr;</button>
+        </span>
+      </p>
+    </form>
 
     <!-- Inside the ON EACH goal -->
-    <form ask="state_skill_needed" holder="#conversation" class="form-inline" authenticated="true">
+    <form ask="state_skill_needed" holder="#conversation" class="form-inline">
       <p>
         and the skill I'll going to need in order to accomplish it is
         <span class="input-append">
@@ -27,16 +27,17 @@
       </p>
     </form>
 
-    <form ask="state_teachable" holder="#conversation" class="form-inline" id="state-teachable" authenticated="true">
+    <form ask="state_teachable" holder="#conversation" class="form-inline" id="state-teachable">
       <p>
         In return, I'd be willing to help a friend learn to
         <span class="input-append">
-          <input type="text" name="teachable" placeholder="dance" tabindex="3"><button class="btn" type="submit"><i class="icon-share-alt"></i></button>
+          <input type="text" name="teachable" placeholder="dance" tabindex="3">
+          <button class="btn" type="submit">&rarr;</button>
         </span>
       </p>
     </form>
 
-    <form ask="identify_yourself" holder="#conversation" class="form-inline" authenticated="true">
+    <form ask="identify_yourself" holder="#conversation" class="form-inline">
       <p>
         I can be contacted at the address
         <input type="email" name="email" placeholder="email" tabindex="4">
@@ -44,6 +45,16 @@
       <div style="text-align: center;">
         <button class="btn btn-warning" type="submit">sign up</button>
       </div>
+    </form>
+
+    <form ask="state_additional_teachable" holder="#conversation" class="form-inline" id="state-teachable">
+      <p>
+        What else would you like to teach?
+        <span class="input-append">
+          <input type="text" name="teachable" placeholder="dance">
+          <button class="btn" type="submit">&rarr;</button>
+        </span>
+      </p>
     </form>
 
     <!-- admin display -->
