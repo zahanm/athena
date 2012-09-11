@@ -43,11 +43,14 @@ LISTEN TO public VIA http FOR signup_requests
 
 ON EACH signup_request DO
   learner = PERSON FROM signup_request
+  PRINT learner
   IF learner.karma_profile THEN
     response = ASK learner VIA stream TO state_additional_teachable
     skill = response[0]['skill']
     ADD skill TO learner.karma_profile.teachables
-    SAVE learner TO karma
+    # SAVE learner TO karma
+    SAVE learner TO people.people
+    NOTIFY public VIA stream OF learner
   ELSE
     learner.karma_profile = {}
     response = ASK learner VIA stream TO state_goal
@@ -64,7 +67,7 @@ ON EACH signup_request DO
     identity = ASK learner VIA stream TO identify_yourself
     learner.email = identity[0]['email']
     COMPUTE print_details ON learner
-    # TODO community save SAVE learner TO karma
+    # SAVE learner TO karma
     SAVE learner TO people.people
     NOTIFY public VIA stream OF learner
   END
