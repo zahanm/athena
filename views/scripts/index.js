@@ -14,7 +14,7 @@ dogjs.on('pageload', function () {
   exampleSkills = [
     'cooking',
     'hiking',
-    'raping',
+    'rapping',
     'programing'
   ];
   interval = 2000; // in ms

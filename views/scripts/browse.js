@@ -27,4 +27,44 @@ dogjs.on('pageload', function () {
     }
   });
 
+  // Thank you banner
+  // ----------------
+
+  function fadeOut(elem, callback) {
+    elem.style.opacity = '1';
+    timegap = 100;
+    delta = -0.1;
+    function fadeDelta(elem, amount) {
+      var opacity = Number(elem.style.opacity);
+      opacity += amount;
+      if (opacity <= 0.1) {
+        opacity = 0;
+      }
+      elem.style.opacity = String(opacity);
+      if (opacity > 0) {
+        setTimeout(fadeDelta.bind(this, elem, delta), timegap);
+      } else {
+        elem.style.display = 'none';
+        callback && callback();
+      }
+    }
+    setTimeout(fadeDelta.bind(this, elem, delta), timegap);
+  }
+
+  dogjs.on('submitted:listen:pair_requests', function (data) {
+	debugger;
+    ['form[ask="teacher"]', 'form[ask="student"]'].forEach(function (selector) {
+      step = document.querySelector(selector);
+      if (!step) { return; }
+      step.reset();
+      step.style.display = 'none';
+    });
+    document.querySelector('#thanks-pairing').style.display = 'block';
+    setTimeout(function () {
+      fadeOut(document.querySelector('#thanks-pairing'), function () {
+        window.location = '/index.html';
+      });
+    }, 2000);
+  });
+
 }, this, true);
