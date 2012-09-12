@@ -66,5 +66,4 @@ dogjs.on('pageload', function () {
       });
     }, 2000);
   });
-
 }, this, true);
