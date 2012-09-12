@@ -6,7 +6,7 @@
   <section oneach="@each:signup_request" subscribe="poll">
 
     <!-- browse display -->
-    <li class="span3 people-container" notify="person" holder=".people-grid" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{karma_profile.learnable}} {{karma_profile.teachable}}">
+    <li class="span3 people-container" notify="person" holder=".people-grid" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{#karma_profile.learnables}}{{.}} {{/karma_profile.learnables}} {{#karma_profile.teachables}}{{.}} {{/karma_profile.teachables}}">
       <div class="people-card">
         <div class="thumbnail front">
           <img src="http://graph.facebook.com/{{facebook_profile.id}}/picture?type=large">
@@ -17,31 +17,31 @@
             <p>learn <span class="well">{{karma_profile.learnables.0}}</span></p>
             <p>in order to <span class="well">{{karma_profile.goal}}</span>,</p>
             <p>and is willing to teach <span class="well">{{karma_profile.teachables.0}}</span></p>
-	        </div>
-	      </div>
+          </div>
+        </div>
         <div class="thumbnail back">
-	        <div class="caption">
-	          <ul class="learn-teach-list">
-	            <b>{{first_name}} wants to learn</b>
-	            {{#karma_profile.learnables}}
+          <div class="caption">
+            <ul class="learn-teach-list">
+              <b>{{first_name}} wants to learn</b>
+              {{#karma_profile.learnables}}
                 <li>{{.}}</li>
               {{/karma_profile.learnables}}
-	          </ul>
-	          <ul class="learn-teach-list">
-	            <b>... and can teach you</b>
-	            {{#karma_profile.teachables}}
+            </ul>
+            <ul class="learn-teach-list">
+              <b>... and can teach you</b>
+              {{#karma_profile.teachables}}
                 <li>{{.}}</li>
               {{/karma_profile.teachables}}
-	          </ul>
-	          <div align="center">
-	            <a class="btn btn-info" href="mailto:{{email}}">Contact</a>
-			      <!--<form listen="pair_requests" authenticated="true">
-				      <a class="btn" href="mailto:{{email}}">Contact</a>
-		          <button id="pair-us-button" class="btn btn-warning" type="submit">
-				          Pair Us!
-				      </button>
-		        </form>-->
-		        </div>
+            </ul>
+            <div align="center">
+              <a class="btn btn-info" href="mailto:{{email}}">Contact</a>
+            <!--<form listen="pair_requests" authenticated="true">
+              <a class="btn" href="mailto:{{email}}">Contact</a>
+              <button id="pair-us-button" class="btn btn-warning" type="submit">
+                Pair Us!
+             </button>
+            </form>-->
+            </div>
           </div>
         </div>
       </div>
