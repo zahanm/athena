@@ -14,23 +14,34 @@
             <p>
               <a href="mailto:{{email}}">{{first_name}}</a> wants to
             </p>
-            <p>learn <span class="well">{{karma_profile.learnables}}</span></p>
+            <p>learn <span class="well">{{karma_profile.learnables.0}}</span></p>
             <p>in order to <span class="well">{{karma_profile.goal}}</span>,</p>
-            <p>and is willing to teach <span class="well">{{karma_profile.teachables}}</span></p>
+            <p>and is willing to teach <span class="well">{{karma_profile.teachables.0}}</span></p>
 	        </div>
 	      </div>
-        <div class="thumbnail back" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{karma_profile.learnable}} {{karma_profile.teachable}}">
-	        <div class="caption" align="center">
-	          <p>
-	            {{first_name}} Can Teach You
-	          </p>
-			
-			      <form listen="pair_requests" authenticated="true">
+        <div class="thumbnail back">
+	        <div class="caption">
+	          <ul class="learn-teach-list">
+	            <b>{{first_name}} wants to learn</b>
+	            {{#karma_profile.learnables}}
+                <li>{{.}}</li>
+              {{/karma_profile.learnables}}
+	          </ul>
+	          <ul class="learn-teach-list">
+	            <b>... and can teach you</b>
+	            {{#karma_profile.teachables}}
+                <li>{{.}}</li>
+              {{/karma_profile.teachables}}
+	          </ul>
+	          <div align="center">
+	            <a class="btn btn-info" href="mailto:{{email}}">Contact</a>
+			      <!--<form listen="pair_requests" authenticated="true">
 				      <a class="btn" href="mailto:{{email}}">Contact</a>
 		          <button id="pair-us-button" class="btn btn-warning" type="submit">
 				          Pair Us!
 				      </button>
-		        </form>
+		        </form>-->
+		        </div>
           </div>
         </div>
       </div>
