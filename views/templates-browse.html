@@ -6,7 +6,7 @@
   <section oneach="@each:signup_request" subscribe="poll">
 
     <!-- browse display -->
-    <li class="span3 people-container" notify="person" holder=".people-grid" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{karma_profile.learnable}} {{karma_profile.teachable}}">
+    <li class="span3 people-container" notify="person" holder=".people-grid" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{#karma_profile.learnables}}{{.}} {{/karma_profile.learnables}} {{#karma_profile.teachables}}{{.}} {{/karma_profile.teachables}}">
       <div class="people-card">
         <div class="thumbnail front">
           <img src="http://graph.facebook.com/{{facebook_profile.id}}/picture?type=large">
@@ -14,9 +14,13 @@
             <p>
               <a href="mailto:{{email}}">{{first_name}}</a> wants to
             </p>
-            <p>learn <span class="well">{{karma_profile.learnables}}</span></p>
+            {{#karma_profile.learnables}}
+            <p>learn <span class="well">{{.}}</span></p>
+            {{/karma_profile.learnables}}
             <p>in order to <span class="well">{{karma_profile.goal}}</span>,</p>
-            <p>and is willing to teach <span class="well">{{karma_profile.teachables}}</span></p>
+            {{#karma_profile.teachables}}
+            <p>and is willing to teach <span class="well">{{.}}</span></p>
+            {{/karma_profile.teachables}}
           </div>
         </div>
         <div class="thumbnail back">
