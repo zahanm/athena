@@ -1,4 +1,3 @@
-
 dogjs.configure({
   templates: '/templates-browse.html'
 });
