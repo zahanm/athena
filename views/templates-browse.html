@@ -8,7 +8,7 @@
     <!-- browse display -->
     <li class="span3 people-container" notify="person" holder=".people-grid" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{#karma_profile.learnables}}{{.}} {{/karma_profile.learnables}} {{#karma_profile.teachables}}{{.}} {{/karma_profile.teachables}}">
       <div class="people-card">
-        <div class="thumbnail front">
+        <span class="thumbnail front">
           <img src="http://graph.facebook.com/{{facebook_profile.id}}/picture?type=large">
           <div class="caption">
             <p>
@@ -18,23 +18,45 @@
             <p>in order to <span class="well">{{karma_profile.goal}}</span>,</p>
             <p>and is willing to teach <span class="well">{{karma_profile.teachables.0}}</span></p>
           </div>
-        </div>
-        <div class="thumbnail back">
-          <div class="caption">
-            <ul class="learn-teach-list">
-              <b>{{first_name}} wants to learn</b>
-              {{#karma_profile.learnables}}
-                <li>{{.}}</li>
-              {{/karma_profile.learnables}}
-            </ul>
-            <ul class="learn-teach-list">
-              <b>... and can teach you</b>
-              {{#karma_profile.teachables}}
-                <li>{{.}}</li>
-              {{/karma_profile.teachables}}
-            </ul>
-            <div align="center">
-              <a class="btn btn-info" href="mailto:{{email}}">Contact</a>
+        </span>
+        <span class="thumbnail back">
+          <div class="caption" align="center">
+            <!--TODO(sainsley): link to profile-->
+            <a href=""><h2>{{first_name}}</h2></a>
+            <div style="min-height: 200px">
+              <ul class="learn-teach-list">
+                <b>Goals</b>
+                {{#karma_profile.learnables}}
+                  <li>{{.}}</li>
+                {{/karma_profile.learnables}}
+              </ul>
+              <ul class="learn-teach-list">
+                <b>Skills</b>
+                {{#karma_profile.teachables}}
+                  <li>{{.}}</li>
+                {{/karma_profile.teachables}}
+                <li>
+                  <form listen="pair_requests" authenticated="true">
+                    <div class="input-prepend" style="margin-top: 10px">
+                      <button id="pair-us-button" class="btn" type="submit" style="padding: 4px 10px">+</button><input class="span2" id="prependedInput" size="16" type="text" placeholder="Suggest a skill">
+                    </div>
+                  </form>
+                </li>
+              </ul>
+            </div>
+            <div class="btn-toolbar" style="margin: 0;" align="center">
+              <a class="btn" href="mailto:{{email}}">Contact</a>
+              <div class="btn-group">
+                <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">Connect 
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" align="left">
+                  <li><a href="#">I want to learn from {{first_name}}</a></li>
+                  <li><a href="#">I want to teach {{first_name}}</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Suggest match...</a></li>
+                </ul>
+              </div>
             <!--<form listen="pair_requests" authenticated="true">
               <a class="btn" href="mailto:{{email}}">Contact</a>
               <button id="pair-us-button" class="btn btn-warning" type="submit">
@@ -43,7 +65,7 @@
             </form>-->
             </div>
           </div>
-        </div>
+        </span>
       </div>
     </li>
     <div id="thanks-pairing" class="row">
