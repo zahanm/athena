@@ -5,7 +5,23 @@
   <link rel="stylesheet" href="/styles/index.css" type="text/css" charset="utf-8">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/bootstrap-dropdown.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/scripts/bootstrap-modal.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
+  <script>
+    $(document).on("click", ".open-WindowTitleDialog", function () {
+      debugger;
+         var myBookId = $(this).data('id');
+         $(".modal-body #xlInput").val( myBookId );
+        $('#windowTitleDialog').modal('show');
+    });
+  	function closeDialog () {
+  		$('#windowTitleDialog').modal('hide'); 
+  		};
+  	function okClicked () {
+  		document.title = document.getElementById ("xlInput").value;
+  		closeDialog ();
+  		};
+  </script>
 </head>
 <body>
   <div class="navbar navbar-fixed-top">
@@ -24,7 +40,29 @@
       </div>
     </div>
   </div>
-  <div class="container">
+  <div id="thanks-pairing" class="toast row">
+    <div class="hero-unit">
+      <h1>Thank you</h1>
+      <p>We will pass along your suggestion.</p>
+    </div>
+  </div>
+  <div class="modal hide fade" id="windowTitleDialog" style="display: none; ">
+	  <div class="modal-header">
+		  <a href="#" class="close" data-dismiss="modal">×</a>
+		  <h3 id="title">Please select a match.</h3>
+		</div>
+	  <div class="modal-body">
+		  <div class="divDialogElements">
+			<input type="text" class="search-query" id="xlInput" name="xlInput" placeholder="Filter people">
+			</div>
+		</div>
+	  <div class="modal-footer">
+		  <a href="#" class="btn" onclick="closeDialog ();">Cancel</a>
+		  <a href="#" class="btn btn-primary" onclick="okClicked ();">OK</a>
+		</div>
+	 </div>
+  </div>
+  <div class="container" style="margin-bottom: 100px;">
     <div class="page-header">
       <h1 style="display: inline-block">
         Browse
