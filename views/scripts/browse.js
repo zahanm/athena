@@ -51,8 +51,7 @@ dogjs.on('pageload', function () {
   }
 
   dogjs.on('submitted:listen:pair_requests', function (data) {
-	debugger;
-    ['form[ask="teacher"]', 'form[ask="student"]'].forEach(function (selector) {
+    ['form[ask="teacher"]', 'form[ask="suggested_skill"]'].forEach(function (selector) {
       step = document.querySelector(selector);
       if (!step) { return; }
       step.reset();
@@ -61,7 +60,7 @@ dogjs.on('pageload', function () {
     document.querySelector('#thanks-pairing').style.display = 'block';
     setTimeout(function () {
       fadeOut(document.querySelector('#thanks-pairing'), function () {
-        window.location = '/index.html';
+        window.location = '/browse.html';
       });
     }, 2000);
   });
