@@ -105,20 +105,16 @@ ON EACH pair_request DO
   #response = ASK learner VIA stream TO state_skill_suggested
   #skill = response[0]['skill']
 
-  salman = people.person {
+  tester = people.person {
      email = address
    }
 
    message = dog.email {
      subject = "Hi, World!"
      body = "This is a test"
-   } 
+   }
 
-  NOTIFY salman VIA email OF message
-  # peeps = FIND people IN karma
-  # FOR p IN people DO
-  #   NOTIFY browser OF p
-  # END
+  NOTIFY tester VIA email OF message
 END
 
 # Pairing people
