@@ -26,7 +26,7 @@ dogjs.on('pageload', function () {
     carousels[selector] = true;
     var i = 0;
     function cycle() {
-      if (elem && document.activeElement !== elem && elem.value === '') {
+      if (elem && elem.value === '') {
         elem.placeholder = parade[i];
         i = (i+1) % parade.length;
       }
@@ -36,7 +36,7 @@ dogjs.on('pageload', function () {
 
   // cycle through placeholders for learnables
   function checkAllCarousels() {
-    [ '#conversation input[name="value"]', '#conversation input[name="skill"]', '#conversation input[name="teachable"]' ].forEach(function (s, i) {
+    [ '#conversation input[name="goal"]', '#conversation input[name="skill"]', '#conversation input[name="teachable"]' ].forEach(function (s, i) {
       setupCarousel(s, (i == 0) ? exampleProjects: exampleSkills);
     });
   }
@@ -73,7 +73,7 @@ dogjs.on('pageload', function () {
   // this is the identify_yourself form submission
   dogjs.on('submitted:ask:identify_yourself', function (data) {
     ['form[ask="state_goal"]', 'form[ask="state_skill_needed"]', 'form[ask="state_teachable"]', 'form[ask="identify_yourself"]'].forEach(function (selector) {
-      step = document.querySelector(selector);
+      var step = document.querySelector(selector);
       if (!step) { return; }
       step.reset();
       step.style.display = 'none';
