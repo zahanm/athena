@@ -37,7 +37,7 @@
                 <li>
                   <form listen="pair_requests" authenticated="true">
                     <div class="input-prepend" style="margin-top: 10px">
-                      <button id="pair-us-button" class="btn" type="submit" style="padding: 4px 10px">+</button><input class="span2" id="prependedInput" size="16" type="text" placeholder="Suggest a skill">
+                      <button id="pair-us-button" class="btn" type="submit" style="padding: 4px 10px">+</button><input class="span2" name="suggestion" id="prependedInput" size="16" type="text" placeholder="Suggest a skill">
                     </div>
                     <input type="hidden" name="address" value="{{email}}">
                   </form>
@@ -46,16 +46,14 @@
             </div>
             <div class="btn-toolbar" style="margin: 0;" align="center">
               <a class="btn" href="mailto:{{email}}">Suggest</a>
-              <div class="btn-group">
-                <button class="open-WindowTitleDialog btn btn-info" data-toggle="modal" data-id="{{first_name}}" data-toggle="modal" href="#windowTitleDialog">Connect...
+                <button class="open-PairDialog btn btn-info" data-toggle="modal" data-id="{{first_name}}" data-toggle="modal" href="#pairDialog">Connect...
                 </button>
-                <ul class="dropdown-menu" align="left">
+                <!--<ul class="dropdown-menu" align="left">
                   <li><a href="#">I want to learn from {{first_name}}</a></li>
                   <li><a href="#">I want to teach {{first_name}}</a></li>
                   <li class="divider"></li>
                   <li><a data-toggle="modal" href="#windowTitleDialog">Suggest match...</a></li>
-                </ul>
-              </div>
+                </ul>-->
             <!--<form listen="pair_requests" authenticated="true">
               <a class="btn" href="mailto:{{email}}">Contact</a>
               <button id="pair-us-button" class="btn btn-warning" type="submit">

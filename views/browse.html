@@ -8,19 +8,15 @@
   <script src="/scripts/bootstrap-modal.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
   <script>
-    $(document).on("click", ".open-WindowTitleDialog", function () {
-      debugger;
-         var myBookId = $(this).data('id');
-         $(".modal-body #xlInput").val( myBookId );
-        $('#windowTitleDialog').modal('show');
+    $(document).on("click", ".open-PairDialog", function () {
+      $('#pairDialog').html(Mustache.render($('#pairDialog').html(), { first_name: $(this).data('id') }))
+      // $('#pairDialog').modal('show');
     });
-  	function closeDialog () {
-  		$('#windowTitleDialog').modal('hide'); 
-  		};
-  	function okClicked () {
-  		document.title = document.getElementById ("xlInput").value;
-  		closeDialog ();
-  		};
+    $(document).on("click", ".open-SuggestDialog", function () {
+      debugger;
+      $('#pairDialog').modal('hide');
+      //$('#suggestDialog').modal('show');
+    });
   </script>
 </head>
 <body>
@@ -40,16 +36,37 @@
       </div>
     </div>
   </div>
+  
+  <!-- Alerts and Dialogs -->
   <div id="thanks-pairing" class="toast row">
     <div class="hero-unit">
       <h1>Thank you</h1>
       <p>We will pass along your suggestion.</p>
     </div>
   </div>
-  <div class="modal hide fade" id="windowTitleDialog" style="display: none; ">
+  
+  <!--<div class="alert alert-block" id="pairDialog">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <h4>Warning!</h4>
+    Best check yo self, you're not...
+  </div>-->
+  
+  <div class="modal hide fade" id="pairDialog" style="display: none; width: 300px; margin-top: -100px; margin-left: -150px">
+	  <div class="modal-body" align="center">
+	    <a href="#" class="close" data-dismiss="modal">×</a>
+		  <div class="btn-group btn-group-vertical">
+			  <button class="btn">I want to learn from {{first_name}}</button>
+        <button class="btn">I want to teach {{first_name}}</button>
+        <button class="open-SuggestDialog btn btn-info" data-toggle="modal" href="#suggestDialog">Suggest match...</button>
+			</div>
+		</div>
+	 </div>
+  </div>
+  
+  <div class="modal hide fade" id="suggestDialog" style="display: none; ">
 	  <div class="modal-header">
 		  <a href="#" class="close" data-dismiss="modal">×</a>
-		  <h3 id="title">Please select a match.</h3>
+		  <h3 id="title">Find a match for {{first_name}}</h3>
 		</div>
 	  <div class="modal-body">
 		  <div class="divDialogElements">
@@ -57,11 +74,11 @@
 			</div>
 		</div>
 	  <div class="modal-footer">
-		  <a href="#" class="btn" onclick="closeDialog ();">Cancel</a>
-		  <a href="#" class="btn btn-primary" onclick="okClicked ();">OK</a>
 		</div>
 	 </div>
   </div>
+  
+  <!-- People container -->
   <div class="container" style="margin-bottom: 100px;">
     <div class="page-header">
       <h1 style="display: inline-block">

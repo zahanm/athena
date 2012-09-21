@@ -100,8 +100,10 @@ ON EACH pair_request DO
   PRINT 'name: ' + browser.first_name + " " + browser.last_name
   address = pair_request['address']
   PRINT 'email: ' + address
-  teacher = FIND people.people FROM karma WHERE email == "ainsley@mit.edu"
-  INSPECT teacher
+  teachers = FIND people.people FROM karma WHERE email == address
+  suggestion = pair_request['suggestion']
+INSPECT teachers[0]['email']
+INSPECT suggestion
   #response = ASK learner VIA stream TO state_skill_suggested
   #skill = response[0]['skill']
 
@@ -110,8 +112,8 @@ ON EACH pair_request DO
    }
 
    message = dog.email {
-     subject = "Hi, World!"
-     body = "This is a test"
+     subject = browser.first_name + " suggested a new skill for you!"
+     body = "Hello, " + teachers[0].first_name + ", \n" + browser.first_name + " " + browser.last_name + " suggested that you add '" + suggestion +"' to your list of skills."
    }
 
   NOTIFY tester VIA email OF message
