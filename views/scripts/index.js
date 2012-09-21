@@ -86,4 +86,15 @@ dogjs.on('pageload', function () {
     }, 2000);
   });
 
+  dogjs.on('submitted:ask:state_additional_teachable', function (data) {
+    var f = document.querySelector('form[ask="state_additional_teachable"]')
+    f.reset(); f.style.display = 'none';
+    document.querySelector('#thanks-holder').style.display = 'block';
+    setTimeout(function () {
+      fadeOut(document.querySelector('#thanks-holder'), function () {
+        window.location = '/browse.html';
+      });
+    }, 2000);
+  });
+
 }, this, true);
