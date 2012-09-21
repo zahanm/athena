@@ -31,7 +31,7 @@
       <p>
         In return, I'd be willing to help a friend learn
         <span class="input-append">
-          <input type="text" name="teachable" placeholder="dancing" tabindex="3">
+          <input type="text" name="teachable" placeholder="dancing" tabindex="3" required>
           <button class="btn" type="submit">&rarr;</button>
         </span>
       </p>
@@ -40,7 +40,7 @@
     <form ask="identify_yourself" holder="#conversation" class="form-inline">
       <p>
         I can be contacted at the address
-        <input type="email" name="email" placeholder="email" tabindex="4">
+        <input type="email" name="email" placeholder="email" tabindex="4" required>
       </p>
       <div style="text-align: center;">
         <button class="btn btn-warning" type="submit">sign up</button>
@@ -51,7 +51,7 @@
       <p>
         What else would you like to teach?
         <span class="input-append">
-          <input type="text" name="skill" placeholder="dance">
+          <input type="text" name="skill" placeholder="dance" required>
           <button class="btn" type="submit">&rarr;</button>
         </span>
       </p>
@@ -60,9 +60,9 @@
     <!-- admin display -->
     <section notify="person" holder=".people-table" class="row people-row">
       <div class="cell span2 name"><a href="mailto:{{email}}" class="email">{{first_name}} {{last_name}}</a></div>
-      <div class="cell span4 goal">{{athena_profile.goal}}</div>
-      <div class="cell span3 skill">{{athena_profile.learnable}}</div>
-      <div class="cell span3 skill">{{athena_profile.teachable}}</div>
+      <div class="cell span4 goal">{{karma_profile.goal}}</div>
+      <div class="cell span3 skill">{{karma_profile.learnable}}</div>
+      <div class="cell span3 skill">{{karma_profile.teachable}}</div>
     </section>
 
     <!-- browse display -->
