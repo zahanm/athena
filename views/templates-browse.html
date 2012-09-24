@@ -21,7 +21,7 @@
         <span class="thumbnail back">
           <div class="caption" align="center">
             <!--TODO(sainsley): link to profile-->
-            <a href=""><h2>{{first_name}}</h2></a>
+            <a href="profile.html"><h2>{{first_name}}</h2></a>
             <div style="min-height: 200px">
               <ul class="learn-teach-list">
                 <b>Goals</b>
@@ -64,6 +64,11 @@
           </div>
         </span>
       </div>
+    </li>
+  </section>
+  <section oneach="@each:suggest_request" subscribe="once" dogjs-auth="true" load="suggest_requests">
+    <li class="span1" notify="suggestion" holder=".suggest-grid" data-meta="{{first_name}} {{last_name}}">
+      <img src="http://graph.facebook.com/{{facebook_profile.id}}/picture?type=square">
     </li>
   </section>
 </body>

@@ -13,8 +13,10 @@
       // $('#pairDialog').modal('show');
     });
     $(document).on("click", ".open-SuggestDialog", function () {
-      debugger;
-      $('#pairDialog').modal('hide');
+      $('#suggestDialog').html(Mustache.render($('#suggestDialog').html(), { first_name: $(this).data('id') }))
+      // $('#pairDialog').modal('show');
+      //$('#pairDialog').modal('hide');
+      //$('#pairDialog').modal('toggle');
       //$('#suggestDialog').modal('show');
     });
   </script>
@@ -27,7 +29,7 @@
           Karma
         </a>
         <ul class="nav">
-          <li><a href="/">Teach</a></li>
+          <li><a href="/">Profile</a></li>
           <li class="active"><a href="/browse.html">Browse</a></li>
         </ul>
         <ul class="nav pull-right" dogjs-auth="true">
@@ -53,11 +55,12 @@
   
   <div class="modal hide fade" id="pairDialog" style="display: none; width: 300px; margin-top: -100px; margin-left: -150px">
 	  <div class="modal-body" align="center">
-	    <a href="#" class="close" data-dismiss="modal">×</a>
+	    <a href="#" class="close" id="closePairDialog" data-dismiss="modal">×</a>
 		  <div class="btn-group btn-group-vertical">
 			  <button class="btn">I want to learn from {{first_name}}</button>
         <button class="btn">I want to teach {{first_name}}</button>
-        <button class="open-SuggestDialog btn btn-info" data-toggle="modal" href="#suggestDialog">Suggest match...</button>
+        <button class="open-SuggestDialog btn btn-info" data-toggle="modal" data-id="{{first_name}}" href="#suggestDialog"          
+            onClick="document.getElementById('closePairDialog').click();">Suggest match...</button>
 			</div>
 		</div>
 	 </div>
@@ -66,11 +69,27 @@
   <div class="modal hide fade" id="suggestDialog" style="display: none; ">
 	  <div class="modal-header">
 		  <a href="#" class="close" data-dismiss="modal">×</a>
-		  <h3 id="title">Find a match for {{first_name}}</h3>
+		  <h1 id="title" style="display: inline-block">
+        Match
+        <!--Insert spinner for teacher/student-->
+        <small>Find a 
+          <select class="well" style="margin-bottom: 0px;">
+            <option>teacher</option>
+            <option>student</option>
+          </select> 
+        for {{first_name}}</small>
+      </h1>
 		</div>
 	  <div class="modal-body">
-		  <div class="divDialogElements">
-			<input type="text" class="search-query" id="xlInput" name="xlInput" placeholder="Filter people">
+		  <!-- People container -->
+      <div class="container" style="margin-bottom: 100px;">
+        <form class="form-search">
+          <input type="text" class="search-query" id="peoplefilter" placeholder="Filter people">
+        </form>
+        <div class="span6">
+          <ul class="suggest-grid" method="append"></ul>
+        </div>
+      </div>
 			</div>
 		</div>
 	  <div class="modal-footer">
