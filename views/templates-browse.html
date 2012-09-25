@@ -4,6 +4,7 @@
 <body>
 
   <section oneach="@each:browse_request" subscribe="once" dogjs-auth="true" load="browse_requests">
+
     <!-- browse display -->
     <li class="span3 people-container" notify="person" holder=".people-grid" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{#karma_profile.learnables}}{{.}} {{/karma_profile.learnables}} {{#karma_profile.teachables}}{{.}} {{/karma_profile.teachables}}">
       <div class="people-card">
@@ -65,8 +66,8 @@
         </span>
       </div>
     </li>
-  </section>
-  <section oneach="@each:suggest_request" subscribe="once" dogjs-auth="true" load="suggest_requests">
+
+    <!-- person suggestions -->
     <li class="span1" notify="suggestion" holder=".suggest-grid" data-meta="{{first_name}} {{last_name}}">
       <img src="http://graph.facebook.com/{{facebook_profile.id}}/picture?type=square">
     </li>
