@@ -102,10 +102,6 @@ ON EACH pair_request DO
   PRINT 'email: ' + address
   teachers = FIND people.people FROM karma WHERE email == address
   suggestion = pair_request['suggestion']
-INSPECT teachers[0]['email']
-INSPECT suggestion
-  #response = ASK learner VIA stream TO state_skill_suggested
-  #skill = response[0]['skill']
 
   tester = people.person {
      email = address
@@ -117,6 +113,23 @@ INSPECT suggestion
    }
 
   NOTIFY tester VIA email OF message
+END
+
+# Profiles
+DEFINE profile_request { id }
+
+LISTEN TO public VIA http FOR profile_requests
+
+ON EACH profile_request DO
+  PRINT 'REQUEST'
+  browser = PERSON FROM profile_request
+  id = profile_request['id']
+  profiles = FIND people.people FROM karma WHERE facebook_profile.id == id
+  INSPECT profiles
+
+  FOR EACH profile IN profiles DO
+    NOTIFY browser VIA stream OF profile
+  END
 END
 
 # Pairing people
