@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Karma</title>
+  <link rel="stylesheet" href="/styles/index.css" type="text/css" charset="utf-8">
+  <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand" href="/">
+          Karma
+        </a>
+        <ul class="nav">
+          <li class="active" id="signup"><a href="/">Profile</a></li>
+          <li dogjs-auth="true"><a href="/browse.html">Browse</a></li>
+        </ul>
+        <ul class="nav pull-right" dogjs-auth="true">
+          <li><a href="/dog/account/logout">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- learning request flow -->
+  <div class="profile-wrapper" method="append"></div>
+  <script src="/scripts/profile.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

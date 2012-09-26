@@ -123,10 +123,9 @@ LISTEN TO public VIA http FOR profile_requests
 ON EACH profile_request DO
   PRINT 'REQUEST'
   browser = PERSON FROM profile_request
-  id = profile_request['id']
+  id = '1063020008' # profile_request['id']
   profiles = FIND people.people FROM karma WHERE facebook_profile.id == id
   INSPECT profiles
-
   FOR EACH profile IN profiles DO
     NOTIFY browser VIA stream OF profile
   END
