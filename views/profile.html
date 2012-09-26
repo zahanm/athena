@@ -3,7 +3,13 @@
 <head>
   <title>Karma</title>
   <link rel="stylesheet" href="/styles/index.css" type="text/css" charset="utf-8">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
+  <script>
+    $(document).on("click", ".skill-link", function () {
+      window.location = '/browse.html'+'?interest='+$(this).data('skill');
+    });
+  </script>
 </head>
 <body>
   <div class="navbar navbar-fixed-top">

@@ -8,21 +8,39 @@
   <script src="/scripts/bootstrap-modal.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
   <script>
+    // Dialog click listeners 
     $(document).on("click", ".open-PairDialog", function () {
       $('#pairDialog').html(Mustache.render($('#pairDialog').html(), { first_name: $(this).data('id'), email: $(this).data('addr') }))
-      // $('#pairDialog').modal('show');
     });
     $(document).on("click", ".open-SuggestDialog", function () {
       $('#suggestDialog').html(Mustache.render($('#suggestDialog').html(), { first_name: $(this).data('id') }))
+      var suggestfilter = document.getElementById('suggestfilter');
+        suggestfilter && suggestfilter.addEventListener('keyup', function (ev) {
+          var corpus = document.querySelectorAll('.suggest-grid > li');
+          if (ev.target && ev.target.value) {
+            console.log('search:', ev.target.value);
+            var query = ev.target.value.split(/\s+/).join('|');
+            var search = new RegExp('\\b(' + query + ')', 'i');
+            Array.prototype.forEach.call(corpus, function (doc) {
+              if (search.exec(doc.dataset && doc.dataset.meta)) {
+                doc.style.display = 'list-item';
+              } else {
+                doc.style.display = 'none';
+              }
+            });
+          } else {
+            console.log('clear search');
+            Array.prototype.forEach.call(corpus, function (doc) {
+              doc.style.display = 'list-item';
+            });
+          }});
     });
     $(document).on("click", ".suggest-preview", function () {
-      console.log($(this));
-      console.log(this.className);
       $('input#suggestName').text($(this).data('fbid'))
       // remove selection style and highlight new element
       var els = document.querySelector('.suggest-grid').getElementsByTagName('li');
       for(i=0;i<els.length;i++){
-           els[i].className = 'suggest-preview well';
+        els[i].className = 'suggest-preview well';
       }
       this.className = 'suggest-preview well suggest-select';
     });
@@ -89,7 +107,7 @@
 		</div>
     <div class="modal-body">
       <!-- People container -->
-      <div class="container" style="margin-bottom: 100px;">
+      <div style="height: 100px; margin-bottom: 100px;">
         <form class="span6">
           <ul class="suggest-grid" method="append"></ul>
         </form>
@@ -97,7 +115,7 @@
 		</div>
     <div class="modal-footer" style="text-align: left;">
       <form class="form-search">
-        <input type="text" class="search-query" id="peoplefilter" placeholder="Search">
+        <input type="text" class="search-query" id="suggestfilter" placeholder="Search">
         <input id="suggestName" type="hidden">{{suggest_name}}</input>
         <button class="btn btn-info" style="float: right; margin-left: 10px;">Suggest</button>
         <button class="btn" style="float: right;">Cancel</button>
