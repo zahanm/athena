@@ -4,12 +4,15 @@ dogjs.configure({
 
 dogjs.on('pageload', function () {
 
-  var peoplefilter = document.getElementById('peoplefilter');
-  peoplefilter && peoplefilter.addEventListener('keyup', function (ev) {
+  // Filter function
+  function filterCards(ev, filterString) {
     var corpus = document.querySelectorAll('.thumbnails > li');
-    if (ev.target && ev.target.value) {
-      console.log('search:', ev.target.value);
-      var query = ev.target.value.split(/\s+/).join('|');
+	if (ev && ev.target && ev.target.value) {
+		filterString = ev.target.value;
+	}
+    if (filterString) {
+      console.log('search:',filterString);
+      var query = filterString.split(/\s+/).join('|');
       var search = new RegExp('\\b(' + query + ')', 'i');
       Array.prototype.forEach.call(corpus, function (doc) {
         if (search.exec(doc.dataset && doc.dataset.meta)) {
@@ -18,12 +21,36 @@ dogjs.on('pageload', function () {
           doc.style.display = 'none';
         }
       });
-    } else {
+	} else {
       console.log('clear search');
       Array.prototype.forEach.call(corpus, function (doc) {
         doc.style.display = 'list-item';
       });
     }
+  }
+
+  // Get URL params
+  var searchString = document.location.search;
+  searchString = searchString.substring(1);
+  var nvPairs = searchString.split("&");
+
+  for (i = 0; i < nvPairs.length; i++)
+  {
+	var nvPair = nvPairs[i].split("=");
+	var name = nvPair[0];
+	var value = nvPair[1];
+	if (name=='interest') {
+		console.log("url param: ",name+" "+value);
+		filterCards(null, value);
+		var peoplefilter = document.getElementById('peoplefilter');
+		peoplefilter.value = value;
+		console.log("url param: ", peoplefilter.value);
+	}
+  }
+
+  var peoplefilter = document.getElementById('peoplefilter');
+  peoplefilter && peoplefilter.addEventListener('keyup', function (ev) {
+    filterCards(ev, '');
   });
 
   // Thank you banner
