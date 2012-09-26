@@ -3,6 +3,13 @@
 <head></head>
 <body>
 
+  <script>
+    dogjs.on_page_load(function() {
+      // get the id from window.location
+      $("input:hidden")
+    })
+  </script>
+
   <section oneach="@each:browse_request" subscribe="once" dogjs-auth="true" load="browse_requests">
 
     <!-- browse display -->
@@ -46,21 +53,9 @@
               </ul>
             </div>
             <div class="btn-toolbar" style="margin: 0;" align="center">
-              <a class="btn" href="mailto:{{email}}">Suggest</a>
-                <button class="open-PairDialog btn btn-info" data-toggle="modal" data-id="{{first_name}}" data-toggle="modal" href="#pairDialog">Connect...
+                <button class="open-SuggestDialog btn" data-toggle="modal" data-id="{{first_name}}" href="#suggestDialog">Suggest</button>
+                <button class="open-PairDialog btn btn-info" data-toggle="modal" data-id="{{first_name}}" data-addr="{{email}}" data-toggle="modal" href="#pairDialog">Connect...
                 </button>
-                <!--<ul class="dropdown-menu" align="left">
-                  <li><a href="#">I want to learn from {{first_name}}</a></li>
-                  <li><a href="#">I want to teach {{first_name}}</a></li>
-                  <li class="divider"></li>
-                  <li><a data-toggle="modal" href="#windowTitleDialog">Suggest match...</a></li>
-                </ul>-->
-            <!--<form listen="pair_requests" authenticated="true">
-              <a class="btn" href="mailto:{{email}}">Contact</a>
-              <button id="pair-us-button" class="btn btn-warning" type="submit">
-                Pair Us!
-             </button>
-            </form>-->
             </div>
           </div>
         </span>
@@ -68,8 +63,9 @@
     </li>
 
     <!-- person suggestions -->
-    <li class="span1" notify="suggestion" holder=".suggest-grid" data-meta="{{first_name}} {{last_name}}">
+    <li class="suggest-preview well" notify="person" holder=".suggest-grid" data-meta="{{first_name}} {{last_name}}" data-fbid="{{facebook_profile.id}}">
       <img src="http://graph.facebook.com/{{facebook_profile.id}}/picture?type=square">
+      <small>{{first_name}} {{last_name}}</small>
     </li>
   </section>
 </body>
