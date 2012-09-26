@@ -9,15 +9,22 @@
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
   <script>
     $(document).on("click", ".open-PairDialog", function () {
-      $('#pairDialog').html(Mustache.render($('#pairDialog').html(), { first_name: $(this).data('id') }))
+      $('#pairDialog').html(Mustache.render($('#pairDialog').html(), { first_name: $(this).data('id'), email: $(this).data('addr') }))
       // $('#pairDialog').modal('show');
     });
     $(document).on("click", ".open-SuggestDialog", function () {
       $('#suggestDialog').html(Mustache.render($('#suggestDialog').html(), { first_name: $(this).data('id') }))
-      // $('#pairDialog').modal('show');
-      //$('#pairDialog').modal('hide');
-      //$('#pairDialog').modal('toggle');
-      //$('#suggestDialog').modal('show');
+    });
+    $(document).on("click", ".suggest-preview", function () {
+      console.log($(this));
+      console.log(this.className);
+      $('input#suggestName').text($(this).data('fbid'))
+      // remove selection style and highlight new element
+      var els = document.querySelector('.suggest-grid').getElementsByTagName('li');
+      for(i=0;i<els.length;i++){
+           els[i].className = 'suggest-preview well';
+      }
+      this.className = 'suggest-preview well suggest-select';
     });
   </script>
 </head>
@@ -59,8 +66,7 @@
       <div class="btn-group btn-group-vertical">
         <button class="btn">I want to learn from {{first_name}}</button>
         <button class="btn">I want to teach {{first_name}}</button>
-        <button class="open-SuggestDialog btn btn-info" data-toggle="modal" data-id="{{first_name}}" href="#suggestDialog"          
-            onClick="document.getElementById('closePairDialog').click();">Suggest match...</button>
+        <a class="btn btn-info" href="mailto:{{email}}" style="width: inherit;">Contact</a>
 			</div>
 		</div>
   </div>
@@ -84,15 +90,19 @@
     <div class="modal-body">
       <!-- People container -->
       <div class="container" style="margin-bottom: 100px;">
-        <form class="form-search">
-          <input type="text" class="search-query" id="peoplefilter" placeholder="Filter people">
-        </form>
-        <div class="span6">
+        <form class="span6">
           <ul class="suggest-grid" method="append"></ul>
-        </div>
+        </form>
       </div>
 		</div>
-    <div class="modal-footer"></div>
+    <div class="modal-footer" style="text-align: left;">
+      <form class="form-search">
+        <input type="text" class="search-query" id="peoplefilter" placeholder="Search">
+        <input id="suggestName" type="hidden">{{suggest_name}}</input>
+        <button class="btn btn-info" style="float: right; margin-left: 10px;">Suggest</button>
+        <button class="btn" style="float: right;">Cancel</button>
+      </form>
+    </div>
   </div>
 
   <!-- People container -->
