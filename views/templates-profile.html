@@ -60,7 +60,7 @@
               <div class="row skills-display">
                 <div style="padding: 10px;">
                   {{#karma_profile.teachables}}
-                    <span class="well" style="padding: 0px 4px 0px 4px; margin-top: 8px;">{{.}}</span>
+                    <button class="well skill-link" data-skill="{{.}}">{{.}}</button>
                   {{/karma_profile.teachables}}
                 </div>
               </div>
@@ -70,7 +70,7 @@
               <div class="row skills-display">
                 <div style="padding: 10px;">
                   {{#karma_profile.learnables}}
-                    <span class="well" style="padding: 0px 4px 0px 4px; margin-top: 8px;">{{.}}</span>
+                    <span class="well skill-link" data-skill="{{.}}">{{.}}</span>
                   {{/karma_profile.learnables}}
                 </div>
               </div>
