@@ -5,6 +5,7 @@ DEFINE COMMUNITY karma USING karma_profile {
   teachables
   student
   teacher
+  location
 }
 
 DEFINE COMMUNITY admins USING admins_profile {}
@@ -32,6 +33,11 @@ DEFINE identify_yourself FOR person DO
   RETURN email
 END
 
+DEFINE state_location FOR person DO
+  PERFORM "Tell me your current city. (optional)"
+  RETURN location
+END
+
 DEFINE state_additional_teachable FOR person DO
   PERFORM "What is another skill you could teach?"
   RETURN skill
@@ -45,29 +51,32 @@ ON EACH signup_request DO
   learner = PERSON FROM signup_request
   PRINT learner
   IF learner.karma_profile THEN
-    response = ASK learner VIA stream TO state_additional_teachable
-    skill = response[0]['skill']
-    ADD skill TO learner.karma_profile.teachables
-    SAVE learner TO karma
+    #esponse = ASK learner VIA stream TO know_profile_exists
+    #skill = response[0]['skill']
+    #ADD skill TO learner.karma_profile.teachables
+    #SAVE learner TO karma
     NOTIFY public VIA stream OF learner
   ELSE
-    learner.karma_profile = {}
-    response = ASK learner VIA stream TO state_goal
-    goal = response[0]['goal']
-    learner.karma_profile.goal = goal
-    response = ASK learner VIA stream TO state_skill_needed
-    learner.karma_profile.learnables = {}
-    skill = response[0]['skill']
-    ADD skill TO learner.karma_profile.learnables
-    response = ASK learner VIA stream TO state_teachable
-    learner.karma_profile.teachables = {}
-    teachable = response[0]['teachable']
-    ADD teachable TO learner.karma_profile.teachables
-    identity = ASK learner VIA stream TO identify_yourself
-    learner.email = identity[0]['email']
-    COMPUTE print_details ON learner
-    SAVE learner TO karma
-    NOTIFY public VIA stream OF learner
+  	learner.karma_profile = {}
+   	response = ASK learner VIA stream TO state_goal
+   	goal = response[0]['goal']
+	INSPECT goal
+   	learner.karma_profile.goal = goal
+   	response = ASK learner VIA stream TO state_skill_needed
+   	learner.karma_profile.learnables = {}
+   	skill = response[0]['skill']
+   	ADD skill TO learner.karma_profile.learnables
+   	response = ASK learner VIA stream TO state_teachable
+   	learner.karma_profile.teachables = {}
+   	teachable = response[0]['teachable']
+   	ADD teachable TO learner.karma_profile.teachables
+	location = ASK learner VIA stream TO state_location
+   	learner.location = location[0]['location']
+   	identity = ASK learner VIA stream TO identify_yourself
+   	learner.email = identity[0]['email']
+   	COMPUTE print_details ON learner
+   	SAVE learner TO karma
+   	NOTIFY public VIA stream OF learner
   END
 END
 
@@ -121,7 +130,6 @@ DEFINE profile_request { id }
 LISTEN TO public VIA http FOR profile_requests
 
 ON EACH profile_request DO
-  PRINT 'REQUEST'
   browser = PERSON FROM profile_request
   id = '1063020008' # profile_request['id']
   profiles = FIND people.people FROM karma WHERE facebook_profile.id == id

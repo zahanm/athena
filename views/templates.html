@@ -36,6 +36,16 @@
         </span>
       </p>
     </form>
+    
+    <form ask="state_location" holder="#conversation" class="form-inline">
+      <p>
+        I currently live in
+        <span class="input-append">
+          <input type="text" name="location" placeholder="(optional)" tabindex="3">
+          <button class="btn" type="submit">&rarr;</button>
+        </span>
+      </p>
+    </form>
 
     <form ask="identify_yourself" holder="#conversation" class="form-inline">
       <p>
@@ -47,7 +57,7 @@
       </div>
     </form>
 
-    <form ask="state_additional_teachable" holder="#conversation" class="form-inline" id="state-teachable">
+    <!--<form ask="state_additional_teachable" holder="#conversation" class="form-inline" id="state-teachable">
       <p>
         What else would you like to teach?
         <span class="input-append">
@@ -55,7 +65,8 @@
           <button class="btn" type="submit">&rarr;</button>
         </span>
       </p>
-    </form>
+    </form>-->
+    <input type="hidden" notify="person" holder="#conversation" id="profile-flag"/>
 
     <!-- admin display -->
     <section notify="person" holder=".people-table" class="row people-row">
