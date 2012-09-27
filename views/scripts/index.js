@@ -1,4 +1,3 @@
-
 dogjs.on('pageload', function () {
 
   // placeholder cycling
@@ -40,7 +39,19 @@ dogjs.on('pageload', function () {
       setupCarousel(s, (i == 0) ? exampleProjects: exampleSkills);
     });
   }
-  dogjs.on('add:node', checkAllCarousels);
+
+  // reroute if account exists
+  function profileCheck() {	
+	var profileExists = document.getElementById('profile-flag');
+	var auth = dogjs.isAuth();
+	if (profileExists && auth && auth == true) {
+	  	window.location = '/profile.html';
+		return;
+	 }
+	 checkAllCarousels();
+  }
+
+  dogjs.on('add:node', profileCheck);
   checkAllCarousels();
 
   function changePlaceholder(elem, ptext) {
