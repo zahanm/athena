@@ -14,4 +14,20 @@ dogjs.on('pageload', function () {
 	
 	var id = getUrlVars()["id"];
 	
+	// reroute if account exists
+	function profileCheck() {	
+		var profileIsCurrent = document.getElementById('auth-profile');
+		var auth = profileIsCurrent.value;
+		if (auth == 'false') {
+	  		var els = document.querySelectorAll('.edit-icon');
+      		for(i=0;i<els.length;i++){
+		   		els[i].style.display = 'none';
+		   	}
+	 	}
+  	}
+
+	dogjs.on('add:node', profileCheck);
+	
 }, this, true);
+
+
