@@ -5,6 +5,7 @@
   <section oneach="@each:profile_request" subscribe="once" dogjs-auth="true" load="profile_requests">
     <div class="container-fluid" notify="person" holder=".profile-wrapper" data-meta="{{first_name}} {{last_name}} {{karma_profile.goal}} {{#karma_profile.learnables}}{{.}} {{/karma_profile.learnables}} {{#karma_profile.teachables}}{{.}} {{/karma_profile.teachables}}">
       <div dogjs-auth="true">
+        <input type="hidden" id="auth-profile" value ="{{is_current}}"/>
         <div class="row-fluid" style="margin: 50px 0px 50px 0px;">
             <div class="span9">
               <div class="row-fluid show-grid">
@@ -55,12 +56,32 @@
             </div>
             <div class="span2" style="margin-top: -25px;">
               <div class="row">
-                <div class="span12"><h2><small>{{first_name}}'s<p></small>Skills</p></h2></div>
+                <div class="span10">
+                  <h2><small>{{first_name}}'s</small>
+                      <p>Skills 
+                        <a class="edit-icon btn btn-small" visibility="hidden" data-id="0"><i class="icon-pencil"></i></a>
+                      </p>
+                  </h2>
+                </div>
               </div>
               <div class="row skills-display">
-                <div style="padding: 10px;">
+                <div class="row span12 skill-edit" style="display: none;">
+                  <form listen="add_teachables">
+                    <input type="text" class="span12" 
+                      style="float: left; border: none; border-bottom: #E3E3E3 1px dashed;" 
+                      placeholder="What else can you teach?" 
+                      onkeypress="handleKeyPress(event,this.form)"/>
+                  </form>
+                </div>
+                <div class="row span12" style="padding: 6px;">
                   {{#karma_profile.teachables}}
-                    <button class="well skill-link" data-skill="{{.}}">{{.}}</button>
+                  <!--<form listen="delete_teachables" style="margin: 0;">-->
+                    <!--<input type="hidden" name="skill" value="{{.}}">-->
+                    <div class="btn-group" style="display: inline-block;">
+                      <button class="well skill skill-link" data-skill="{{.}}" type="button">{{.}}</button>
+                      <button class="btn well skill skill-delete" style="display: none;" type="submit">x</button>
+                    </div>
+                  <!--</form>-->
                   {{/karma_profile.teachables}}
                 </div>
               </div>
@@ -68,9 +89,10 @@
                 <div class="span12"><h2><small>{{first_name}}'s<p></small>Goals</h2></p></div>
               </div>
               <div class="row skills-display">
+                <a class="edit-icon btn btn-small" visibility="hidden" data-id="1"><i class="icon-pencil"></i></a>
                 <div style="padding: 10px;">
                   {{#karma_profile.learnables}}
-                    <span class="well skill-link" data-skill="{{.}}">{{.}}</span>
+                    <button class="well skill-link" data-skill="{{.}}">{{.}}</button>
                   {{/karma_profile.learnables}}
                 </div>
               </div>

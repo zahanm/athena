@@ -6,6 +6,7 @@ DEFINE COMMUNITY karma USING karma_profile {
   student
   teacher
   location
+  is_current
 }
 
 DEFINE COMMUNITY admins USING admins_profile {}
@@ -125,6 +126,7 @@ ON EACH pair_request DO
 END
 
 # Profiles
+
 DEFINE profile_request { profile_id }
 
 LISTEN TO public VIA http FOR profile_requests
@@ -135,6 +137,47 @@ ON EACH profile_request DO
   profiles = FIND people.people FROM karma WHERE facebook_profile.id == id
   INSPECT profiles
   NOTIFY browser VIA stream OF profiles[0]
+END
+
+DEFINE add_teachable { skill }
+
+LISTEN TO public VIA http FOR add_teachables
+
+ON EACH add_teachable DO
+  browser = PERSON FROM add_teachable
+  PRINT 'name: ' + browser.first_name + " " + browser.last_name
+  teachable = add_teachable['skill']
+  ADD teachable TO browser.karma_profile.teachables
+  SAVE browser TO karma
+  INSPECT browser.karma_profile.teachables
+  NOTIFY public VIA stream OF browser
+END
+	
+DEFINE delete_teachable { skill }
+
+LISTEN TO public VIA http FOR delete_teachables
+
+ON EACH delete_teachable DO
+  browser = PERSON FROM delete_teachable
+  PRINT 'name: ' + browser.first_name + " " + browser.last_name
+  teachables = {}
+  skill = delete_teachable['skill']
+  FOR EACH teachable IN browser.karma_profile.teachables DO
+	PRINT teachable
+	IF teachable != skill THEN
+		ADD teachable TO teachables
+	END
+  END
+  INSPECT skill
+  size = COMPUTE system.size ON teachables
+  IF size != 0 THEN
+  	browser.karma_profile.teachables = teachables
+  	INSPECT browser.karma_profile.teachables
+  	SAVE browser TO karma
+  ELSE
+	PRINT 'Cannot delete all skills.'
+  END
+  NOTIFY public VIA stream OF browser
 END
 
 # Pairing people
