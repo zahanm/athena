@@ -6,6 +6,9 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
   <script>
+    dogjs.configure({
+      templates: '/templates-profile.html'
+    });
     $(document).on("click", ".skill-link", function () {
       window.location = '/browse.html'+'?interest='+$(this).data('skill');
     });

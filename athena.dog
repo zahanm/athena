@@ -126,23 +126,18 @@ ON EACH pair_request DO
 END
 
 # Profiles
-# --------------
-DEFINE profile_request { id }						 
+DEFINE profile_request { profile_id }
 
 LISTEN TO public VIA http FOR profile_requests
 
 ON EACH profile_request DO
   browser = PERSON FROM profile_request
-  id = '1063020008' # profile_request['id']
+  id = profile_request['profile_id']
   profiles = FIND people.people FROM karma WHERE facebook_profile.id == id
-  FOR EACH profile IN profiles DO
-	profile.is_current = browser.facebook_profile.id == id
-	INSPECT browser.facebook_profile.id
-	INSPECT id
-	INSPECT profile
-
-    NOTIFY browser VIA stream OF profile
-  END
+  INSPECT profiles
+  profile = profiles[0]
+  profile.is_current = browser.facebook_profile.id == id
+  NOTIFY browser VIA stream OF profile
 END
 
 DEFINE add_teachable { skill }
