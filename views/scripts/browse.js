@@ -6,7 +6,7 @@ dogjs.on('pageload', function () {
 
   // Filter function
   function filterCards(ev, filterString) {
-    var corpus = document.querySelectorAll('.thumbnails > li');
+    var corpus = document.querySelectorAll('profile');
 	if (ev && ev.target && ev.target.value) {
 		filterString = ev.target.value;
 	}
