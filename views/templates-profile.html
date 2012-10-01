@@ -2,8 +2,9 @@
 <html>
 <head></head>
 <body>
+  <section oneach="@each:edit_request" subscribe="pull" dogjs-auth="true">
   <section oneach="@each:profile_request" subscribe="pull" dogjs-auth="true" load="profile_requests">
-    <div class="container-fluid profile" notify="person" holder=".profile-wrapper">
+    <div class="container-fluid profile" notify="person" holder=".profile-wrapper" method="overwrite">
       <div dogjs-auth="true">
         <input type="hidden" id="auth-profile" value ="{{is_current}}"/>
         <div class="row-fluid" style="margin: 50px 0px 50px 0px;">
@@ -106,6 +107,7 @@
           </div>
         </div>
     </div>
+  </section>
   </section>
 </body>
 </html>
