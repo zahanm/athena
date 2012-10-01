@@ -4,6 +4,8 @@
   <title>Karma</title>
   <link rel="stylesheet" href="/styles/index.css" type="text/css" charset="utf-8">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/scripts/bootstrap-alert.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/scripts/bootstrap-typeahead.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
   <script>
     dogjs.configure({
@@ -11,6 +13,19 @@
     });
     $(document).on("click", ".skill-link", function () {
       window.location = '/browse.html'+'?interest='+$(this).data('skill');
+    });
+    $(document).on("click", ".skill-delete", function () {
+      // TODO: check if there is only one
+      // console.log(this.parentNode.parentNode.parentNode.childNodes.length);
+      if (this.parentNode.parentNode.parentNode.childNodes.length > 7) {
+        this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+      } else {
+        $(".alert").alert();
+        document.getElementById("skill-delete-warning").style.display = "block";
+      }
+    });
+    $(document).on("click", ".skill-delete-close", function () {
+      document.getElementById("skill-delete-warning").style.display = "none";
     });
     $(document).on("click", ".edit-icon", function () {
       var id = $(this).data('id');
@@ -35,10 +50,19 @@
   		  }
       }
     });
-    function handleKeyPress(e,form){
+    function handleKeyPress(e, input){
       var key=e.keyCode || e.which;
       if (key==13){
-        form.submit();
+        submit = document.getElementById('edit-submit');
+        test = $('.skill-element').clone()[0];
+        //$(test).text(input.value);
+        skill_link = test.querySelector('.skill-link');
+        $(skill_link).text(input.value);
+        $(skill_link).data("skill", input.value);
+        console.log(test);
+        $(test).appendTo('.skill-holder');
+        //submit.click();
+        //window.location = '/profile.html';
       }
     }
   </script>
@@ -59,6 +83,10 @@
         </ul>
       </div>
     </div>
+  </div>
+  <div class="alert alert-info" style="display: none;" id="skill-delete-warning">
+    <button type="button" class="close skill-delete-close">×</button>
+    <strong>Sorry!</strong> You cannot delete all of your skills.
   </div>
   <!-- learning request flow -->
   <div class="profile-wrapper" method="append"></div>

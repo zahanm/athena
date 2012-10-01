@@ -3,6 +3,8 @@ dogjs.configure({
 });
 
 dogjs.on('pageload', function () {
+	
+	
 
 	function getUrlVars() {
 	    var vars = {};

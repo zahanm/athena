@@ -9,6 +9,12 @@ DEFINE COMMUNITY karma USING karma_profile {
   is_current
 }
 
+DEFINE interest {
+  name
+}
+
+DEFINE interests OF interest
+
 DEFINE COMMUNITY admins USING admins_profile {}
 
 # Signup process
@@ -39,11 +45,6 @@ DEFINE state_location FOR person DO
   RETURN location
 END
 
-DEFINE state_additional_teachable FOR person DO
-  PERFORM "What is another skill you could teach?"
-  RETURN skill
-END
-
 DEFINE signup_request {}
 
 LISTEN TO public VIA http FOR signup_requests
@@ -67,10 +68,12 @@ ON EACH signup_request DO
    	learner.karma_profile.learnables = {}
    	skill = response[0]['skill']
    	ADD skill TO learner.karma_profile.learnables
+	COMPUTE save_skill ON skill
    	response = ASK learner VIA stream TO state_teachable
    	learner.karma_profile.teachables = {}
    	teachable = response[0]['teachable']
    	ADD teachable TO learner.karma_profile.teachables
+	COMPUTE save_skill ON teachables
 	location = ASK learner VIA stream TO state_location
    	learner.location = location[0]['location']
    	identity = ASK learner VIA stream TO identify_yourself
@@ -133,25 +136,43 @@ LISTEN TO public VIA http FOR profile_requests
 ON EACH profile_request DO
   browser = PERSON FROM profile_request
   id = profile_request['profile_id']
-  profiles = FIND people.people FROM karma WHERE facebook_profile.id == id
-  INSPECT profiles
-  profile = profiles[0]
-  profile.is_current = browser.facebook_profile.id == id
-  NOTIFY browser VIA stream OF profile
+  IF id THEN
+  	profiles = FIND people.people FROM karma WHERE facebook_profile.id == id
+	INSPECT profiles
+	profile = profiles[0]
+	profile.is_current = browser.facebook_profile.id == id
+	NOTIFY browser VIA stream OF profile
+  ELSE
+	browser.is_current = true;
+	NOTIFY browser VIA stream OF browser
+  END 
 END
 
-DEFINE add_teachable { skill }
+DEFINE state_additional_teachable FOR person DO
+  PERFORM "What is another skill you could teach?"
+  RETURN skill
+END
 
-LISTEN TO public VIA http FOR add_teachables
+DEFINE edit_request { skill }
 
-ON EACH add_teachable DO
-  browser = PERSON FROM add_teachable
-  PRINT 'name: ' + browser.first_name + " " + browser.last_name
-  teachable = add_teachable['skill']
+LISTEN TO public VIA http FOR edit_requests
+
+ON EACH edit_request DO
+  browser = PERSON FROM edit_request
+  teachable = edit_request['skill']
+  #PRINT 'name: ' + browser.first_name + " " + browser.last_name
+  #teachable = add_teachable['skill'] 
+  INSPECT teachable
+  COMPUTE save_skill ON teachable
   ADD teachable TO browser.karma_profile.teachables
-  SAVE browser TO karma
+  SAVE browser TO people.people
   INSPECT browser.karma_profile.teachables
+  INSPECT karma
+  #NOTIFY public VIA stream OF browser
+  #response = ASK browser VIA stream TO state_additional_teachable
   NOTIFY public VIA stream OF browser
+  #skill = response[0]['skill']  
+  #INSPECT skill
 END
 	
 DEFINE delete_teachable { skill }
@@ -174,7 +195,7 @@ ON EACH delete_teachable DO
   IF size != 0 THEN
   	browser.karma_profile.teachables = teachables
   	INSPECT browser.karma_profile.teachables
-  	SAVE browser TO karma
+  	SAVE browser TO people.people
   ELSE
 	PRINT 'Cannot delete all skills.'
   END
@@ -200,6 +221,33 @@ END
 
 # external functions
 # ------------------
+
+DEFINE save_skill ON skill DO
+	matches = FIND interests WHERE name == skill
+	INSPECT matches
+	PRINT "COMPUTE"
+	new_skill = false
+	IF matches THEN
+		size = COMPUTE system.size ON matches
+		IF size == 0 THEN
+			new_skill = true
+		END
+	ELSE 
+		new_skill = true
+	END
+	PRINT new_skill
+	IF new_skill THEN
+		new_interest = {}
+		new_interest.name = skill
+		#INSPECT skill
+		#INSPECT new_interest
+		SAVE new_interest TO interests
+		INSPECT interests
+	END
+	skills = FIND interests WHERE name != null
+	PRINT "SKILLS"
+	INSPECT skills
+END
 
 DEFINE rank_k_teachers FOR shell ON me, teachers, k DO
   PERFORM "python ranking.py"
