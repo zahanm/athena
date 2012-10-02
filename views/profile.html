@@ -16,8 +16,9 @@
     });
     $(document).on("click", ".skill-delete", function () {
       // TODO: check if there is only one
-      // console.log(this.parentNode.parentNode.parentNode.childNodes.length);
-      if (this.parentNode.parentNode.parentNode.childNodes.length > 7) {
+      // console.log(this.parentNode.parentNode.parentNode.querySelectorAll('.skill-element').length);
+      //console.log(this.parentNode.parentNode.parentNode.childNodes.length);
+      if (this.parentNode.parentNode.parentNode.querySelectorAll('.skill-element').length > 1) {
         this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
       } else {
         $(".alert").alert();
@@ -89,7 +90,7 @@
     <strong>Sorry!</strong> You cannot delete all of your skills.
   </div>
   <!-- learning request flow -->
-  <div class="profile-wrapper" method="append"></div>
+  <div class="profile-wrapper" method="overwrite"></div>
   <script src="/scripts/profile.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

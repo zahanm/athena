@@ -25,7 +25,12 @@ dogjs.on('pageload', function () {
       		for(i=0;i<els.length;i++){
 		   		els[i].style.display = 'none';
 		   	}
-	 	}
+	 	} else {
+			var els = document.querySelectorAll('.person-label');
+      		for(i=0;i<els.length;i++){
+		   		$(els[i]).text('My');
+		   	}
+		}
   	}
 
 	dogjs.on('add:node', profileCheck);

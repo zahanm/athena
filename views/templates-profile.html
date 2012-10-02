@@ -2,9 +2,9 @@
 <html>
 <head></head>
 <body>
-  <section oneach="@each:edit_request" subscribe="pull" dogjs-auth="true">
-  <section oneach="@each:profile_request" subscribe="pull" dogjs-auth="true" load="profile_requests">
-    <div class="container-fluid profile" notify="person" holder=".profile-wrapper" method="overwrite">
+  <section oneach="@each:edit_request" subscribe="poll" dogjs-auth="true">
+  <section oneach="@each:profile_request" subscribe="poll" dogjs-auth="true" load="profile_requests">
+    <div class="container-fluid profile" notify="person" holder=".profile-wrapper">
       <div dogjs-auth="true">
         <input type="hidden" id="auth-profile" value ="{{is_current}}"/>
         <div class="row-fluid" style="margin: 50px 0px 50px 0px;">
@@ -58,7 +58,7 @@
             <div class="span2" style="margin-top: -25px;">
               <div class="row">
                 <div class="span10">
-                  <h2><small>{{first_name}}'s</small>
+                  <h2><small class="person-label">{{first_name}}'s</small>
                       <p>Skills 
                         <a class="edit-icon btn btn-small" visibility="hidden" data-id="0"><i class="icon-pencil"></i></a>
                       </p>
@@ -72,34 +72,57 @@
                     <input type="text" class="span12" 
                       name="skill"
                       style="float: left; border: none; border-bottom: #E3E3E3 1px dashed;" 
-                      placeholder="What else can you teach?" 
+                      placeholder="I can teach..." 
                       onkeypress="handleKeyPress(event, this)"
                       data-provide="typeahead" data-items="4"
-                      data-source="[{{#karma_profile.teachables}}&quot;{{.}}&quot;,{{/karma_profile.teachables}}&quot; &quot;]"/>
-                      
-                    <button type="submit" class="edit-submit" id="edit-submit" style="display: none;">submit</button>
+                      data-source="[{{#all_skills}}&quot;{{name}}&quot;,{{/all_skills}}&quot; &quot;]"/>
+                    <input type="hidden" name="type" value="teachable">
                   </form>
                 </div>
                 <div class="row span12 skill-holder" style="padding: 6px;">
                   {{#karma_profile.teachables}}
-                  <form class="form inline skill-element" listen="delete_teachables" style="margin: 0; display: inline-block;">
+                  <form class="form inline skill-element" listen="delete_requests" style="margin: 0; display: inline-block;">
                     <input type="hidden" name="skill" value="{{.}}">
                     <div class="btn-group" style="display: inline-block;">
-                      <button class="well skill skill-link" data-skill="{{.}}" type="button">{{.}}</button>
+                      <button class="well skill skill-link" data-skill="{{.}}" data-type="teachable" type="button">{{.}}</button>
                       <button class="btn well skill skill-delete" style="display: none;" type="submit">x</button>
                     </div>
                   </form>
                   {{/karma_profile.teachables}}
                 </div>
               </div>
-              <div class="row ">
-                <div class="span12"><h2><small>{{first_name}}'s<p></small>Goals</h2></p></div>
+              <div class="row">
+                <div class="span10">
+                  <h2><small class="person-label">{{first_name}}'s</small>
+                      <p>Goals
+                        <a class="edit-icon btn btn-small" visibility="hidden" data-id="1"><i class="icon-pencil"></i></a>
+                      </p>
+                  </h2>
+                </div>
               </div>
               <div class="row skills-display">
-                <a class="edit-icon btn btn-small" visibility="hidden" data-id="1"><i class="icon-pencil"></i></a>
-                <div style="padding: 10px;">
+                <div class="row span12 skill-edit" id="edit-box" style="display: none;">
+                  <!--<form ask="state_additional_teachable" holder="#edit-box" id="state-teachable">-->
+                  <form listen="edit_requests" authenticated="true">
+                    <input type="text" class="span12" 
+                      name="skill"
+                      style="float: left; border: none; border-bottom: #E3E3E3 1px dashed;" 
+                      placeholder="I want to learn..." 
+                      onkeypress="handleKeyPress(event, this)"
+                      data-provide="typeahead" data-items="4"
+                      data-source="[{{#all_skills}}&quot;{{name}}&quot;,{{/all_skills}}&quot; &quot;]"/>
+                    <input type="hidden" name="type" value="learnable">
+                  </form>
+                </div>
+                <div class="row span12 skill-holder" style="padding: 6px;">
                   {{#karma_profile.learnables}}
-                    <button class="well skill-link" data-skill="{{.}}">{{.}}</button>
+                  <form class="form inline skill-element" listen="delete_requests" style="margin: 0; display: inline-block;">
+                    <input type="hidden" name="skill" value="{{.}}">
+                    <div class="btn-group" style="display: inline-block;">
+                      <button class="well skill skill-link" data-skill="{{.}}" data-type="learnable" type="button">{{.}}</button>
+                      <button class="btn well skill skill-delete" style="display: none;" type="submit">x</button>
+                    </div>
+                  </form>
                   {{/karma_profile.learnables}}
                 </div>
               </div>

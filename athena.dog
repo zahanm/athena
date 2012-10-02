@@ -62,23 +62,23 @@ ON EACH signup_request DO
   	learner.karma_profile = {}
    	response = ASK learner VIA stream TO state_goal
    	goal = response[0]['goal']
-	INSPECT goal
+	#INSPECT goal
    	learner.karma_profile.goal = goal
    	response = ASK learner VIA stream TO state_skill_needed
    	learner.karma_profile.learnables = {}
    	skill = response[0]['skill']
    	ADD skill TO learner.karma_profile.learnables
-	COMPUTE save_skill ON skill
+	COMPUTE save_skill ON skill[0]
    	response = ASK learner VIA stream TO state_teachable
    	learner.karma_profile.teachables = {}
    	teachable = response[0]['teachable']
    	ADD teachable TO learner.karma_profile.teachables
-	COMPUTE save_skill ON teachables
+	COMPUTE save_skill ON teachable[0]
 	location = ASK learner VIA stream TO state_location
    	learner.location = location[0]['location']
    	identity = ASK learner VIA stream TO identify_yourself
    	learner.email = identity[0]['email']
-   	COMPUTE print_details ON learner
+   	#COMPUTE print_details ON learner
    	SAVE learner TO karma
    	NOTIFY public VIA stream OF learner
   END
@@ -94,7 +94,7 @@ LISTEN TO public FOR browse_requests
 ON EACH browse_request DO
   browser = PERSON FROM browse_request
   karma_users = FIND people.people FROM karma
-  INSPECT karma_users
+  #INSPECT karma_users
   FOR EACH karma_user IN karma_users DO
     NOTIFY browser VIA stream OF karma_user
   END
@@ -138,12 +138,14 @@ ON EACH profile_request DO
   id = profile_request['profile_id']
   IF id THEN
   	profiles = FIND people.people FROM karma WHERE facebook_profile.id == id
-	INSPECT profiles
+	#INSPECT profiles
 	profile = profiles[0]
 	profile.is_current = browser.facebook_profile.id == id
 	NOTIFY browser VIA stream OF profile
   ELSE
-	browser.is_current = true;
+	browser.is_current = true
+	skills = FIND interests WHERE name != null
+	browser.all_skills = skills
 	NOTIFY browser VIA stream OF browser
   END 
 END
@@ -153,48 +155,57 @@ DEFINE state_additional_teachable FOR person DO
   RETURN skill
 END
 
-DEFINE edit_request { skill }
+DEFINE edit_request { skill, type }
 
 LISTEN TO public VIA http FOR edit_requests
 
 ON EACH edit_request DO
   browser = PERSON FROM edit_request
-  teachable = edit_request['skill']
-  #PRINT 'name: ' + browser.first_name + " " + browser.last_name
-  #teachable = add_teachable['skill'] 
-  INSPECT teachable
-  COMPUTE save_skill ON teachable
-  ADD teachable TO browser.karma_profile.teachables
-  SAVE browser TO people.people
-  INSPECT browser.karma_profile.teachables
-  INSPECT karma
-  #NOTIFY public VIA stream OF browser
-  #response = ASK browser VIA stream TO state_additional_teachable
-  NOTIFY public VIA stream OF browser
-  #skill = response[0]['skill']  
+  skill = edit_request['skill']
+  type = edit_request['type']
+  PRINT 'EDIT REQUEST'
   #INSPECT skill
+  #INSPECT type
+  COMPUTE save_skill ON skill
+  IF type == 'teachable' THEN 
+	ADD skill TO browser.karma_profile.teachables
+  ELSE
+	ADD skill TO browser.karma_profile.learnables
+  END
+  SAVE browser TO karma
+  #INSPECT browser.karma_profile.teachables
+  #INSPECT karma
+  skills = FIND interests WHERE name != null
+  browser.all_skills = skills
+  NOTIFY browser VIA stream OF browser
 END
 	
-DEFINE delete_teachable { skill }
+DEFINE delete_request { skill, type }
 
-LISTEN TO public VIA http FOR delete_teachables
+LISTEN TO public VIA http FOR delete_requests
 
-ON EACH delete_teachable DO
-  browser = PERSON FROM delete_teachable
-  PRINT 'name: ' + browser.first_name + " " + browser.last_name
-  teachables = {}
-  skill = delete_teachable['skill']
-  FOR EACH teachable IN browser.karma_profile.teachables DO
-	PRINT teachable
-	IF teachable != skill THEN
-		ADD teachable TO teachables
+ON EACH delete_request DO
+  browser = PERSON FROM delete_request
+  #PRINT 'name: ' + browser.first_name + " " + browser.last_name
+  skills = {}
+  del_skill = delete_request['skill']
+  type = delete_request['type']
+  FOR EACH skill IN browser.karma_profile.teachables DO
+	#PRINT skill
+	IF skill != del_skill THEN
+		ADD skill TO skills
 	END
   END
-  INSPECT skill
-  size = COMPUTE system.size ON teachables
+  #INSPECT skill
+  size = COMPUTE system.size ON skills
   IF size != 0 THEN
-  	browser.karma_profile.teachables = teachables
-  	INSPECT browser.karma_profile.teachables
+	IF type == 'teachable' THEN 
+  		browser.karma_profile.teachables = skills
+  		#INSPECT browser.karma_profile.teachables
+	ELSE
+		browser.karma_profile.learnables = skills 
+		#INSPECT browser.karma_profile.learnables
+	END 
   	SAVE browser TO people.people
   ELSE
 	PRINT 'Cannot delete all skills.'
@@ -223,10 +234,10 @@ END
 # ------------------
 
 DEFINE save_skill ON skill DO
+	#PRINT "COMPUTE"
+	new_skill = false
 	matches = FIND interests WHERE name == skill
 	INSPECT matches
-	PRINT "COMPUTE"
-	new_skill = false
 	IF matches THEN
 		size = COMPUTE system.size ON matches
 		IF size == 0 THEN
@@ -235,18 +246,18 @@ DEFINE save_skill ON skill DO
 	ELSE 
 		new_skill = true
 	END
-	PRINT new_skill
+	#PRINT new_skill
 	IF new_skill THEN
 		new_interest = {}
 		new_interest.name = skill
 		#INSPECT skill
 		#INSPECT new_interest
 		SAVE new_interest TO interests
-		INSPECT interests
+		#INSPECT interests
 	END
 	skills = FIND interests WHERE name != null
-	PRINT "SKILLS"
-	INSPECT skills
+	#PRINT "SKILLS"
+	#INSPECT skills
 END
 
 DEFINE rank_k_teachers FOR shell ON me, teachers, k DO
