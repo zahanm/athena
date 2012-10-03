@@ -55,27 +55,27 @@ ON EACH signup_request DO
   IF learner.karma_profile THEN
     NOTIFY public VIA stream OF learner
   ELSE
-  	learner.karma_profile = {}
-   	response = ASK learner VIA stream TO state_goal
-   	goal = response[0]['goal']
-   	learner.karma_profile.goal = goal
-   	response = ASK learner VIA stream TO state_skill_needed
-   	learner.karma_profile.learnables = {}
-   	skill = response[0]['skill']
-   	ADD skill TO learner.karma_profile.learnables
-	COMPUTE save_skill ON skill[0]
-   	response = ASK learner VIA stream TO state_teachable
-   	learner.karma_profile.teachables = {}
-   	teachable = response[0]['teachable']
-   	ADD teachable TO learner.karma_profile.teachables
-	COMPUTE save_skill ON teachable[0]
-	location = ASK learner VIA stream TO state_location
-   	learner.location = location[0]['location']
-   	identity = ASK learner VIA stream TO identify_yourself
-   	learner.email = identity[0]['email']
-   	#COMPUTE print_details ON learner
-   	SAVE learner TO karma
-   	NOTIFY public VIA stream OF learner
+    learner.karma_profile = {}
+    response = ASK learner VIA stream TO state_goal
+    goal = response[0]['goal']
+    learner.karma_profile.goal = goal
+    response = ASK learner VIA stream TO state_skill_needed
+    learner.karma_profile.learnables = {}
+    skill = response[0]['skill']
+    ADD skill TO learner.karma_profile.learnables
+    COMPUTE save_skill ON skill[0]
+    response = ASK learner VIA stream TO state_teachable
+    learner.karma_profile.teachables = {}
+    teachable = response[0]['teachable']
+    ADD teachable TO learner.karma_profile.teachables
+    COMPUTE save_skill ON teachable[0]
+    location = ASK learner VIA stream TO state_location
+    learner.location = location[0]['location']
+    identity = ASK learner VIA stream TO identify_yourself
+    learner.email = identity[0]['email']
+    #COMPUTE print_details ON learner
+    SAVE learner TO karma
+    NOTIFY public VIA stream OF learner
   END
 END
 
@@ -115,9 +115,9 @@ ON EACH skill_suggestion DO
      email = address
    }
 
-   message = dog.email {
-     subject = browser.first_name + " suggested a new skill for you!"
-     body = "Hello, " + teachers[0].first_name + ", \n" + browser.first_name + " " + browser.last_name + " suggested that you add '" + suggestion +"' to your list of skills."
+  message = dog.email {
+    subject = browser.first_name + " suggested a new skill for you!"
+    body = "Hello, " + teachers[0].first_name + ", \n" + browser.first_name + " " + browser.last_name + " suggested that you add '" + suggestion +"' to your list of skills."
   }
 
   NOTIFY tester VIA email OF message
@@ -132,16 +132,16 @@ ON EACH profile_request DO
   browser = PERSON FROM profile_request
   id = profile_request['profile_id']
   IF id THEN
-  	profiles = FIND people.people FROM karma WHERE facebook_profile.id == id
-	profile = profiles[0]
-	profile.is_current = browser.facebook_profile.id == id
-	NOTIFY browser VIA stream OF profile
+    profiles = FIND people.people FROM karma WHERE facebook_profile.id == id
+    profile = profiles[0]
+    profile.is_current = browser.facebook_profile.id == id
+    NOTIFY browser VIA stream OF profile
   ELSE
-	browser.is_current = true
-	skills = FIND interests WHERE name != null
-	browser.all_skills = skills
-	NOTIFY browser VIA stream OF browser
-  END 
+    browser.is_current = true
+    skills = FIND interests WHERE name != null
+    browser.all_skills = skills
+    NOTIFY browser VIA stream OF browser
+  END
 END
 
 DEFINE state_additional_teachable FOR person DO
@@ -158,17 +158,17 @@ ON EACH edit_request DO
   skill = edit_request['skill']
   type = edit_request['type']
   COMPUTE save_skill ON skill
-  IF type == 'teachable' THEN 
-	ADD skill TO browser.karma_profile.teachables
+  IF type == 'teachable' THEN
+    ADD skill TO browser.karma_profile.teachables
   ELSE
-	ADD skill TO browser.karma_profile.learnables
+    ADD skill TO browser.karma_profile.learnables
   END
   SAVE browser TO karma
   skills = FIND interests WHERE name != null
   browser.all_skills = skills
   NOTIFY browser VIA stream OF browser
 END
-	
+
 DEFINE delete_request { skill, type }
 
 LISTEN TO public VIA http FOR delete_requests
@@ -179,20 +179,20 @@ ON EACH delete_request DO
   del_skill = delete_request['skill']
   type = delete_request['type']
   FOR EACH skill IN browser.karma_profile.teachables DO
-	IF skill != del_skill THEN
-		ADD skill TO skills
-	END
+    IF skill != del_skill THEN
+      ADD skill TO skills
+    END
   END
   size = COMPUTE system.size ON skills
   IF size != 0 THEN
-	IF type == 'teachable' THEN 
-  		browser.karma_profile.teachables = skills
-	ELSE
-		browser.karma_profile.learnables = skills 
-	END 
-  	SAVE browser TO people.people
+    IF type == 'teachable' THEN
+      browser.karma_profile.teachables = skills
+    ELSE
+      browser.karma_profile.learnables = skills
+    END
+    SAVE browser TO people.people
   ELSE
-	PRINT 'Cannot delete all skills.'
+    PRINT 'Cannot delete all skills.'
   END
   NOTIFY public VIA stream OF browser
 END
@@ -224,50 +224,50 @@ ON EACH pair_request DO
   PRINT "PAIR REQUEST"
   browser = PERSON FROM pair_request
   learner_id = pair_request['learner']
-  teacher_id = pair_request['teacher']  
-INSPECT teacher_id
-INSPECT learner_id
+  teacher_id = pair_request['teacher']
+  INSPECT teacher_id
+  INSPECT learner_id
   # send emails to appropriate parties
   IF teacher_id == null THEN # offer to teach
     learners = FIND people.people FROM karma WHERE facebook_profile.id == learner_id
-	learner = learners[0]
-	INSPECT learner
-	message = dog.email {
+    learner = learners[0]
+    INSPECT learner
+    message = dog.email {
       subject = browser.first_name + " would like to teach you!"
       body = "Hello, " + learner.first_name + ", \n" + browser.first_name + " " + browser.last_name + " would like to help you reach one of your goals."
-  	}
-	NOTIFY learner VIA email OF message
+    }
+    NOTIFY learner VIA email OF message
   ELSE IF learner_id == null THEN # teaching requests
-	teachers = FIND people.people FROM karma WHERE facebook_profile.id == teacher_id
-	teacher = teachers[0]
-	INSPECT teacher
-	message = dog.email {
+    teachers = FIND people.people FROM karma WHERE facebook_profile.id == teacher_id
+    teacher = teachers[0]
+    INSPECT teacher
+    message = dog.email {
       subject = browser.first_name + " wants to learn from you!"
       body = "Hello, " + teacher.first_name + ", \n" + browser.first_name + " " + browser.last_name + " would like to learn from you."
-	}
-	NOTIFY teacher VIA email OF message
-  ELSE # third-party 
-	teachers = FIND people.people FROM karma WHERE facebook_profile.id == teacher_id
-	teacher = teachers[0]
-	learners = FIND people.people FROM karma WHERE facebook_profile.id == learner_id
-	learner = learners[0]
-	# email teacher
-	message = dog.email {
+    }
+    NOTIFY teacher VIA email OF message
+  ELSE # third-party
+    teachers = FIND people.people FROM karma WHERE facebook_profile.id == teacher_id
+    teacher = teachers[0]
+    learners = FIND people.people FROM karma WHERE facebook_profile.id == learner_id
+    learner = learners[0]
+    # email teacher
+    message = dog.email {
       subject = browser.first_name + " suggested a student for you!"
       body = "Hello, " + teacher.first_name + ", \n" + browser.first_name + " " + browser.last_name + " suggests you teach " + learner.first_name + " " + learner.last_name
-	}
-	NOTIFY teacher VIA email OF message
-	# emails student
-	message = dog.email {
+    }
+    NOTIFY teacher VIA email OF message
+    # emails student
+    message = dog.email {
       subject = browser.first_name + " suggested a teacher for you!"
       body = "Hello, " + learner.first_name + ", \n" + browser.first_name + " " + browser.last_name + " suggests you learn from " + teacher.first_name + " " + teacher.last_name
-	}
-	NOTIFY learner VIA email OF message
+    }
+    NOTIFY learner VIA email OF message
   END
-  # Above: 
+  # Above:
   # 1) store in queue of potential pairings
   # 2) send link that flip cooresponding bit in potential pairing
-  # one bits are flipped: compute pairing 
+  # one bits are flipped: compute pairing
 END
 
 # external functions
@@ -282,7 +282,7 @@ DEFINE save_skill ON skill DO
 		IF size == 0 THEN
 			new_skill = true
 		END
-	ELSE 
+  ELSE
 		new_skill = true
 	END
 	IF new_skill THEN
