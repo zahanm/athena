@@ -38,6 +38,9 @@ dogjs.on('pageload', function () {
     peoplefilter.dispatchEvent(ev);
   }
 
+  var suggestfilter = document.getElementById('suggestfilter');
+  suggestfilter && suggestfilter.addEventListener('keyup', createSearcher('.suggest-grid > li'));
+
   // Fill in ID for new pair dialog, so we can launch from
   // the user card
   function formatDialog() {
