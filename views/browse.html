@@ -12,8 +12,8 @@
     // Dialog click listeners
     $(document).on("click", ".pairDialog-btn", function () {
       $(".alert").alert();
-      $(document.getElementById("closePairDialog")).click();
-      $(document.getElementById("request-name")).text($(this).data('person'));
+      $("#closePairDialog").click();
+      $("#request-name").text($(this).data('person'));
       document.getElementById("thanks-request").style.display = "block";
     });
     $(document).on("click", ".suggestSubmit-btn", function () {
@@ -28,10 +28,8 @@
       document.getElementById("thanks-suggestion").style.display = "none";
     });
     $(document).on("click", ".open-SuggestDialog", function () {
-      console.log('open modal');
-      /*
-      createSearcher() happens in one line in browse.js
-      */
+      $('#suggestDialog .firstname').text(this.dataset.name);
+      $('#suggestDialog #suggest-profile-id').text(this.dataset.id);
     });
     $(document).on("click", ".suggest-preview", function () {
       var type = document.getElementById('selectSuggestType').value;
@@ -45,10 +43,10 @@
       }
       // remove selection style and highlight new element
       var els = document.querySelectorAll('.suggest-grid > li');
-      for(i=0;i<els.length;i++){
-        els[i].className = 'suggest-preview well';
-      }
-      this.className = 'suggest-preview well suggest-select';
+      Array.prototype.forEach.call(els, function (el) {
+        el.classList.remove('suggest-select');
+      });
+      this.classList.add('suggest-select');
     });
   </script>
 </head>
@@ -111,10 +109,10 @@
             <option>teacher</option>
             <option>student</option>
           </select>
-          for {{first_name}}
+          for <span class="firstname"></span>
         </small>
       </h1>
-      <input id="suggest-profile-id" type="hidden" value="{{profile_id}}">
+      <input id="suggest-profile-id" type="hidden" value="">
 		</div>
     <div class="modal-body">
       <!-- People container -->
