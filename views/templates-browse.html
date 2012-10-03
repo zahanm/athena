@@ -43,9 +43,9 @@
                   <li>{{.}}</li>
                 {{/karma_profile.teachables}}
                 <li>
-                  <form listen="pair_requests" authenticated="true">
+                  <form listen="skill_suggestions" authenticated="true">
                     <div class="input-prepend" style="margin-top: 10px">
-                      <button id="pair-us-button" class="btn" type="submit" style="padding: 4px 10px">+</button><input class="span2" name="suggestion" id="prependedInput" size="16" type="text" placeholder="Suggest a skill">
+                      <button id="pair-us-button" class="btn suggestSubmit-btn" type="submit" style="padding: 4px 10px">+</button><input class="span2" name="suggestion" id="prependedInput" size="16" type="text" placeholder="Suggest a skill">
                     </div>
                     <input type="hidden" name="address" value="{{email}}">
                   </form>
@@ -53,8 +53,8 @@
               </ul>
             </div>
             <div class="btn-toolbar" style="margin: 0;" align="center">
-                <button class="open-SuggestDialog btn" data-toggle="modal" data-id="{{first_name}}" href="#suggestDialog">Suggest</button>
-                <button class="open-PairDialog btn btn-info" data-toggle="modal" data-id="{{first_name}}" data-addr="{{email}}" data-toggle="modal" href="#pairDialog">Connect...
+                <button class="open-SuggestDialog btn" data-toggle="modal" data-name="{{first_name}}" data-id="{{facebook_profile.id}}" href="#suggestDialog">Suggest</button>
+                <button class="btn btn-info" data-toggle="modal" data-id="{{first_name}}" data-addr="{{email}}" data-toggle="modal" href="#pairDialog-{{facebook_profile.id}}">Connect...
                 </button>
             </div>
           </div>
@@ -62,11 +62,46 @@
       </div>
     </li>
 
+    <!-- connection dialog -->
+    <!---<li class="connect-dialog" notify="person" holder=".connect-dialogs">
+      <form listen="pair_requests" authenticated="true">
+        <div class="btn-group btn-group-vertical">
+          <button class="btn" type="submit">I want to learn from {{first_name}}</button>
+          <button class="btn">I want to teach {{first_name}}</button>
+          <a class="btn btn-info" href="mailto:{{email}}" style="width: inherit;">Contact</a>
+			  </div>
+			</form>
+    </li>-->
+    
+    <div class="modal hide fade connect-dialog" id="pairDialog" data-profile="{{facebook_profile.id}}" notify="person" holder=".connect-dialogs" 
+    style="width: 300px; margin-top: -100px; margin-left: -150px">
+      <div class="modal-body" align="center">
+        <a href="#" class="close" id="closePairDialog" data-dismiss="modal">×</a>
+        <form listen="pair_requests" authenticated="true" style="margin: 0px;">
+          <div class="btn-group btn-group-vertical">
+            <button class="btn pairDialog-btn" data-person="{{first_name}}" type="submit" name="teacher" value="{{facebook_profile.id}}">I want to learn from {{first_name}}</button>
+            <button class="btn pairDialog-btn" data-person="{{first_name}}" type="submit" name="learner" value="{{facebook_profile.id}}">I want to teach {{first_name}}</button>
+            <a class="btn btn-info" href="mailto:{{email}}" style="width: inherit;">Contact</a>
+  			  </div>
+  			</form>
+  		</div>
+    </div>
+
     <!-- person suggestions -->
     <li class="suggest-preview well" notify="person" holder=".suggest-grid" data-meta="{{first_name}} {{last_name}}" data-fbid="{{facebook_profile.id}}">
       <img src="http://graph.facebook.com/{{facebook_profile.id}}/picture?type=square">
       <small>{{first_name}} {{last_name}}</small>
     </li>
+    
+    <div notify="person" holder=".suggest-form">
+      <form class="form-search" listen="pair_requests" authenticated="true" style="margin: 0px;">
+        <input type="text" class="search-query" id="suggestfilter" placeholder="Search">
+        <button class="btn btn-info suggestSubmit-btn" type="submit" style="float: right; margin-left: 10px;">Suggest</button>
+        <button class="btn" style="float: right;" data-dismiss="modal">Cancel</button>
+        <input id="teacher" name="teacher" type="hidden"/>
+        <input id="learner" name="learner" type="hidden"/>
+      </form>
+    </div>
   </section>
 </body>
 </html>

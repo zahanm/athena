@@ -53,42 +53,14 @@ dogjs.on('pageload', function () {
     filterCards(ev, '');
   });
 
-  // Thank you banner
-  // ----------------
-
-  function fadeOut(elem, callback) {
-    elem.style.opacity = '1';
-    timegap = 100;
-    delta = -0.1;
-    function fadeDelta(elem, amount) {
-      var opacity = Number(elem.style.opacity);
-      opacity += amount;
-      if (opacity <= 0.1) {
-        opacity = 0;
-      }
-      elem.style.opacity = String(opacity);
-      if (opacity > 0) {
-        setTimeout(fadeDelta.bind(this, elem, delta), timegap);
-      } else {
-        elem.style.display = 'none';
-        callback && callback();
-      }
-    }
-    setTimeout(fadeDelta.bind(this, elem, delta), timegap);
+  // Fill in ID for new pair dialog, so we can launch from
+  // the user card
+  function formatDialog() {	
+	var dialog_id = 'pairDialog';
+	var dialog = document.getElementById(dialog_id);
+	console.log($(dialog).data('profile'));
+	var profile_id = $(dialog).data('profile');
+	$(dialog).attr("id", dialog_id+"-"+profile_id);
   }
-
-  dogjs.on('submitted:listen:pair_requests', function (data) {
-    ['form[ask="teacher"]', 'form[ask="suggested_skill"]'].forEach(function (selector) {
-      step = document.querySelector(selector);
-      if (!step) { return; }
-      step.reset();
-      step.style.display = 'none';
-    });
-    document.querySelector('#thanks-pairing').style.display = 'block';
-    setTimeout(function () {
-      fadeOut(document.querySelector('#thanks-pairing'), function () {
-        window.location = '/browse.html';
-      });
-    }, 2000);
-  });
+  dogjs.on('add:node', formatDialog);
 }, this, true);
