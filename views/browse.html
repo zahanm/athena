@@ -9,7 +9,7 @@
   <script src="/scripts/bootstrap-modal.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
   <script>
-    // Dialog click listeners 
+    // Dialog click listeners
     $(document).on("click", ".pairDialog-btn", function () {
       $(".alert").alert();
       $(document.getElementById("closePairDialog")).click();
@@ -18,7 +18,7 @@
     });
     $(document).on("click", ".suggestSubmit-btn", function () {
       $(".alert").alert();
-      $(document.getElementById("closeSuggestions")).click();
+      $("#closeSuggestions").click();
       document.getElementById("thanks-suggestion").style.display = "block";
     });
     $(document).on("click", ".thanks-request-close", function () {
@@ -28,6 +28,8 @@
       document.getElementById("thanks-suggestion").style.display = "none";
     });
     $(document).on("click", ".open-SuggestDialog", function () {
+      console.log('open modal');
+      /*
       $('#suggestDialog').html(Mustache.render($('#suggestDialog').html(), { first_name: $(this).data('name'), profile_id: $(this).data('id') }))
       // suggestion filter
       var suggestfilter = document.getElementById('suggestfilter');
@@ -49,7 +51,9 @@
             Array.prototype.forEach.call(corpus, function (doc) {
               doc.style.display = 'list-item';
             });
-          }});
+          }
+        });
+        */
     });
     $(document).on("click", ".suggest-preview", function () {
       var type = document.getElementById('selectSuggestType').value;
@@ -62,7 +66,7 @@
         $('input#teacher').val(profile_id);
       }
       // remove selection style and highlight new element
-      var els = document.querySelector('.suggest-grid').getElementsByTagName('li');
+      var els = document.querySelectorAll('.suggest-grid > li');
       for(i=0;i<els.length;i++){
         els[i].className = 'suggest-preview well';
       }
@@ -112,7 +116,7 @@
           <button class="btn" type="submit">I want to learn from {{first_name}}</button>
           <button class="btn">I want to teach {{first_name}}</button>
           <a class="btn btn-info" href="mailto:{{email}}" style="width: inherit;">Contact</a>
-			  </div>
+        </div>
 			</form>
 		</div>
   </div>-->
