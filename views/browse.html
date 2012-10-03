@@ -4,16 +4,32 @@
   <title>Karma</title>
   <link rel="stylesheet" href="/styles/index.css" type="text/css" charset="utf-8">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/scripts/bootstrap-alert.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/bootstrap-dropdown.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/bootstrap-modal.js" type="text/javascript" charset="utf-8"></script>
   <script src="/scripts/dog.js" type="text/javascript" charset="utf-8"></script>
   <script>
     // Dialog click listeners 
-    $(document).on("click", ".open-PairDialog", function () {
-      $('#pairDialog').html(Mustache.render($('#pairDialog').html(), { first_name: $(this).data('id'), email: $(this).data('addr') }))
+    $(document).on("click", ".pairDialog-btn", function () {
+      $(".alert").alert();
+      $(document.getElementById("closePairDialog")).click();
+      $(document.getElementById("request-name")).text($(this).data('person'));
+      document.getElementById("thanks-request").style.display = "block";
+    });
+    $(document).on("click", ".suggestSubmit-btn", function () {
+      $(".alert").alert();
+      $(document.getElementById("closeSuggestions")).click();
+      document.getElementById("thanks-suggestion").style.display = "block";
+    });
+    $(document).on("click", ".thanks-request-close", function () {
+      document.getElementById("thanks-request").style.display = "none";
+    });
+    $(document).on("click", ".thanks-suggest-close", function () {
+      document.getElementById("thanks-suggestion").style.display = "none";
     });
     $(document).on("click", ".open-SuggestDialog", function () {
-      $('#suggestDialog').html(Mustache.render($('#suggestDialog').html(), { first_name: $(this).data('id') }))
+      $('#suggestDialog').html(Mustache.render($('#suggestDialog').html(), { first_name: $(this).data('name'), profile_id: $(this).data('id') }))
+      // suggestion filter
       var suggestfilter = document.getElementById('suggestfilter');
         suggestfilter && suggestfilter.addEventListener('keyup', function (ev) {
           var corpus = document.querySelectorAll('.suggest-grid > li');
@@ -36,7 +52,15 @@
           }});
     });
     $(document).on("click", ".suggest-preview", function () {
-      $('input#suggestName').text($(this).data('fbid'))
+      var type = document.getElementById('selectSuggestType').value;
+      var profile_id = document.getElementById('suggest-profile-id').value;
+      if (type == "teacher") {
+        $('input#teacher').val($(this).data('fbid'));
+        $('input#learner').val(profile_id);
+      } else {
+        $('input#learner').val($(this).data('fbid'));
+        $('input#teacher').val(profile_id);
+      }
       // remove selection style and highlight new element
       var els = document.querySelector('.suggest-grid').getElementsByTagName('li');
       for(i=0;i<els.length;i++){
@@ -46,7 +70,7 @@
     });
   </script>
 </head>
-<body>
+<body class="connect-dialogs" method="append">
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
@@ -65,11 +89,13 @@
   </div>
 
   <!-- Alerts and Dialogs -->
-  <div id="thanks-pairing" class="toast row" style="display: none;">
-    <div>
-      <h1>Thank you</h1>
-      <p>We will pass along your suggestion.</p>
-    </div>
+  <div id="thanks-suggestion" class="alert alert-info" style="display: none;">
+    <button type="button" class="close thanks-suggest-close">×</button>
+      <strong>Thank you!</strong> We will pass along your suggestion.
+  </div>
+  <div id="thanks-request" class="alert alert-success" style="display: none;">
+    <button type="button" class="close thanks-request-close">×</button>
+      We forwarded your request to <strong id="request-name">name</strong>.
   </div>
 
   <!--<div class="alert alert-block" id="pairDialog">
@@ -78,32 +104,35 @@
     Best check yo self, you're not...
   </div>-->
 
-  <div class="modal hide fade" id="pairDialog" style="display: none; width: 300px; margin-top: -100px; margin-left: -150px">
+  <!--<div class="modal hide fade" id="pairDialog" style="display: none; width: 300px; margin-top: -100px; margin-left: -150px">
     <div class="modal-body" align="center">
       <a href="#" class="close" id="closePairDialog" data-dismiss="modal">×</a>
-      <div class="btn-group btn-group-vertical">
-        <button class="btn">I want to learn from {{first_name}}</button>
-        <button class="btn">I want to teach {{first_name}}</button>
-        <a class="btn btn-info" href="mailto:{{email}}" style="width: inherit;">Contact</a>
-			</div>
+      <form listen="pair_requests" authenticated="true">
+        <div class="btn-group btn-group-vertical">
+          <button class="btn" type="submit">I want to learn from {{first_name}}</button>
+          <button class="btn">I want to teach {{first_name}}</button>
+          <a class="btn btn-info" href="mailto:{{email}}" style="width: inherit;">Contact</a>
+			  </div>
+			</form>
 		</div>
-  </div>
+  </div>-->
 
   <div class="modal hide fade" id="suggestDialog" style="display: none; ">
     <div class="modal-header">
-      <a href="#" class="close" data-dismiss="modal">×</a>
+      <a href="#" id="closeSuggestions" class="close" data-dismiss="modal">×</a>
       <h1 id="title" style="display: inline-block">
         Match
         <!--Insert spinner for teacher/student-->
         <small>
           Find a
-          <select class="well" style="margin-bottom: 0px;">
+          <select id="selectSuggestType" class="well" style="margin-bottom: 0px;">
             <option>teacher</option>
             <option>student</option>
           </select>
           for {{first_name}}
         </small>
       </h1>
+      <input id="suggest-profile-id" type="hidden" value="{{profile_id}}">
 		</div>
     <div class="modal-body">
       <!-- People container -->
@@ -113,13 +142,7 @@
         </form>
       </div>
 		</div>
-    <div class="modal-footer" style="text-align: left;">
-      <form class="form-search">
-        <input type="text" class="search-query" id="suggestfilter" placeholder="Search">
-        <input id="suggestName" type="hidden">{{suggest_name}}</input>
-        <button class="btn btn-info" style="float: right; margin-left: 10px;">Suggest</button>
-        <button class="btn" style="float: right;">Cancel</button>
-      </form>
+    <div class="modal-footer suggest-form" method="overwrite" style="text-align: left;">
     </div>
   </div>
 
