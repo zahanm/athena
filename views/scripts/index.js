@@ -41,17 +41,16 @@ dogjs.on('pageload', function () {
   }
 
   // reroute if account exists
-  function profileCheck() {	
-	var profileExists = document.getElementById('profile-flag');
-	var auth = dogjs.isAuth();
-	if (profileExists && auth && auth == true) {
-	  	window.location = '/profile.html';
-		return;
-	 }
-	 checkAllCarousels();
+  function profileCheck() {
+    var profileExists = document.getElementById('profile-flag');
+    var auth = dogjs.isAuth();
+    if (profileExists && !!auth) {
+      window.location = '/profile.html';
+    }
   }
 
   dogjs.on('add:node', profileCheck);
+  dogjs.on('add:node', checkAllCarousels);
   checkAllCarousels();
 
   function changePlaceholder(elem, ptext) {

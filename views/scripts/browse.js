@@ -5,62 +5,50 @@ dogjs.configure({
 dogjs.on('pageload', function () {
 
   // Filter function
-  function filterCards(ev, filterString) {
-    var corpus = document.querySelectorAll('profile');
-	if (ev && ev.target && ev.target.value) {
-		filterString = ev.target.value;
-	}
-    if (filterString) {
-      console.log('search:',filterString);
-      var query = filterString.split(/\s+/).join('|');
-      var search = new RegExp('\\b(' + query + ')', 'i');
-      Array.prototype.forEach.call(corpus, function (doc) {
-        if (search.exec(doc.dataset && doc.dataset.meta)) {
+  function createSearcher(corpusSelector) {
+    return function (ev) {
+      var corpus = document.querySelectorAll(corpusSelector);
+      var filterString = ev && ev.target && ev.target.value;
+      if (filterString && filterString.length) {
+        var query = filterString.split(/\s+/).join('|');
+        var search = new RegExp('\\b(' + query + ')', 'i');
+        Array.prototype.forEach.call(corpus, function (doc) {
+          if (search.exec(doc.dataset && doc.dataset.meta)) {
+            doc.style.display = 'list-item';
+          } else {
+            doc.style.display = 'none';
+          }
+        });
+      } else {
+        Array.prototype.forEach.call(corpus, function (doc) {
           doc.style.display = 'list-item';
-        } else {
-          doc.style.display = 'none';
-        }
-      });
-	} else {
-      console.log('clear search');
-      Array.prototype.forEach.call(corpus, function (doc) {
-        doc.style.display = 'list-item';
-      });
+        });
+      }
     }
   }
 
+  var peoplefilter = document.getElementById('peoplefilter');
+  peoplefilter && peoplefilter.addEventListener('keyup', createSearcher('.people-grid > li'));
   // Get URL params
-  var searchString = document.location.search;
-  searchString = searchString.substring(1);
-  var nvPairs = searchString.split("&");
-
-  for (i = 0; i < nvPairs.length; i++)
-  {
-	var nvPair = nvPairs[i].split("=");
-	var name = nvPair[0];
-	var value = nvPair[1];
-	if (name=='interest') {
-		console.log("url param: ",name+" "+value);
-		filterCards(null, value);
-		var peoplefilter = document.getElementById('peoplefilter');
-		peoplefilter.value = value;
-		console.log("url param: ", peoplefilter.value);
-	}
+  var urlparams = Utilities.fromqs(document.location.search);
+  if (urlparams["interest"]) {
+    peoplefilter.value = urlparams["interest"];
+    var ev = document.createEvent("KeyboardEvent");
+    ev.initKeyboardEvent('keyup', true, true, window, false, false, false, false, 0, 0);
+    peoplefilter.dispatchEvent(ev);
   }
 
-  var peoplefilter = document.getElementById('peoplefilter');
-  peoplefilter && peoplefilter.addEventListener('keyup', function (ev) {
-    filterCards(ev, '');
-  });
+  var suggestfilter = document.getElementById('suggestfilter');
+  suggestfilter && suggestfilter.addEventListener('keyup', createSearcher('.suggest-grid > li'));
 
   // Fill in ID for new pair dialog, so we can launch from
   // the user card
-  function formatDialog() {	
-	var dialog_id = 'pairDialog';
-	var dialog = document.getElementById(dialog_id);
-	console.log($(dialog).data('profile'));
-	var profile_id = $(dialog).data('profile');
-	$(dialog).attr("id", dialog_id+"-"+profile_id);
+  function formatDialog() {
+    var dialog_id = 'pairDialog';
+    var dialog = document.getElementById(dialog_id);
+    var profile_id = $(dialog).data('profile');
+    $(dialog).attr("id", dialog_id+"-"+profile_id);
   }
   dogjs.on('add:node', formatDialog);
+
 }, this, true);

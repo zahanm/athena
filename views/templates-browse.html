@@ -3,13 +3,6 @@
 <head></head>
 <body>
 
-  <script>
-    dogjs.on_page_load(function() {
-      // get the id from window.location
-      $("input:hidden")
-    })
-  </script>
-
   <section oneach="@each:browse_request" subscribe="once" dogjs-auth="true" load="browse_requests">
 
     <!-- browse display -->
@@ -53,7 +46,7 @@
               </ul>
             </div>
             <div class="btn-toolbar" style="margin: 0;" align="center">
-                <button class="open-SuggestDialog btn" data-toggle="modal" data-name="{{first_name}}" data-id="{{facebook_profile.id}}" href="#suggestDialog">Suggest</button>
+                <button class="open-SuggestDialog btn" data-toggle="modal" data-target="#suggestDialog" data-name="{{first_name}}" data-id="{{facebook_profile.id}}" href="#suggestDialog">Suggest</button>
                 <button class="btn btn-info" data-toggle="modal" data-id="{{first_name}}" data-addr="{{email}}" data-toggle="modal" href="#pairDialog-{{facebook_profile.id}}">Connect...
                 </button>
             </div>
@@ -73,11 +66,11 @@
 			</form>
     </li>-->
     
-    <div class="modal hide fade connect-dialog" id="pairDialog" data-profile="{{facebook_profile.id}}" notify="person" holder=".connect-dialogs" 
+    <div class="modal hide fade connect-dialog" id="pairDialog" data-profile="{{facebook_profile.id}}" notify="person" holder=".connect-dialogs"
     style="width: 300px; margin-top: -100px; margin-left: -150px">
       <div class="modal-body" align="center">
         <a href="#" class="close" id="closePairDialog" data-dismiss="modal">×</a>
-        <form listen="pair_requests" authenticated="true" style="margin: 0px;">
+        <form listen="pair_requests" style="margin: 0px;">
           <div class="btn-group btn-group-vertical">
             <button class="btn pairDialog-btn" data-person="{{first_name}}" type="submit" name="teacher" value="{{facebook_profile.id}}">I want to learn from {{first_name}}</button>
             <button class="btn pairDialog-btn" data-person="{{first_name}}" type="submit" name="learner" value="{{facebook_profile.id}}">I want to teach {{first_name}}</button>
@@ -94,7 +87,7 @@
     </li>
     
     <div notify="person" holder=".suggest-form">
-      <form class="form-search" listen="pair_requests" authenticated="true" style="margin: 0px;">
+      <form class="form-search" listen="pair_requests" style="margin: 0px;">
         <input type="text" class="search-query" id="suggestfilter" placeholder="Search">
         <button class="btn btn-info suggestSubmit-btn" type="submit" style="float: right; margin-left: 10px;">Suggest</button>
         <button class="btn" style="float: right;" data-dismiss="modal">Cancel</button>
