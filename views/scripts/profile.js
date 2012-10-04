@@ -3,8 +3,6 @@ dogjs.configure({
 });
 
 dogjs.on('pageload', function () {
-	
-	
 
 	function getUrlVars() {
 	    var vars = {};
@@ -30,6 +28,12 @@ dogjs.on('pageload', function () {
       		for(i=0;i<els.length;i++){
 		   		$(els[i]).text('My');
 		   	}
+		}
+		// check for request
+		var pendingRequest = document.getElementById('request_id').value;
+		if (pendingRequest != "false") {
+			var pair_controls = document.getElementById('pair_controls');
+			pair_controls.style.visibility = "visible"
 		}
   	}
 

@@ -13,7 +13,12 @@
                 <div class="offset1 span3 well">
                   <img src="http://graph.facebook.com/{{facebook_profile.id}}/picture?type=large" style="border: 1px solid #E3E3E3;"/>
                 </div>
-                <div class="span7" style="margin-top: 80px;">
+                <div class="span7">
+                  <form id="pair_controls" listen="pair_responses" class="btn-toolbar pair-control" align="left">
+                      <input type="hidden" id="request_id" name="request_id" value="{{pending_request}}"/>
+                      <button class="btn btn-info pair-us-btn" type="submit" name="response" value="confirm">Pair Us!</button>
+                      <button class="btn" type="submit" name="response" value="decline">No, Thanks.</button>
+                  </form>
                   <div style="border-bottom: 1px solid #EEE;">
                     <h1>
                       {{first_name}} {{last_name}}
