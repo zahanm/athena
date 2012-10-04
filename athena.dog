@@ -268,7 +268,6 @@ ON EACH pair_request DO
   # Above:
   # 1) store in queue of potential pairings
   # 2) send link that flip cooresponding bit in potential pairing
-  # one bits are flipped: compute pairing
 END
 
 # external functions
