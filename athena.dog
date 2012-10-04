@@ -6,14 +6,28 @@ DEFINE COMMUNITY karma USING karma_profile {
   students
   teachers
   location
-  is_current
 }
 
 DEFINE interest {
   name
 }
 
+DEFINE pending_request {
+  teacher_id
+  student_id
+  teacher_confirm
+  student_confirm
+}
+
+DEFINE pairing {
+  teacher_id
+  student_id
+  meet_ups
+}
+
 DEFINE interests OF interest
+DEFINE pending_requests OF pending_request
+DEFINE pairings OF pairing
 
 DEFINE COMMUNITY admins USING admins_profile {}
 
@@ -124,21 +138,42 @@ ON EACH skill_suggestion DO
 END
 
 # Profiles
-
-DEFINE profile_request { profile_id }
+DEFINE profile_request { profile_id, request_id }
 
 LISTEN TO public VIA http FOR profile_requests
 
 ON EACH profile_request DO
   browser = PERSON FROM profile_request
   id = profile_request['profile_id']
+  pair_request = profile_request['request_id']
+  PRINT "CHECK REQUEST"
+  INSPECT pair_request
   IF id THEN
+	# TODO(sainsley) : if this is the browser ID, fall through and show edit tools
     profiles = FIND people.people FROM karma WHERE facebook_profile.id == id
     profile = profiles[0]
     profile.is_current = browser.facebook_profile.id == id
+	profile.pending_request = false
+	# check for pending request on current user
+	IF pair_request THEN
+		matches = FIND pending_requests WHERE _id == pair_request
+		PRINT "MATCHES"
+		INSPECT matches
+		IF matches AND matches[0] THEN
+			match = matches[0]
+			# check that browser is valid student or teacher
+			IF match.student_id == id AND match.teacher_id == browser.facebook_profile.id AND match.teacher_confirm == false THEN
+				profile.pending_request = pair_request
+			ELSE IF match.teacher_id == id AND	match.student_id == browser.facebook_profile.id AND match.student_confirm == false THEN
+				profile.pending_request = pair_request
+			END
+			INSPECT profile.pending_request
+		END
+	END
     NOTIFY browser VIA stream OF profile
   ELSE
     browser.is_current = true
+	browser.pending_requests = false
     skills = FIND interests WHERE name != null
     browser.all_skills = skills
     NOTIFY browser VIA stream OF browser
@@ -226,10 +261,17 @@ ON EACH pair_request DO
   browser = PERSON FROM pair_request
   learner_id = pair_request['learner']
   teacher_id = pair_request['teacher']
+  new_request = {}
+  new_request.teacher_id = teacher_id
+  new_request.student_id = learner_id
+  new_request.teacher_confirm = false
+  new_request.student_confirm = false
   INSPECT teacher_id
   INSPECT learner_id
   # send emails to appropriate parties
   IF teacher_id == null THEN # offer to teach
+	new_request.teacher_confirm = true
+	new_request.teacher_id = browser.facebook_profile.id
     learners = FIND people.people FROM karma WHERE facebook_profile.id == learner_id
     learner = learners[0]
     INSPECT learner
@@ -239,6 +281,8 @@ ON EACH pair_request DO
     }
     NOTIFY learner VIA email OF message
   ELSE IF learner_id == null THEN # teaching requests
+	new_request.student_confirm = true
+	new_request.student_id = browser.facebook_profile.id
     teachers = FIND people.people FROM karma WHERE facebook_profile.id == teacher_id
     teacher = teachers[0]
     INSPECT teacher
@@ -265,9 +309,67 @@ ON EACH pair_request DO
     }
     NOTIFY learner VIA email OF message
   END
+  SAVE new_request TO pending_requests
+  request_id = COMPUTE dog.id ON new_request
+  INSPECT request_id
   # Above:
   # 1) store in queue of potential pairings
   # 2) send link that flip cooresponding bit in potential pairing
+END
+
+DEFINE pair_response { request_id, response }
+
+LISTEN TO public VIA http FOR pair_responses
+
+ON EACH pair_response DO
+	PRINT 'PAIR_RESPONSE'
+	browser = PERSON FROM pair_response
+	request_id = pair_response['request_id']
+	response = pair_response['response']
+	matches = FIND pending_requests WHERE _id == request_id
+	INSPECT request_id
+	INSPECT matches
+	INSPECT response
+	IF matches AND matches[0] THEN
+		IF response == 'deny' THEN
+			del_request = matches[0]
+			REMOVE pending_requests WHERE _id == request_id
+		ELSE IF response == 'confirm' THEN
+			confirm_request = matches[0]
+			INSPECT confirm_request.teacher_id
+			INSPECT browser.facebook_profile.id
+			INSPECT confirm_request.teacher_confirm
+			IF confirm_request.teacher_id == browser.facebook_profile.id AND confirm_request.teacher_confirm == false THEN
+				confirm_request.teacher_confirm = true
+			ELSE IF confirm_request.student_id == browser.facebook_profile.id AND confirm_request.student_confirm == false THEN
+				confirm_request.student_confirm = true
+			END
+			INSPECT confirm_request.student_confirm
+			INSPECT confirm_request.teacher_confirm
+			INSPECT pairings
+			IF confirm_request.student_confirm == true AND confirm_request.teacher_confirm == true THEN
+				new_pairing = {}
+				new_pairing.teacher_id = confirm_request.teacher_id
+				new_pairing.student_id = confirm_request.student_id
+				new_pairing.meet_ups = 0
+				# TODO(sainsley): add student to teacher and visa versa 
+				SAVE new_pairing TO pairings
+				REMOVE pending_requests WHERE _id == request_id
+				#PRINT "requests"
+				stuff = FIND pending_requests WHERE _id != null
+				INSPECT stuff
+				#stuff = FIND pairings WHERE _id != null
+				#INSPECT stuff
+			END
+		END
+	END
+	# if delete
+	# pull potential pairing from database
+	# delete from requests
+	# else 
+	# pull potential pairing from database
+	# if id == teacher, set teacher.confirm = true, etc.
+	# if both confirm, add pairing to pairings and delete from requests
 END
 
 # external functions
@@ -277,12 +379,12 @@ DEFINE save_skill ON skill DO
 	new_skill = false
 	matches = FIND interests WHERE name == skill
 	INSPECT matches
-	IF matches THEN
+	IF matches AND matches[0] THEN
 		size = COMPUTE system.size ON matches
 		IF size == 0 THEN
 			new_skill = true
 		END
-  ELSE
+  	ELSE
 		new_skill = true
 	END
 	IF new_skill THEN
