@@ -12,7 +12,11 @@ dogjs.on('pageload', function () {
 	    return vars;
 	}
 	
-	var id = getUrlVars()["id"];
+	var id = getUrlVars()["profile_id"];
+	//var pendingRequest = document.getElementById('request_id').value;
+	//var pair_controls = document.getElementById('pair_controls');
+	//console.log("LOAD request: "+pendingRequest+" "+id+" "+request_id);
+	profileCheck();
 	
 	// reroute if account exists
 	function profileCheck() {	
@@ -30,14 +34,25 @@ dogjs.on('pageload', function () {
 		   	}
 		}
 		// check for request
+		var request_id = getUrlVars()["request_id"];
 		var pendingRequest = document.getElementById('request_id').value;
-		if (pendingRequest != "false") {
-			var pair_controls = document.getElementById('pair_controls');
+		var pair_controls = document.getElementById('pair_controls');
+		console.log("request: "+pendingRequest);
+		if (pendingRequest == request_id) {
+			console.log("visibility: "+pair_controls.style.visibility);
 			pair_controls.style.visibility = "visible"
+			console.log("new_visibility: "+pair_controls.style.visibility);
+		} else {
+			console.log("visibility: "+pair_controls.style.visibility);
+			pair_controls.style.visibility = "hidden"
+			console.log("new_visibility: "+pair_controls.style.visibility);
 		}
   	}
 
-	dogjs.on('add:node', profileCheck);
+	//dogjs.on('add:node', function(newnode) {
+	    //console.log("NODE "+newnode.innerHTML);
+	//});
+	//profileCheck(new_node));
 	
 }, this, true);
 
