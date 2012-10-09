@@ -29,11 +29,14 @@
     });
     $(document).on("click", ".open-SuggestDialog", function () {
       $('#suggestDialog .firstname').text(this.dataset.name);
-      $('#suggestDialog #suggest-profile-id').text(this.dataset.id);
+      $('#suggestDialog #suggest-profile-id').val(this.dataset.id);
     });
     $(document).on("click", ".suggest-preview", function () {
       var type = document.getElementById('selectSuggestType').value;
       var profile_id = document.getElementById('suggest-profile-id').value;
+      console.log(type);
+      console.log($(this).data('fbid'));
+      console.log(profile_id);
       if (type == "teacher") {
         $('input#teacher').val($(this).data('fbid'));
         $('input#learner').val(profile_id);

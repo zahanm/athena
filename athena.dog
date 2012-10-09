@@ -87,6 +87,8 @@ ON EACH signup_request DO
     learner.location = location[0]['location']
     identity = ASK learner VIA stream TO identify_yourself
     learner.email = identity[0]['email']
+	#learner.karma_profile.students = {}
+	#learner.karma_profile.teachers = {}
     #COMPUTE print_details ON learner
     SAVE learner TO karma
     NOTIFY public VIA stream OF learner
@@ -131,7 +133,7 @@ ON EACH skill_suggestion DO
 
   message = dog.email {
     subject = browser.first_name + " suggested a new skill for you!"
-    body = "Hello, " + teachers[0].first_name + ", \n" + browser.first_name + " " + browser.last_name + " suggested that you add '" + suggestion +"' to your list of skills."
+    body = "Hello, " + teachers[0].first_name + ", \n \n" + browser.first_name + " " + browser.last_name + " suggested that you add '" + suggestion +"' to your list of skills."
   }
 
   NOTIFY tester VIA email OF message
@@ -153,7 +155,7 @@ ON EACH profile_request DO
     profiles = FIND people.people FROM karma WHERE facebook_profile.id == id
     profile = profiles[0]
     profile.is_current = browser.facebook_profile.id == id
-	profile.pending_request = false
+	# profile.pending_request = false
 	# check for pending request on current user
 	IF pair_request THEN
 		matches = FIND pending_requests WHERE _id == pair_request
@@ -170,12 +172,16 @@ ON EACH profile_request DO
 			INSPECT profile.pending_request
 		END
 	END
+	PRINT "PROFILE NOTIFY " 
+	INSPECT profile.pending_request
     NOTIFY browser VIA stream OF profile
   ELSE
     browser.is_current = true
-	browser.pending_requests = false
+	#browser.pending_request = false
     skills = FIND interests WHERE name != null
     browser.all_skills = skills
+	PRINT "PROFILE NOTIFY BROWSER " 
+	INSPECT browser.pending_request
     NOTIFY browser VIA stream OF browser
   END
 END
@@ -266,9 +272,10 @@ ON EACH pair_request DO
   new_request.student_id = learner_id
   new_request.teacher_confirm = false
   new_request.student_confirm = false
-  INSPECT teacher_id
-  INSPECT learner_id
+  request_id = COMPUTE dog.id ON new_request
+  INSPECT request_id
   # send emails to appropriate parties
+  # TODO (sainsley) : compartmentalize this
   IF teacher_id == null THEN # offer to teach
 	new_request.teacher_confirm = true
 	new_request.teacher_id = browser.facebook_profile.id
@@ -277,7 +284,7 @@ ON EACH pair_request DO
     INSPECT learner
     message = dog.email {
       subject = browser.first_name + " would like to teach you!"
-      body = "Hello, " + learner.first_name + ", \n" + browser.first_name + " " + browser.last_name + " would like to help you reach one of your goals."
+      body = "Hello, " + learner.first_name + ",\n\n" + browser.first_name + " " + browser.last_name + " would like to help you reach one of your goals.\n\nLink up with "+browser.first_name+" http://localhost:8080/profile.html?profile_id="+browser.facebook_profile.id+"&request_id="+request_id
     }
     NOTIFY learner VIA email OF message
   ELSE IF learner_id == null THEN # teaching requests
@@ -288,7 +295,7 @@ ON EACH pair_request DO
     INSPECT teacher
     message = dog.email {
       subject = browser.first_name + " wants to learn from you!"
-      body = "Hello, " + teacher.first_name + ", \n" + browser.first_name + " " + browser.last_name + " would like to learn from you."
+      body = "Hello, " + teacher.first_name + ",\n\n" + browser.first_name + " " + browser.last_name + " would like to learn from you.\n\nLink up with "+browser.first_name+" http://localhost:8080/profile.html?profile_id="+browser.facebook_profile.id+"&request_id="+request_id
     }
     NOTIFY teacher VIA email OF message
   ELSE # third-party
@@ -296,16 +303,20 @@ ON EACH pair_request DO
     teacher = teachers[0]
     learners = FIND people.people FROM karma WHERE facebook_profile.id == learner_id
     learner = learners[0]
+	INSPECT learner_id
+	INSPECT teacher_id
+	INSPECT learner
+	INSPECT teacher
     # email teacher
     message = dog.email {
       subject = browser.first_name + " suggested a student for you!"
-      body = "Hello, " + teacher.first_name + ", \n" + browser.first_name + " " + browser.last_name + " suggests you teach " + learner.first_name + " " + learner.last_name
+      body = "Hello, " + teacher.first_name + ",\n\n" + browser.first_name + " " + browser.last_name + " suggests you teach " + learner.first_name + " " + learner.last_name+".\n\nLink up with "+learner.first_name+" http://localhost:8080/profile.html?profile_id="+learner.facebook_profile.id+"&request_id="+request_id
     }
     NOTIFY teacher VIA email OF message
     # emails student
     message = dog.email {
       subject = browser.first_name + " suggested a teacher for you!"
-      body = "Hello, " + learner.first_name + ", \n" + browser.first_name + " " + browser.last_name + " suggests you learn from " + teacher.first_name + " " + teacher.last_name
+      body = "Hello, " + learner.first_name + ",\n\n" + browser.first_name + " " + browser.last_name + " suggests you learn from " + teacher.first_name + " " + teacher.last_name+".\n\nLink up with "+teacher.first_name+" http://localhost:8080/profile.html?profile_id="+teacher.facebook_profile.id+"&request_id="+request_id
     }
     NOTIFY learner VIA email OF message
   END
@@ -331,7 +342,7 @@ ON EACH pair_response DO
 	INSPECT matches
 	INSPECT response
 	IF matches AND matches[0] THEN
-		IF response == 'deny' THEN
+		IF response == 'decline' THEN
 			del_request = matches[0]
 			REMOVE pending_requests WHERE _id == request_id
 		ELSE IF response == 'confirm' THEN
@@ -346,7 +357,9 @@ ON EACH pair_response DO
 			END
 			INSPECT confirm_request.student_confirm
 			INSPECT confirm_request.teacher_confirm
-			INSPECT pairings
+			UPDATE confirm_request IN pending_requests
+			#stuff = FIND pending_requests WHERE _id != null
+			#INSPECT stuff
 			IF confirm_request.student_confirm == true AND confirm_request.teacher_confirm == true THEN
 				new_pairing = {}
 				new_pairing.teacher_id = confirm_request.teacher_id
@@ -354,12 +367,37 @@ ON EACH pair_response DO
 				new_pairing.meet_ups = 0
 				# TODO(sainsley): add student to teacher and visa versa 
 				SAVE new_pairing TO pairings
-				REMOVE pending_requests WHERE _id == request_id
-				#PRINT "requests"
-				stuff = FIND pending_requests WHERE _id != null
-				INSPECT stuff
+				# Add teachers and learners
+				teachers = FIND people.people FROM karma WHERE facebook_profile.id == confirm_request.teacher_id
+			    teacher = teachers[0]
+			    learners = FIND people.people FROM karma WHERE facebook_profile.id == confirm_request.student_id
+			    learner = learners[0]
+				PRINT "inspecting teacher"
+				#INSPECT teacher
+				#INSPECT learner
+				PRINT "adding to teacher"
+				IF learner.karma_profile.teachers == null THEN
+					learner.karma_profile.teachers = {}
+				END
+				ADD confirm_request.teacher_id TO learner.karma_profile.teachers
+				#INSPECT confirm_request.teacher_id
+				#INSPECT learner.karma_profile.teachers
+				PRINT "adding to learner"
+				IF learner.karma_profile.students == null THEN
+					learner.karma_profile.students = {}
+				END
+				ADD confirm_request.student_id TO teacher.karma_profile.students
+				#INSPECT teacher.karma_profile.students
+				PRINT "STUDENT ID"
+				PRINT "STUDENT ID2"
+				INSPECT learner
+				SAVE learner TO karma
+				INSPECT learner.karma_profile.teachers
+				SAVE teacher TO karma
+				# TODO(sainsley): SEND EMAIL ANNOUCEMENT
 				#stuff = FIND pairings WHERE _id != null
 				#INSPECT stuff
+				REMOVE pending_requests WHERE _id == request_id
 			END
 		END
 	END

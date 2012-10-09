@@ -51,6 +51,17 @@
   		  }
       }
     });
+    $(document).on("click", ".request-btn", function () {
+      var pair_controls = document.getElementById('pair_controls');
+			pair_controls.style.visibility = "hidden"
+			if (this.value == "confirm") {
+			  $(".alert").alert();
+        document.getElementById("request-confirm").style.display = "block";
+      }
+    });
+    $(document).on("click", ".request-confirm-close", function () {
+      document.getElementById("request-confirm").style.display = "none";
+    });
     function handleKeyPress(e, input){
       var key=e.keyCode || e.which;
       if (key==13){
@@ -90,7 +101,7 @@
     <strong>Sorry!</strong> You cannot delete all of your skills.
   </div>
   <!-- learning request flow -->
-  <div class="profile-wrapper" method="overwrite"></div>
+  <div class="container profile-wrapper" method="overwrite"></div>
   <script src="/scripts/profile.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
